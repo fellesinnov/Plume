@@ -1,0 +1,53 @@
+name: Python CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      MPLBACKEND: Agg
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip check
+
+      - name: Syntax check
+        run: python -m py_compile outfall_screen.py compare_cormix.py self_test.py
+
+      - name: Self-test
+        run: python self_test.py
+
+      - name: Batch smoke
+        run: |
+          mkdir -p .ci
+          python outfall_screen.py batch test_cases.csv --out .ci/test_results.csv
+          python - <<'PY'
+          import pandas as pd
+
+          df = pd.read_csv(".ci/test_results.csv")
+          assert len(df) == 20, f"expected 20 cases, got {len(df)}"
+          assert "result_status" in df.columns
+          assert df["result_status"].notna().all()
+          print("Batch smoke passed:", len(df), "cases")
+          print(df["result_status"].value_counts().to_dict())
+          PY
+
+      - name: Upload deterministic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: plume-ci-evidence
+          path: .ci/test_results.csv
