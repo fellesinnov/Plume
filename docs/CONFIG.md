@@ -12,6 +12,7 @@
 - Paths are relative to the config file unless explicitly absolute.
 - Downloaded/provider data and generated outputs are local artifacts, not source.
 - Provider-specific data is normalized before it reaches the model.
+- Outlet geometry is type-tagged and extensible; unsupported geometry must fail explicitly rather than silently falling back.
 
 See [../configs/example.yaml](../configs/example.yaml).
 
@@ -31,9 +32,39 @@ workspace
 outputs
 ```
 
-Provider/file details may evolve behind those concepts.
+Provider/file and outlet-type details may evolve behind those concepts.
 
-## 3. Forcing references
+## 3. Outfall contract
+
+All configs contain a type-tagged `outfall` object.
+
+Common concepts:
+
+```text
+type
+discharge position / depth
+vertical angle
+azimuth / orientation
+```
+
+Type-specific geometry is explicit.
+
+Initial type:
+
+```yaml
+outfall:
+  type: single_round_port
+  diameter_m: 0.8
+  discharge_depth_below_surface_m: 12.0
+  vertical_angle_deg: 0.0
+  azimuth_deg: 90.0
+```
+
+Future types may include multiport diffusers and surface/near-surface outlets. Their schema can add port count, spacing/layout or other geometry without changing provider/time-runner contracts.
+
+Representation in config does not mean a physics implementation exists. The config validator must reject outlet types for which no selected model adapter exists.
+
+## 4. Forcing references
 
 A forcing value is described by a small source descriptor rather than a hard-coded API call.
 
@@ -82,7 +113,7 @@ COPERNICUSMARINE_SERVICE_PASSWORD
 
 The config may name credential *environment variable names* later, but never store credential values.
 
-## 4. Normalized provider contracts
+## 5. Normalized provider contracts
 
 Provider adapters should return a small number of model-facing shapes.
 
@@ -120,7 +151,38 @@ Raster/grid or normalized point cloud with explicit coordinate reference/datum.
 
 Every provider response must also return provenance/warnings separately from the numerical array.
 
-## 5. Copernicus provider
+## 6. Design Mode
+
+Design Mode uses the same normalized config/model stack as time-series runs, but evaluates one forcing snapshot repeatedly while changing geometry/operation.
+
+A design snapshot may come from:
+
+- inline/manual profiles;
+- CSV/files;
+- a selected timestamp from an already cached provider dataset;
+- later, an automatically selected adverse/representative timestamp.
+
+Design candidates should be saved in the ignored workspace rather than committed by default:
+
+```text
+workspace/
+  design/
+    <project-id>/
+      <session-id>/
+        base.normalized.yaml
+        candidates/
+          <candidate-id>/
+            config.normalized.yaml
+            metrics.*
+            plots/
+        selected.yaml
+```
+
+The selected candidate can then be copied/exported as the locked project config for annual simulation.
+
+Design Mode should not fork the physics implementation. It calls the same outlet adapter, solver, field reconstruction and criteria engine used by historical/live runs.
+
+## 7. Copernicus provider
 
 Reuse the proven HeatHandler ideas without coupling the repositories:
 
@@ -136,7 +198,7 @@ Plume additionally needs current components and should support depth-resolved `u
 
 Do not assume global Copernicus resolution is sufficient for a permit-scale coastal site. Provider provenance must make resolution and spatial fallback visible.
 
-## 6. Workspace
+## 8. Workspace
 
 Default:
 
@@ -154,6 +216,9 @@ workspace/
         <request-hash>/
           data.*
           metadata.json
+  design/
+    <project-id>/
+      <session-id>/
   runs/
     <project-id>/
       <run-id>/
@@ -170,7 +235,7 @@ workspace/
 
 ### Shared provider cache
 
-`workspace/_cache` is shared across configs/runs. An identical provider request should reuse the same immutable cache entry.
+`workspace/_cache` is shared across configs/design sessions/runs. An identical provider request should reuse the same immutable cache entry.
 
 The cache key should include all request fields that can change the returned data: provider, dataset/variable, location/bounds, depth selection, time range, temporal aggregation and relevant provider version/options.
 
@@ -186,7 +251,7 @@ At minimum, every run saves:
 
 Heavy artifacts are controlled by config.
 
-## 7. Output retention policy
+## 9. Output retention policy
 
 The config decides what is saved. Typical switches:
 
@@ -201,16 +266,17 @@ The config decides what is saved. Typical switches:
 
 A fast engineering run may save only metrics and selected frames. A permit package may retain fields, figures and animation.
 
-## 8. Run identity and provenance
+## 10. Run identity and provenance
 
 Generated `manifest.json` should eventually contain:
 
 - config path and normalized-config digest;
 - Plume git SHA/version;
-- start/end/cadence;
+- start/end/cadence or design snapshot identity;
 - provider requests and cache digests;
 - actual coordinates/depths used;
 - source data file digests;
+- outlet type/geometry;
 - model options;
 - criteria;
 - warnings;
@@ -218,7 +284,7 @@ Generated `manifest.json` should eventually contain:
 
 No secret value may be copied into the manifest.
 
-## 9. Portability / HeatHandler
+## 11. Portability / HeatHandler
 
 Core config and result objects should not mention Streamlit or HeatHandler.
 
