@@ -8,7 +8,8 @@ This file records accepted project direction that should survive chat/session bo
 - Keep the starter process simple. Avoid importing C++/DAW-specific ceremony that Plume does not need.
 - `PLUMES2.0-main/` is the modelling reference archive and **must not be modified** during normal development.
 - The archived PLUMES2.0 implementation is the comparison source of truth for model regression work.
-- Prefer ChatGPT + sandbox/GitHub CI for Python implementation and deterministic testing.
+- Prefer ChatGPT + sandbox for Python implementation and deterministic testing.
+- GitHub Actions is **manual opt-in only** because project credits are scarce. ChatGPT must ask the human before dispatching or enabling an Actions run, and should not use Actions when the same claim can be proven directly in the sandbox.
 - Use a local Luna/Windows closer only when evidence specifically requires the archived PLUMES Windows executable or another local-only dependency.
 - Maintain durable owners for live work and evidence: backlog, user input, gates, and a build/status log.
 - Preserve lessons learned so the Plume workflow can evolve from its own evidence rather than blindly copying BOOSTED.
