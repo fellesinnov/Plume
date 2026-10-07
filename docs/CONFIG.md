@@ -62,7 +62,7 @@ outfall:
 
 Future types may include multiport diffusers and surface/near-surface outlets. Their schema can add port count, spacing/layout or other geometry without changing provider/time-runner contracts.
 
-Representation in config does not mean a physics implementation exists. The config validator must reject outlet types for which no selected model adapter exists.
+Representation in config does not mean a physics implementation exists. CORE-0 rejects outlet types without a registered structural adapter. Once model selection is introduced, the runner/model boundary must additionally reject a structurally representable outlet when no selected qualified physics adapter implements it.
 
 ### Coordinate and angle convention
 
