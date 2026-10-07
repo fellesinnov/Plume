@@ -1,5 +1,7 @@
 # Current build / evidence status
 
+This file is the single owner for current repository status.
+
 ## CORE-0 candidate — 2026-10-07
 
 **Branch:** `core-0-package-config-workspace`.
@@ -24,8 +26,6 @@ Candidate evidence:
 **Integration state:** READY FOR HUMAN INTEGRATION, not merged. CORE-0 does not claim plume physics or thermodynamic qualification.
 
 **Next seam after integration:** `MODEL-1`.
-
-This file is the single owner for current repository status.
 
 ## REF-1 integrated — 2026-10-07
 
