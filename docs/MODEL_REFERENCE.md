@@ -58,55 +58,75 @@ Public Python core for Visual Plumes/UM3, including ambient profiles, UM3 near f
 
 License observed: **GPL-3.0**.
 
-Use: strong external behavioural/architecture reference. Do not copy/adapt source into Plume unless the human explicitly chooses a GPL-compatible strategy.
+Project policy: this implementation may be used aggressively as an external executable/behavioural/reference oracle. Direct copying/linking/adaptation into Plume remains a deliberate deployment/license decision so that future customer-installed software remains flexible. Its GPL license is not a reason to avoid running it for model comparison.
 
 ### Ebb Carbon Plumes_Public
 https://github.com/ebbcarbon/Plumes_Public
 
-Public MIT-licensed Python reimplementation of PLUMES2.0 with extensive executable trace/reference cases and decoded file/physics notes. Its README explicitly states that the upstream executable ships without source and that the port was reconstructed from manuals, literature and executable traces.
+Public **MIT-licensed** Python reimplementation of PLUMES2.0 with extensive executable trace/reference cases and decoded file/physics notes. Its README states that upstream ships without source and that the port was reconstructed from manuals, literature and executable traces.
 
-Use: potentially very valuable secondary implementation, parser/reference-case research and cross-check. Any direct source adaptation should still be explicit and attributed; independent reference comparisons remain useful even when permissive reuse is possible.
+Project policy: review it as a serious candidate implementation source rather than assuming we should independently rebuild UM3. Reuse/adaptation is acceptable with explicit provenance/attribution if its physics, tests and interfaces are suitable.
 
-Neither implementation automatically replaces the selected PLUMES2.0 executable as the project's regression source of truth.
+## 4. Reference strategy — triangulation, not hierarchy
 
-## 4. Reference roles
+PLUMES2.0 is useful evidence, not sacred truth.
 
-REF-1 must assign explicit roles rather than blend evidence:
+REF-1 should deliberately compare:
 
-- **Primary executable regression:** one selected checked-in PLUMES2.0 binary/version.
-- **Secondary executable regression:** the other checked-in PLUMES2.0 release.
-- **Independent implementation references:** SFEI Visual Plumes and/or Ebb port where useful.
-- **Independent physical evidence:** published experiments/literature/site observations.
+- both checked-in PLUMES2.0 executable releases;
+- SFEI Visual Plumes/UM3;
+- Ebb Carbon's MIT PLUMES2.0 port;
+- published governing theory / laboratory or field evidence;
+- later, site/probe observations.
 
-Calibration cases and hold-back cases must be separate.
+Reference disagreements are first-class findings. Do not average them away or force Plume to match a known implementation defect merely for parity.
 
-## 5. Golden-reference layout
+Roles may differ by mechanism:
 
-Derived golden evidence should live outside `References/`, for example:
+- one source may be strongest for near-field trajectory/dilution;
+- another for multiport/merging;
+- another for similarity profiles/isopleths;
+- another for far-field Brooks behaviour;
+- independent measurements/literature ultimately matter more for physical accuracy.
+
+The outcome of REF-1 is therefore an evidence-backed implementation plan and benchmark matrix, not the coronation of one "primary truth" executable.
+
+## 5. Calibration and verification
+
+Use separate sets:
+
+- **mechanism/calibration cases** to identify coefficients or choose between formulations;
+- **hold-back cases** never used for fitting;
+- where site measurements later calibrate a digital twin, reserve independent times/locations/conditions for verification.
+
+A model can match reference software and still be physically wrong. A model can also intentionally differ from a reference when the reference has a documented defect and independent evidence supports the difference.
+
+## 6. Golden/reference evidence layout
+
+Derived evidence should live outside `References/`, for example:
 
 ```text
-tests/reference/plumes2/
-  <case-id>/
-    manifest.json
-    input/
-    raw/
-    normalized.*
+tests/reference/
+  plumes2/
+  visual_plumes/
+  ebb_plumes/
+  literature/
 ```
 
-Each manifest should record:
+A case manifest should record:
 
-- case ID/purpose;
+- case ID/purpose/mechanism;
 - source commit;
-- reference distribution and executable path;
-- executable SHA-256/version;
-- runner/OS identity;
+- reference implementation/version/path;
+- executable/source digest where practical;
+- runner/environment identity;
 - exact inputs;
 - exact raw outputs;
 - any GUI choices not represented in files;
-- whether the case is calibration or hold-back.
+- calibration vs hold-back role.
 
 Raw output is evidence; normalized output is derived test material.
 
-## 6. Interpretation
+## 7. Interpretation
 
 Reference agreement can show that Plume tracks a named implementation for named cases. It does **not** by itself establish physical truth, regulatory acceptance or applicability outside the compared mechanisms/envelope.
