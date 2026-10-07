@@ -14,6 +14,16 @@ Observed in the repository at bootstrap:
 
 The archive README describes PLUMES2.0 as a Fortran-based UM3 implementation. That does not mean this repository currently contains its FORTRAN source.
 
+## Upstream provenance and source availability
+
+The public upstream repository identified during bootstrap is `uw-ssmc/PLUMES2.0`. Its public `main` currently exposes the same distribution shape as this archive: documentation, example project, licence/disclaimer, icons/images, `plumes2.0v1.exe`, and its manifest. The executable Git blob is the same `dce0fe6b488e233169aec267d0c28706f516d546`.
+
+No FORTRAN source is published in that official repository.
+
+Therefore do not assume that "Fortran-based" means the implementation source can be fetched publicly. If the maintainer later supplies an authentic source distribution that is legally shareable, treat it as a separate provenance/import seam: preserve the files verbatim, record their origin/version/hash, and never silently replace the executable reference with a rebuilt or modified variant.
+
+A third-party reimplementation or decoded specification may be useful research, but it is not the immutable upstream source of truth unless explicitly adopted by a future decision.
+
 ## Remote execution boundary
 
 The ChatGPT sandbox used during the 2026-10-07 bootstrap has GNU Fortran 14.2.0 and successfully compiled/executed a small FORTRAN probe.
@@ -23,7 +33,7 @@ That proves FORTRAN compiler availability only.
 The checked-in reference itself is a Windows executable, and the sandbox does not currently provide Wine. Therefore the exact archived PLUMES executable is a **Windows/local evidence dependency** until either:
 
 1. canonical golden outputs are captured and committed for remote comparison; or
-2. a separately provenance-checked upstream FORTRAN source distribution is intentionally adopted.
+2. an authentic, separately provenance-checked FORTRAN source distribution is intentionally adopted.
 
 Do not silently substitute a reimplementation for the archived reference.
 
