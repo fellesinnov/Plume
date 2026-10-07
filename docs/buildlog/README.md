@@ -2,16 +2,15 @@
 
 This file is the single owner for current repository status.
 
-## REF-1 candidate — 2026-10-07
+## REF-1 integrated — 2026-10-07
 
 **Authoritative `main` at sprint start:** `20822afe25175a94ba2b7cb91579e4191b7bc52c`.
 
-**Candidate branch:** `ref-1-reference-bakeoff`.
+**Merged branch:** `ref-1-reference-bakeoff`.
 
-**Draft PR:** #3.
+**Merged PR:** #3.
 
-SPEC-0 is integrated on `main`. REF-1 adds reference/qualification infrastructure and decisions
-only; there is still no production plume implementation.
+REF-1 is integrated on `main` via PR #3 at merge commit `6fce138287b6df3ae24b0e67569f61855251bf12`. It adds reference/qualification infrastructure and decisions only; there is still no production plume implementation.
 
 Detailed records:
 
@@ -129,11 +128,10 @@ optional SHA-256 values and the derived golden whenever such a checkout is used.
 
 ### Integration state
 
-**READY FOR INTEGRATION.**
+**INTEGRATED.** PR #3 merged to `main` at `6fce138287b6df3ae24b0e67569f61855251bf12`.
 
-REF-1's purpose was to establish reference roles, architecture and evidence boundaries before
-implementation. It has done that without pretending software parity is physical validation.
+REF-1 established reference roles, architecture and evidence boundaries before implementation without pretending software parity is physical validation.
 
-No Actions run is required or authorised. Merge authority remains human-only.
+No Actions run was required or authorised.
 
-**Recommended next seam after integration:** `CORE-0`, then `MODEL-1`.
+**Next seam:** `CORE-0`, then `MODEL-1`.
