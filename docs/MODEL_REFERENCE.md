@@ -103,15 +103,19 @@ A model can match reference software and still be physically wrong. A model can 
 
 ## 6. Golden/reference evidence layout
 
-Derived evidence should live outside `References/`, for example:
+Derived evidence lives outside `References/`. REF-1A establishes the first concrete layout:
 
 ```text
+tools/reference_harness/          # stdlib-only parsers/identity helpers; not product runtime
 tests/reference/
-  plumes2/
-  visual_plumes/
-  ebb_plumes/
-  literature/
+  reference-lock.json             # pinned distribution/repository identities
+  cases/                          # canonical case manifests
+  expected/                       # small derived golden summaries
+tests/reference_harness/          # parser/manifest/full-reference regressions
 ```
+
+Large normalized tables should only be committed when they are genuinely useful golden material;
+otherwise regenerate them from the immutable raw evidence plus the pinned manifest.
 
 A case manifest should record:
 
@@ -127,6 +131,31 @@ A case manifest should record:
 
 Raw output is evidence; normalized output is derived test material.
 
-## 7. Interpretation
+## 7. REF-1 pinned identities and normalization
+
+REF-1 uses exact source identities rather than floating branches:
+
+- Ebb Carbon `ebbcarbon/Plumes_Public` at
+  `9791c80ff94f706603df0ae473667ccdffd359db`;
+- SFEI `sfei/Visual-Plumes-Models` at
+  `99283a481a84902ab248fcf3b6041b484daa1c1e`;
+- checked-in PLUMES distribution tree/executable Git identities recorded in
+  `tests/reference/reference-lock.json`.
+
+The PLUMES result normalizer names the executable's signed vertical result as `z_m`: free
+surface zero, positive upward. It also derives `depth_below_surface_m = -z_m`. Flux-average
+dilution and centreline dilution remain distinct quantities.
+
+The checked-in executables are pinned by Git blob identity and byte size. Exact SHA-256 remains
+open because the current connector/sandbox boundary does not expose repository binary contents;
+`tools/reference_harness/hash_reference.py` computes SHA-256 and re-checks the Git blob identity
+when a binary-capable checkout is available.
+
+The shipped-example comparison is itself a warning about reference hygiene: both distributions
+produce 55 identical near-field rows through the surface event, while the far fields differ under
+different diffusivity settings. A shipped-output difference is therefore not automatically a
+model-version difference.
+
+## 8. Interpretation
 
 Reference agreement can show that Plume tracks a named implementation for named cases. It does **not** by itself establish physical truth, regulatory acceptance or applicability outside the compared mechanisms/envelope.
