@@ -1,3 +1,4 @@
+# Python / tooling
 __pycache__/
 *.py[cod]
 .venv/
@@ -7,3 +8,15 @@ __pycache__/
 .coverage
 htmlcov/
 .ci/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local Plume data/results workspace
+workspace/
+
+# Common generated outputs if a user explicitly points outside workspace/
+outputs/
+reports/

@@ -1,63 +1,80 @@
 # AGENTS.md — Plume
 
-Agent entry point for this repository. Keep this file short; detailed method and current evidence live under `docs/`.
+Agent entry point for this repository. Detailed product, method and evidence owners live under `docs/`.
 
 ## Before doing work
 
 Read these in order before changing repository content:
 
-1. [docs/METHOD.md](docs/METHOD.md) — development and evidence method.
-2. [docs/buildlog/README.md](docs/buildlog/README.md) — current status and evidence boundary.
-3. [docs/USER_INPUT.md](docs/USER_INPUT.md) and [docs/BACKLOG.md](docs/BACKLOG.md) — accepted human direction and live queue.
-4. [docs/GATES.md](docs/GATES.md) — unresolved reference/manual evidence.
-5. [docs/MODEL_REFERENCE.md](docs/MODEL_REFERENCE.md) — immutable PLUMES2.0 reference contract.
-6. For modelling work, read [MODEL_NOTES.md](MODEL_NOTES.md), [SCREENING_PROCEDURE.md](SCREENING_PROCEDURE.md), then inspect the implementing Python and relevant tests/data.
+1. [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md) — what Plume is and is not.
+2. [docs/METHOD.md](docs/METHOD.md) — development and evidence method.
+3. [docs/buildlog/README.md](docs/buildlog/README.md) — current status and evidence boundary.
+4. [docs/USER_INPUT.md](docs/USER_INPUT.md) and [docs/BACKLOG.md](docs/BACKLOG.md) — accepted human direction and live queue.
+5. [docs/GATES.md](docs/GATES.md) — unresolved evidence/judgement gates.
+6. [docs/CONFIG.md](docs/CONFIG.md) — config, provider and local-workspace contracts.
+7. [docs/MODEL_REFERENCE.md](docs/MODEL_REFERENCE.md) — immutable external model/reference contract.
 
-When written claims disagree, check the implementing code. The implementation is evidence for current behaviour; accepted model/reference decisions define intended behaviour; `docs/buildlog/README.md` owns current evidence/status.
+For implementation work, inspect the implementing code and relevant tests/data after reading the owners above. When prose disagrees with implementation, check the implementation before making behavioural claims; accepted product/model decisions define intended behaviour and `docs/buildlog/README.md` owns current evidence/status.
 
 ## Immutable reference boundary
 
-**Never modify anything under `PLUMES2.0-main/` during normal product/model work.**
+**Never modify files under `References/` during normal product/model work.**
 
-That directory is the archived reference distribution used to generate comparison evidence. Do not edit, reformat, regenerate, rename, delete, or "fix" files inside it. Any future upstream refresh must be its own explicitly human-authorised archive-import sprint with before/after identities and provenance.
+`References/` contains verbatim third-party/reference distributions used as evidence. Do not edit, reformat, regenerate, rename, delete, or "fix" their contents. A new upstream snapshot is a separate explicitly human-authorised reference-import sprint with provenance and before/after identities.
 
-Reference-model agreement is not physical validation and must never be described as permitting proof.
+Reference agreement is not physical validation and must never be described as permitting proof.
+
+## Product boundary
+
+Plume is a permit-oriented **thermal-discharge digital twin engine**:
+
+- fixed outfall/site geometry;
+- time-varying flow, discharge temperature, ambient temperature/salinity profiles and current;
+- near-field thermal plume physics first;
+- prescribed-current/simple far-field only as a separate model layer;
+- historical replay (for example Copernicus) and later live probe/SCADA providers through the same data contracts;
+- permit-relevant thermal metrics, plots and animations.
+
+Thermal effects are the product scope. Chemistry/pollutant modules in reference models are reference material, not Plume product requirements.
+
+The active implementation must remain UI-independent so a future light integration in HeatHandler or another application can call the same core package.
+
+## Config, workspace and secrets
+
+- Product behaviour is driven by versioned config files, not UI state.
+- Config encoding may be YAML or JSON; the normalized schema is the contract.
+- Runtime data, provider caches, generated plots, animations and reports belong in a configurable **gitignored workspace** (default `workspace/`), not in source control.
+- Every run must preserve enough manifest/provenance information to reproduce which config, model version and input data produced it.
+- Never commit credentials. Local credentials use environment variables / ignored `.env` files. GitHub Secrets are only for explicitly human-approved Actions runs.
 
 ## Working agreement
 
 - Work in explicit, decision-coherent sprints. At sprint start state scope, retirement evidence, and recommended reasoning level.
 - Count judgements, not files. Plan before changing more than two independent decisions.
-- Check behavioural/model claims against the function that implements them before planning from prose.
-- Every backlog item must name the observation that retires it.
-- Every important deterministic gate should have a real failure discriminator where practical.
-- Route every finding to `BACKLOG.md`, `GATES.md`, a durable model/decision owner, or a buildlog before clearing context.
-- Preserve units and conventions explicitly. Do not silently change coordinate systems, bulk/centerline definitions, density conventions, calibration meanings, or termination semantics.
-- Separate calibration cases from verification/hold-back cases. Do not tune a coefficient against a case and then cite that same case as independent verification.
-- Prefer the simplest current architecture; this repository is still prototype-stage and does not owe backward compatibility unless a future owner says otherwise.
-- **Sandbox first, Actions by permission.** Prove everything practical in the ChatGPT sandbox. GitHub Actions consumes scarce project credits and must never be dispatched or enabled automatically without explicit human approval for that run. If sandbox evidence is sufficient, do not spend Actions credits merely to duplicate it.
+- Every backlog item names the observation that retires it.
+- Important deterministic gates should have a plausible failure discriminator where practical.
+- Route findings to `BACKLOG.md`, `GATES.md`, a durable spec/reference owner, or buildlog before clearing context.
+- Preserve units, coordinates, dilution definitions and reference conventions explicitly.
+- Separate calibration cases from verification/hold-back cases.
+- Prefer the simplest current architecture. Prototype history does not create backward-compatibility obligations.
+- **Sandbox first, Actions by permission.** Prove everything practical in the ChatGPT sandbox. Never dispatch or enable GitHub Actions without explicit human approval for that run.
 
 ## Actor model
 
-The normal path is deliberately lighter than BOOSTED:
+- **ChatGPT + GitHub**: architecture, source authoring/review, repository status, durable evidence, branches and PRs.
+- **ChatGPT sandbox**: default deterministic closer whenever the needed environment can be reproduced there.
+- **GitHub Actions**: manual opt-in cross-check only after explicit human approval.
+- **Local Windows/Luna**: exception path for evidence that specifically requires a Windows-only reference executable or other local dependency.
+- **Human**: product/modelling judgement, permission to spend Actions credits, and final merge authority.
 
-- **ChatGPT + GitHub**: architecture, source authoring, review, repository status, durable evidence and branch/PR work.
-- **ChatGPT sandbox**: default mechanical closer for Python syntax, regression tests, deterministic batches, parsers and generated comparison evidence when the required environment can be reproduced there.
-- **GitHub Actions**: optional/manual cross-check only after explicit human approval; never an automatic tax on pushes or PRs.
-- **Local Luna/Windows**: exception path for evidence that specifically requires the archived Windows PLUMES executable, GUI interaction, or another OS-local dependency.
-- **Human**: modelling/product judgement, permission to spend GitHub Actions credits, acceptance of ambiguous engineering policy, and final merge authority.
-
-Use one writer lease at a time. Connector-authored source is a candidate until its required deterministic evidence is green. Do not make the human relay routine Python failures that the sandbox can establish directly.
+Use one writer lease at a time. Do not reset/force/auto-stash around conflicting writer state.
 
 ## Verification and completion
 
-For ordinary Python/model work, close the deterministic boundary in the ChatGPT sandbox whenever practical. Record the exact commit/source identity and commands/results. Use GitHub Actions only when the human explicitly approves the run or when a repository-hosted environment itself is the subject of the test.
-
-A physics/closure/trajectory/dilution change additionally owes the relevant PLUMES reference comparison once the golden-reference harness exists.
-
 State exactly what was tested and what remains unproven. Never upgrade:
 
-- "sandbox tests green" or "CI green" to "validated",
-- "matches PLUMES" to "physically correct",
-- one platform/reference case to a general support or applicability claim.
+- "sandbox green" or "CI green" to "validated";
+- "matches PLUMES/Visual Plumes" to "physically correct";
+- one reference case to a general applicability or permitting claim.
 
-At integration checkpoints recommend **merge/integrate now** or **hold**, with blockers. Never merge `main` without explicit human authorisation.
+At integration checkpoints recommend **integrate now** or **hold**, with blockers. Never merge `main` without explicit human authorisation.

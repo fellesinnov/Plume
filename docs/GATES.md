@@ -1,11 +1,13 @@
 # Open gates
 
-Gates hold evidence that cannot be closed by ordinary source reasoning/CI alone.
+Gates hold evidence or judgement that source editing alone cannot settle.
 
-| Gate | Question / evidence owed | Owner | State | Retirement evidence |
-|---|---|---|---|---|
-| PLUMES-REF-1 | Can the exact archived `plumes2.0v1.exe` be driven repeatably for our canonical cases on Windows? | Local Luna + human only where GUI judgement is unavoidable | OPEN | Exact executable SHA-256/version + committed inputs/raw outputs for the first canonical case set |
-| PLUMES-REF-2 | What normalized fields can be extracted robustly from PLUMES output for automated trajectory/dilution comparison? | ChatGPT after REF-1 data exists | BLOCKED on REF-1 | Parser tests plus deliberate-red discriminator |
-| MODEL-TOL-1 | What acceptance metrics/tolerances are defensible for PLUMES regression? | ChatGPT + human modelling judgement | BLOCKED on REF-1/2 | Evidence-backed documented thresholds with hold-back cases |
+| Gate | Question / evidence owed | State | Retirement evidence |
+|---|---|---|---|
+| PLUMES-SOURCE-1 | Is authentic public PLUMES2.0 Fortran source available? | **SEARCH CLOSED 2026-10-07 — no public source found** | EPA/SSMC/public-GitHub/web search recorded in `MODEL_REFERENCE.md`; reopen if maintainers publish/provide source |
+| PLUMES-REF-1 | Which checked-in PLUMES2.0 executable/version is the primary regression reference, and are canonical runs repeatable? | OPEN | Exact hashes + identical canonical inputs/raw outputs from both distributions + documented primary/secondary roles |
+| MODEL-TOL-1 | What near-field metrics/tolerances are defensible? | BLOCKED on REF-1 / MODEL-1 | Evidence-backed thresholds with separate hold-back cases |
+| FIELD-PROFILE-1 | Which radial/similarity profile and centerline-to-mean relation should define ΔT contours? | OPEN | Literature/reference-backed choice plus reference cases that discriminate plausible alternatives |
+| FARFIELD-SCOPE-1 | Where is the simple prescribed-current far field adequate versus mandatory external hydrodynamics? | BLOCKED on REF-1 / FARFIELD-1 | Reference comparison + documented applicability/trigger criteria |
 
-Do not manufacture numeric tolerances merely to make a gate pass.
+Do not manufacture tolerances merely to make a gate pass.

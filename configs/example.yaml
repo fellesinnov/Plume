@@ -1,0 +1,86 @@
+schema_version: 1
+
+project:
+  id: demo_thermal_outfall
+  name: Demo thermal outfall
+
+site:
+  latitude_deg: 60.0
+  longitude_deg: 5.0
+  water_depth_m: 20.0
+
+outfall:
+  type: single_round_port
+  diameter_m: 0.80
+  discharge_depth_below_surface_m: 12.0
+  vertical_angle_deg: 0.0
+  azimuth_deg: 90.0
+
+forcing:
+  clock:
+    start: 2025-01-01T00:00:00Z
+    end: 2025-01-07T00:00:00Z
+    step: PT1H
+
+  source:
+    flow_m3h:
+      provider: constant
+      value: 4000.0
+    delta_T_C:
+      provider: constant
+      value: 10.0
+
+  ambient:
+    temperature_profile_C:
+      provider: inline_profile
+      levels:
+        - {depth_m: 0.0, value: 10.0}
+        - {depth_m: 10.0, value: 8.0}
+        - {depth_m: 20.0, value: 7.0}
+
+    salinity_profile_psu:
+      provider: inline_profile
+      levels:
+        - {depth_m: 0.0, value: 34.0}
+        - {depth_m: 20.0, value: 35.0}
+
+    current_profile:
+      provider: constant_vector
+      u_east_mps: 0.10
+      v_north_mps: 0.00
+
+model:
+  near_field:
+    enabled: true
+  field_reconstruction:
+    enabled: true
+  far_field:
+    enabled: false
+
+criteria:
+  - id: dt2_extent
+    type: isotherm_extent
+    threshold_delta_T_C: 2.0
+
+  - id: dt2_at_100m
+    type: max_delta_T_at_distance
+    distance_m: 100.0
+    limit_delta_T_C: 2.0
+
+workspace:
+  root: workspace
+  shared_provider_cache: true
+
+outputs:
+  save:
+    forcing_snapshot: true
+    timestep_metrics: true
+    spatial_fields: selected
+    field_stride: PT24H
+    section_plots: true
+    plan_plots: true
+    timeseries_plots: true
+    animation: true
+    report: false
+  animation:
+    fps: 12
