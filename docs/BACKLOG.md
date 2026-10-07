@@ -3,15 +3,17 @@
 Live queue. A ready item names the observation that retires it.
 
 ## SPEC-0 — Define/reset the product
-**State:** READY FOR INTEGRATION on `spec-0-product-reset`.
+**State:** INTEGRATED on `main` at `20822afe25175a94ba2b7cb91579e4191b7bc52c`.
 
 **Scope:** freeze the old prototype, reset active source, define the digital-twin product/config/workspace contracts, repair the immutable `References/` boundary, define extensible outlet geometry and Design Mode, and route the first implementation/reference seams.
 
-**Evidence:** structural/config/workflow checks recorded in `docs/buildlog/README.md`; no Actions run.
+**Evidence:** durable record in `docs/buildlog/2026-10-07-spec-0.md`; no Actions run.
 
-**Retires when:** the SPEC-0 candidate is integrated to `main` and the active tree no longer implies that the historical screening prototype is the product.
+**Retired by:** the active tree now defines the digital-twin product and no longer carries the historical screening implementation as current model truth.
 
 ## REF-1 — Reference bakeoff and qualification
+**State:** ACTIVE on `ref-1-reference-bakeoff`.
+
 **Why:** model implementation should start from multiple explicit references rather than one legacy executable or experimental prototype coefficients.
 
 **Scope:**
@@ -22,6 +24,8 @@ Live queue. A ready item names the observation that retires it.
 - include independent literature/experiment evidence where available;
 - define calibration and hold-back case sets;
 - recommend which implementation/material to reuse directly, wrap, or keep oracle-only.
+
+**Evidence so far:** REF-1A added the stdlib reference harness, pinned manifests/locks and an executable shipped-example golden. Actual checked-in outputs reproduce 55/55 identical near-field rows while the configured far-field laws differ. Exact executable SHA-256 and controlled identical-input cross-build runs remain owed; see `docs/buildlog/README.md`.
 
 **Retires when:** reference roles and canonical cases are explicit, major disagreements are understood/routed, and MODEL-1 has an evidence-backed implementation starting point rather than a guessed closure set.
 
