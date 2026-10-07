@@ -10,7 +10,9 @@ This file is the single owner for current repository status.
 
 **Candidate branch:** `spec-0-product-reset`.
 
-**Qualified reset/source head:** `57196f68f810d02f6ee825457f69565aaed7e7cb`.
+**Qualified reset/source commit:** `57196f68f810d02f6ee825457f69565aaed7e7cb`.
+
+**Current candidate head:** `a13c7952e9e6f08c02c6d2b1ce7a4ca527639fcb`.
 
 ### Candidate result
 
@@ -19,13 +21,17 @@ This file is the single owner for current repository status.
 - `References/` is the immutable external evidence boundary;
 - the user mockup moved from `References/` to `docs/assets/initial-mockup.png`;
 - product/config/provider/workspace/permit-output contracts are defined before implementation;
+- an explicit **Design Mode** now precedes annual simulation: evaluate one representative/adverse snapshot, compare outlet geometry/operation, then lock the selected normal config;
+- outlet architecture is type-tagged/extensible: single round port first, multiport and other outlet geometries later through adapters;
 - generated/downloaded data defaults to ignored `workspace/`;
 - credentials are excluded from source;
-- GitHub Actions remains manual-only.
+- GitHub Actions remains manual-only;
+- reference policy is accuracy-first triangulation, not PLUMES2.0 parity as physical truth;
+- SFEI GPL-3.0 Visual Plumes may be used as an external oracle; the MIT Ebb PLUMES2.0 port is a serious reuse candidate after REF-1 review.
 
 ### Structural evidence
 
-Against `57196f68f810d02f6ee825457f69565aaed7e7cb`:
+Against the qualified reset/source commit:
 
 - top-level active tree is limited to `.env.example`, `.github`, `.gitignore`, `AGENTS.md`, `README.md`, `References/`, `configs/`, and `docs/`;
 - active tree contains **no Python implementation files** and no `requirements.txt`;
@@ -33,7 +39,9 @@ Against `57196f68f810d02f6ee825457f69565aaed7e7cb`:
 - PLUMES reference files are byte-identical relative to sprint start; the only `References/` diff is the user-owned mockup rename into docs;
 - example config YAML parses and passes a focused contract smoke check;
 - manual workflow YAML parses and exposes only `workflow_dispatch`;
-- no GitHub Actions run was started on `spec-0-product-reset`.
+- no GitHub Actions run has been started on `spec-0-product-reset`.
+
+Subsequent commits through the current head are documentation/specification refinements only.
 
 ### Reference research
 
@@ -48,6 +56,6 @@ SPEC-0 changes repository/product contracts, not plume physics. No GitHub Action
 
 ### Integration state
 
-**READY FOR INTEGRATION.** Merge authority remains human-only.
+**READY FOR INTEGRATION.** Merge authority remains human-only under current repository governance.
 
-The next seams after integration are **REF-1** (reference qualification) and **CORE-0** (package/config/workspace skeleton).
+The next seam after integration is **REF-1 reference bakeoff**, followed by **CORE-0**, **MODEL-1**, **FIELD-1**, then **DESIGN-1** before historical TIME-1.
