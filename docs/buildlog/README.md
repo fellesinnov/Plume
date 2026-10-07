@@ -1,5 +1,30 @@
 # Current build / evidence status
 
+## CORE-0 candidate — 2026-10-07
+
+**Branch:** `core-0-package-config-workspace`.
+
+**Authoritative `main` at sprint start:** `c11ff07e44a10e75c3012b4c86fbc874cc60157c`.
+
+CORE-0 now has candidate retirement evidence for the headless package/config/provider/workspace foundation. Detailed record: [2026-10-07-core-0.md](2026-10-07-core-0.md).
+
+Candidate evidence:
+
+- schema-v1 YAML/JSON config normalization;
+- structural `single_round_port` adapter with explicit unsupported-type failure;
+- deterministic local provider contracts/implementations;
+- config-relative paths and corrected demo workspace root;
+- headless `plume prepare` producing normalized config + provenance manifest;
+- sandbox **13/13 focused tests PASS**;
+- `compileall` PASS;
+- editable package + CLI prepare smoke PASS without build isolation;
+- no GitHub Actions run;
+- no `References/` changes.
+
+**Integration state:** READY FOR HUMAN INTEGRATION, not merged. CORE-0 does not claim plume physics or thermodynamic qualification.
+
+**Next seam after integration:** `MODEL-1`.
+
 This file is the single owner for current repository status.
 
 ## REF-1 integrated — 2026-10-07
