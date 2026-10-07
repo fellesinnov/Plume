@@ -1,6 +1,6 @@
 # Configuration, providers and workspace
 
-**Status:** SPEC-0 contract draft with REF-1 coordinate/thermodynamic conventions. No implementation is implied yet.
+**Status:** SPEC-0 contract with REF-1 coordinate/thermodynamic conventions. CORE-0 implements the schema-v1 headless loader/normalizer, structural outlet-adapter registry, deterministic local providers and prepared-run manifest/workspace skeleton. No plume solver, Copernicus adapter or TEOS-10 state conversion is implied yet.
 
 ## 1. Principles
 
@@ -9,7 +9,7 @@
 - YAML and JSON may both be accepted; the normalized schema is authoritative.
 - SI is the default.
 - Secrets never appear in config.
-- Paths are relative to the config file unless explicitly absolute.
+- Paths are relative to the config file unless explicitly absolute. Because `configs/example.yaml` lives under `configs/`, it uses `../workspace` to resolve to the repository-level default `workspace/`.
 - Downloaded/provider data and generated outputs are local artifacts, not source.
 - Provider-specific data is normalized before it reaches the model.
 - Outlet geometry is type-tagged and extensible; unsupported geometry must fail explicitly rather than silently falling back.
@@ -101,6 +101,8 @@ flow_m3h:
   value_column: flow_m3h
 ```
 
+CORE-0's schema-v1 `csv` implementation is deliberately limited to a scalar time series (`time`, `value`) with timezone-aware, strictly increasing timestamps. Depth-profile and vector CSV shapes can extend the same provider interface when a concrete use case requires them.
+
 A profile:
 
 ```yaml
@@ -131,6 +133,8 @@ COPERNICUSMARINE_SERVICE_PASSWORD
 The config may name credential *environment variable names* later, but never store credential values.
 
 ## 5. Normalized provider contracts
+
+CORE-0 normalizes provider **shape and provenance**, not seawater thermodynamics. Inline/manual temperature and salinity values retain the explicit quantity meaning carried by their forcing key/config contract. MODEL-1 still owes the TEOS-10 conversion boundary described below before those values enter production plume physics.
 
 Provider adapters should return a small number of model-facing shapes.
 
