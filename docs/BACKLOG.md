@@ -12,7 +12,7 @@ Live queue. A ready item names the observation that retires it.
 **Retired by:** the active tree now defines the digital-twin product and no longer carries the historical screening implementation as current model truth.
 
 ## REF-1 — Reference bakeoff and qualification
-**State:** READY FOR INTEGRATION on `ref-1-reference-bakeoff` / draft PR #3.
+**State:** INTEGRATED on `main` via PR #3 at `6fce138287b6df3ae24b0e67569f61855251bf12`.
 
 **Why:** model implementation should start from multiple explicit references rather than one legacy executable or experimental prototype coefficients.
 
