@@ -3,9 +3,11 @@
 Live queue. A ready item names the observation that retires it.
 
 ## SPEC-0 — Define/reset the product
-**State:** CANDIDATE on `spec-0-product-reset`.
+**State:** READY FOR INTEGRATION on `spec-0-product-reset`.
 
 **Scope:** freeze the old prototype, reset active source, define the digital-twin product/config/workspace contracts, repair the immutable `References/` boundary, and route the first implementation/reference seams.
+
+**Evidence:** qualified reset/source head `57196f68f810d02f6ee825457f69565aaed7e7cb`; structural/config/workflow checks recorded in `docs/buildlog/README.md`; no Actions run.
 
 **Retires when:** the SPEC-0 candidate is integrated to `main` and the active tree no longer implies that the historical screening prototype is the product.
 
