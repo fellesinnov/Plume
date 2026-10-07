@@ -1,46 +1,72 @@
 # Current build / evidence status
 
-This file is the single owner for current repository evidence. Historical records may contain old states; they do not override this page.
+This file is the single owner for current repository status.
 
-## Bootstrap qualification boundary — 2026-10-07
+## SPEC-0 candidate — 2026-10-07
 
-**Starting authoritative main:** `ef0be9ac3dc3cb5bcba5f44dd5e37dd724d8b2b3` (`initial commit`).
+**Authoritative main at sprint start:** `b691113b374b08a21302a23e17a196a78e325fb8`.
 
-**Bootstrap branch:** `bootstrap/plume-workflow-v1`.
+**Historical prototype snapshot:** branch `archive/prototype-v0` points at that exact commit.
 
-**Qualified model/source head:** `32a4dda49b9904698e15b5102197c2a93abea6e9`.
+**Candidate branch:** `spec-0-product-reset`.
 
-**Sandbox-first workflow/policy head:** `5ec49d0465d733861246bd5d029e0c1895b4b02f`.
+**Qualified reset/source commit:** `57196f68f810d02f6ee825457f69565aaed7e7cb`.
 
-**Current prototype:** root-level `outfall_screen.py`, `compare_cormix.py`, `self_test.py`, `test_cases.csv`, requirements and example outputs.
+**Current candidate head:** `a13c7952e9e6f08c02c6d2b1ce7a4ca527639fcb`.
 
-**Reference archive:** `PLUMES2.0-main/` is immutable for normal work.
+### Candidate result
+
+- active product is defined as a thermal-discharge digital twin, not the historical screening script;
+- historical prototype/calibration is absent from the active candidate but preserved unchanged in Git;
+- `References/` is the immutable external evidence boundary;
+- the user mockup moved from `References/` to `docs/assets/initial-mockup.png`;
+- product/config/provider/workspace/permit-output contracts are defined before implementation;
+- an explicit **Design Mode** now precedes annual simulation: evaluate one representative/adverse snapshot, compare outlet geometry/operation, then lock the selected normal config;
+- outlet architecture is type-tagged/extensible: single round port first, multiport and other outlet geometries later through adapters;
+- generated/downloaded data defaults to ignored `workspace/`;
+- credentials are excluded from source;
+- GitHub Actions remains manual-only;
+- reference policy is accuracy-first triangulation, not PLUMES2.0 parity as physical truth;
+- SFEI GPL-3.0 Visual Plumes may be used as an external oracle; the MIT Ebb PLUMES2.0 port is a serious reuse candidate after REF-1 review.
+
+### Structural evidence
+
+Against the qualified reset/source commit:
+
+- top-level active tree is limited to `.env.example`, `.github`, `.gitignore`, `AGENTS.md`, `README.md`, `References/`, `configs/`, and `docs/`;
+- active tree contains **no Python implementation files** and no `requirements.txt`;
+- `archive/prototype-v0` remains exactly `b691113b374b08a21302a23e17a196a78e325fb8`;
+- PLUMES reference files are byte-identical relative to sprint start; the only `References/` diff is the user-owned mockup rename into docs;
+- example config YAML parses and passes a focused contract smoke check;
+- manual workflow YAML parses and exposes only `workflow_dispatch`;
+- no GitHub Actions run has been started on `spec-0-product-reset`.
+
+Subsequent commits through the current head are documentation/specification refinements only.
+
+### Reference research
+
+- Both checked-in PLUMES distributions contain executables and data, not Fortran source.
+- The EPA Dec-2025 package contains useful additional near-/far-field traces.
+- No authentic public PLUMES2.0 Fortran source was found in the 2026-10-07 EPA/SSMC/web/GitHub search.
+- Public SFEI Visual Plumes/UM3 Python code (GPL-3.0) and Ebb Carbon PLUMES2.0 Python port (MIT) were identified as valuable independent references.
+
+### Evidence policy for this sprint
+
+SPEC-0 changes repository/product contracts, not plume physics. No GitHub Actions run is required or authorised.
+
+### Design Studio refinement
+
+- UI/product contract added at `docs/UI_SPEC.md` on qualified spec head `365ef1de50d4cad193f62abdf80f27bab8ddd0bd`.
+- Preferred first shell is Streamlit, but physics/providers/config/cache/criteria stay headless.
+- Workflow is `Project → Ocean → Design → Simulate → Results`.
+- Ocean data is fetched/cached explicitly; selecting/designing against a pinned timestamp never refetches on geometry changes.
+- Named customer/site projects and revisions remain under gitignored `workspace/projects/` by default.
+- Provider, physics and render caches invalidate independently.
+- Annual runs always retain compact metrics/provenance but need not retain dense spatial fields for every timestep.
+- No GitHub Actions run was required or authorised for this docs/spec refinement.
 
 ### Integration state
 
-- If this file is being read from authoritative `main`, the bootstrap is **INTEGRATED**, P0-1 is retired, and P0-2 / `PLUMES-REF-1` is the next seam.
-- If this file is being read from `bootstrap/plume-workflow-v1`, the candidate is **READY FOR INTEGRATION** and merge authority remains human-only.
+**READY FOR INTEGRATION.** Merge authority remains human-only under current repository governance.
 
-### Evidence established
-
-- GitHub repository and implementing prototype inspected.
-- Archived reference contents inspected: Windows PLUMES executable, manuals and example project/output are present; no FORTRAN source was found in the checked-in archive.
-- ChatGPT sandbox capability probe: GNU Fortran 14.2.0 successfully compiled and ran a minimal FORTRAN program.
-- This does **not** prove the archived Windows PLUMES executable runs in the sandbox.
-- Earlier bootstrap GitHub Actions verification on model/source head `32a4dda49b9904698e15b5102197c2a93abea6e9`: dependency check, Python syntax, existing `self_test.py`, and 20-case batch smoke **PASS**.
-- Batch regression identity at that head: 15 RED / 4 AMBER / 1 GREEN. These classifications are preserved prototype output, not validation evidence.
-- Comparison from `32a4dda49b9904698e15b5102197c2a93abea6e9` through `5ec49d0465d733861246bd5d029e0c1895b4b02f` contains only workflow/documentation changes; no Python modelling source changed.
-- Sandbox verification of the revised workflow: YAML parse **PASS**; only trigger is `workflow_dispatch`; no automatic `push`, `pull_request`, or scheduled trigger.
-- No GitHub Actions run was dispatched for the sandbox-first policy changes.
-
-### Verification policy
-
-- ChatGPT sandbox is the default deterministic closer whenever the required environment can be reproduced there.
-- GitHub Actions is manual opt-in only. The human must explicitly approve each run before it is dispatched; do not spend Actions credits merely to duplicate sandbox evidence.
-- Local Luna/Windows remains the exception path for exact PLUMES Windows executable/GUI evidence.
-
-### Remaining evidence / debt
-
-- PLUMES Windows golden capture is the next explicit gate/backlog seam (`PLUMES-REF-1` / P0-2).
-- No PLUMES regression comparison has been performed yet.
-- No claim of physical/model validation is made.
+The next seam after integration is **REF-1 reference bakeoff**, followed by **CORE-0**, **MODEL-1**, **FIELD-1**, then **DESIGN-1** before historical TIME-1.

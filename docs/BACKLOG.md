@@ -1,39 +1,76 @@
 # Backlog
 
-Live queue. Item numbers are identities, not priority. A ready item names the observation that retires it.
+Live queue. A ready item names the observation that retires it.
 
-## What is next
+## SPEC-0 — Define/reset the product
+**State:** READY FOR INTEGRATION on `spec-0-product-reset`.
 
-### P0-1 — Bootstrap repository workflow
-**State:** RETIRED when this document is on authoritative `main`; otherwise READY FOR INTEGRATION on `bootstrap/plume-workflow-v1`.
+**Scope:** freeze the old prototype, reset active source, define the digital-twin product/config/workspace contracts, repair the immutable `References/` boundary, define extensible outlet geometry and Design Mode, and route the first implementation/reference seams.
 
-**Evidence:** repository owners exist; model/source head `32a4dda49b9904698e15b5102197c2a93abea6e9` passed the bootstrap Python verification before the Actions-credit policy changed; later changes are workflow/docs only. The sandbox-first workflow was mechanically verified to expose only manual `workflow_dispatch`, with no automatic push/PR/schedule trigger. PLUMES reference capture is explicitly routed to P0-2 / `PLUMES-REF-1`.
+**Evidence:** structural/config/workflow checks recorded in `docs/buildlog/README.md`; no Actions run.
 
-**Retires when:** this bootstrap content is integrated to `main`.
+**Retires when:** the SPEC-0 candidate is integrated to `main` and the active tree no longer implies that the historical screening prototype is the product.
 
-### P0-2 — Capture canonical PLUMES2.0 golden cases
-**Why:** the archived reference is a Windows executable and cannot currently run in the remote Linux sandbox.
+## REF-1 — Reference bakeoff and qualification
+**Why:** model implementation should start from multiple explicit references rather than one legacy executable or experimental prototype coefficients.
 
-**Scope:** choose a small representative first set (baseline warm discharge, high/low momentum, crossflow, shallow/deep or stratified as supported), run the exact archived executable on Windows, preserve exact inputs and raw outputs outside `PLUMES2.0-main/`, and record executable SHA-256/version/environment.
+**Scope:**
+- inventory/hash both checked-in PLUMES2.0 distributions;
+- compare representative executable traces where useful;
+- inspect/run the MIT Ebb Carbon PLUMES2.0 port and GPL-3.0 SFEI Visual Plumes/UM3 as independent references;
+- map model equations, similarity profiles, multiport behaviour, far-field assumptions and known divergences;
+- include independent literature/experiment evidence where available;
+- define calibration and hold-back case sets;
+- recommend which implementation/material to reuse directly, wrap, or keep oracle-only.
 
-**Retires when:** committed golden evidence can reproduce the exact reference outputs without relying on chat memory.
+**Retires when:** reference roles and canonical cases are explicit, major disagreements are understood/routed, and MODEL-1 has an evidence-backed implementation starting point rather than a guessed closure set.
 
-### P0-3 — Build PLUMES output parser + comparison harness
-**Scope:** parse preserved raw PLUMES text into normalized trajectory/dilution data and compare the Python model using named metrics.
+## CORE-0 — Implement package/config/workspace skeleton
+**Scope:** create the UI-independent Python package, versioned YAML/JSON config loader/normalizer, outlet-adapter contract, workspace/run manifest, provider interface and deterministic constant/inline/CSV providers.
 
-**Retires when:** the sandbox can run at least one golden case, a deliberate plausible mismatch goes red, and the report identifies exact reference/candidate identities. An optional GitHub Actions cross-check requires explicit human approval.
+**Retires when:** `configs/example.yaml` loads headlessly, produces a normalized config + manifest in an ignored workspace, unsupported outlet types fail explicitly, and deliberate schema/provider errors fail deterministically.
 
-### P1-1 — Convert prototype checks to a normal Python test layout
-Move toward `src/` + `tests/` and pytest only after the reference baseline is pinned.
+## MODEL-1 — Qualified single-round-port near-field kernel
+**Scope:** implement the first outlet adapter and thermal near-field kernel with conserved heat/salt, arbitrary ambient T/S profiles, prescribed depth-varying current vector, explicit coordinates and boundary events. Reuse/adapt proven permissive implementation material where advantageous instead of reinventing equations.
 
-**Retires when:** imports/tests are package-stable, current self-test coverage is preserved, and the sandbox verification is green.
+**Retires when:** deterministic conservation/trend tests pass and agreed calibration + hold-back reference cases meet evidence-backed metrics without tuning the hold-backs.
 
-### P1-2 — Define comparison acceptance bands from evidence
-Do not invent tolerances before seeing reference behaviour and numerical repeatability.
+## FIELD-1 — Spatial ΔT reconstruction and primary plots
+**Scope:** convert integral plume state into an explicit similarity-profile temperature field; generate section/plan ΔT contours tied mathematically to the model.
 
-**Retires when:** named metrics/tolerances are justified in a durable decision/model note and include independent hold-back cases.
+**Retires when:** the mockup-style plot is produced from a documented/qualified field reconstruction and deliberate profile/geometry changes cause predictable test failures.
 
-### P2-1 — Independent validation strategy
-Define the role of CORMIX, literature/experiment data, and site-specific engineering checks after PLUMES regression is working.
+## DESIGN-1 — Live Design Studio snapshot mode
+**Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
 
-**Retires when:** we can distinguish calibration, reference regression, and independent physical validation without conflating them.
+**Retires when:** one pinned snapshot can compare multiple deterministic geometry variants through the same MODEL/FIELD/criteria stack with no provider refetch, save/reopen project revisions, and export/select the locked configuration for historical simulation.
+
+## TIME-1 — Ocean browser + historical runner + Copernicus
+**Scope:** add the Design Studio Ocean view plus quasi-steady time runner: map/coordinate site selection, default previous-complete-year fetch, shared provider cache/provenance, annual T/S/current plots, date/time selection of a cached profile for Design Mode, and annual metrics table. Geometry/config changes must reuse the ocean cache.
+
+**Retires when:** a reproducible historical interval can be run from one config with cached provider data and one metric row per forcing timestamp.
+
+## PERMIT-1 — Simulate/Results views, permit statistics and animation
+**Scope:** config-driven ΔT/absolute-temperature criteria, receptor/mixing-zone checks, annual max/P95/P99/exceedance duration, section/plan animation.
+
+**Retires when:** an end-to-end synthetic customer case produces auditable criteria results, summary plots and animation from one config.
+
+## OUTLET-2 — Additional outlet geometries
+**Scope:** add multiport diffuser/plume merging first, then consider vertical/surface/near-surface/open-channel outlet types only where the physics and reference evidence are adequate.
+
+**Retires when:** each added outlet type has an explicit config schema, model adapter, reference/hold-back evidence and shared runner/criteria compatibility.
+
+## FARFIELD-1 — Prescribed-current far-field decision/implementation
+**Scope:** compare PLUMES/Visual Plumes/Ebb Brooks-style far-field behaviour, define state/memory boundary, and document when external hydrodynamics is mandatory.
+
+**Retires when:** selected reference/physical cases are reproduced within agreed metrics and applicability triggers are explicit.
+
+## LIVE-1 — Probe/SCADA provider layer and field comparison
+**Scope:** live/environmental provider adapters using the same normalized forcing contract as historical data, plus controlled comparison to simple permit-relevant measurements such as surface temperature.
+
+**Retires when:** a live/mock streaming source can replace historical forcing without changing model/criteria APIs and measurement residuals can be recorded without conflating calibration and verification.
+
+## INTEGRATION-1 — Light HeatHandler integration
+**Scope:** expose a thin callable/API surface so HeatHandler can construct a Plume config, invoke a run and consume metrics/figures without importing Plume UI code.
+
+**Retires when:** a minimal HeatHandler-side spike calls Plume through the public headless interface with no duplicated plume physics.
