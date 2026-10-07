@@ -1,6 +1,6 @@
 # Plume product specification
 
-**Status:** SPEC-0 product boundary, version 0.1.
+**Status:** SPEC-0 product boundary, version 0.2.
 
 ## 1. Purpose
 
@@ -19,16 +19,34 @@ The central question is not merely "what is the dilution for one case?" but:
 
 > How does the thermal plume change through the operating and environmental envelope, and what does that mean for the customer's permit criteria?
 
+Accuracy matters more than parity with any one legacy/reference implementation.
+
 ## 2. Primary use cases
+
+### Design Mode — choose the outlet first
+
+Before annual simulation, load one representative or deliberately adverse water column plus one source operating state and rapidly explore outlet geometry/operation.
+
+Typical knobs:
+
+- discharge depth/elevation;
+- outlet type;
+- diameter;
+- vertical angle;
+- azimuth;
+- port count/spacing when the selected model supports multiport;
+- flow;
+- absolute discharge temperature or process ΔT.
+
+Design Mode should show permit-relevant metrics and plume plots immediately enough for engineering comparison. The selected design is saved as a normal versioned project config, then reused unchanged for historical/digital-twin analysis.
+
+The design profile can initially be inline or file-backed. Later it may be selected from Copernicus/provider history, such as a worst/representative timestamp.
 
 ### Historical permit assessment
 Replay a season/year using historical plant data plus measured or Copernicus ocean data. Produce worst-case, percentile and exceedance statistics plus representative/worst-case plume frames.
 
-### Design comparison
-Compare outlet depth, diameter, angle, number of ports or operating strategies against the same environmental time series and permit criteria.
-
 ### Operational / digital-twin mode
-Later, replace historical providers with live probe/SCADA feeds without changing the solver or criteria interfaces.
+Later, replace historical providers with live probe/SCADA feeds without changing the solver or criteria interfaces. Measurements can be compared with the model and may support controlled calibration, while preserving independent verification data.
 
 ### Reusable engine
 Keep the physics, providers, runner and criteria UI-independent so HeatHandler or another application can call a light Plume package later.
@@ -39,8 +57,9 @@ Keep the physics, providers, runner and criteria UI-independent so HeatHandler o
 
 - Thermal discharge only as the customer-facing quantity.
 - Fresh or saline receiving water as required for density/buoyancy physics.
-- Single round submerged port first.
-- Fixed geometry per config/run.
+- Single round submerged port as the first implemented outlet model.
+- **Outlet abstraction from the start** so future multiport, vertical/horizontal and near-surface/surface discharge geometries can be added without redesigning configs/runners.
+- Fixed geometry per locked config/run.
 - Flow and discharge temperature varying with time.
 - Ambient temperature and salinity varying with depth and time.
 - Ambient current vector varying with depth and time when data exist.
@@ -52,6 +71,7 @@ Keep the physics, providers, runner and criteria UI-independent so HeatHandler o
 ### Separate/optional model layers
 
 - Multiport diffuser and plume merging.
+- Other outlet types where reference/physics evidence supports them.
 - Prescribed-current Brooks/simple far-field transport.
 - Bathymetry as a geometric boundary.
 - External hydrodynamic model fields for site-scale advection.
@@ -62,7 +82,7 @@ Keep the physics, providers, runner and criteria UI-independent so HeatHandler o
 - Solving tidal circulation from bathymetry.
 - Replacing FVCOM/ROMS/Delft3D/MIKE/TELEMAC for recirculation, shoreline steering or complex hydrodynamics.
 - Pollutant, pH, carbonate, dissolved oxygen or reaction chemistry as Plume product features.
-- Claiming regulatory acceptance merely because a result matches PLUMES2.0/Visual Plumes.
+- Claiming regulatory acceptance merely because a result matches PLUMES2.0, Visual Plumes or any other software.
 
 ## 4. Model architecture
 
@@ -73,7 +93,9 @@ config
   ↓
 providers ─────→ normalized forcing/data contracts
   ↓
-time runner ───→ one timestamp / operating state
+design snapshot OR time runner
+  ↓
+outlet adapter
   ↓
 near-field kernel
   ↓
@@ -95,6 +117,7 @@ src/plume/
   config/
   domain/
   providers/
+  outlets/
   model/
   field/
   farfield/
@@ -119,6 +142,8 @@ This is appropriate while the near-field adjustment time is much shorter than th
 
 A future far-field model may carry memory between timesteps. If so, that stateful layer must remain distinct from the quasi-steady near-field kernel.
 
+Design Mode is simply a one-timestamp/snapshot use of the same normalized model/criteria stack, not a separate physics implementation.
+
 ## 6. Required input concepts
 
 ### Site
@@ -130,13 +155,20 @@ A future far-field model may carry memory between timesteps. If so, that statefu
 
 ### Outfall
 
+Stable/common fields should include:
+
 - outlet type;
-- port diameter;
-- discharge depth below surface (human-facing input);
-- port elevation/position after normalization;
+- discharge position/depth;
 - vertical angle;
-- azimuth;
-- port count/spacing when multiport support is introduced.
+- azimuth/orientation.
+
+Type-specific geometry belongs behind the outlet adapter. Examples include:
+
+- single round port: diameter;
+- multiport diffuser: port diameter/count/spacing/layout;
+- future surface/near-surface outlet: geometry appropriate to that model.
+
+The schema should not pretend unsupported outlet types are physically implemented merely because they can be represented.
 
 ### Source forcing
 
@@ -236,13 +268,14 @@ A simple Brooks/prescribed-current far-field layer is in scope after near-field 
 
 ## 12. Reproducibility
 
-Every run must create a manifest that can answer:
+Every run/design evaluation must be able to answer:
 
 - which config/schema version;
 - which Plume commit/model version;
 - which provider datasets and exact requests;
 - actual coordinates/depths/times used;
 - cache/input digests;
+- outlet geometry/model;
 - solver/reference qualification state;
 - criteria;
 - generated outputs.
@@ -251,27 +284,29 @@ A run with identical normalized inputs should be reproducible independent of UI.
 
 ## 13. Reference and validation strategy
 
-External/reference implementations are evidence, not runtime dependencies by default.
-
-Qualification ladder:
+No external program is holy. Use a **reference ensemble**:
 
 1. deterministic conservation/invariant tests;
-2. canonical PLUMES2.0 comparisons;
-3. Visual Plumes/UM3 implementation comparisons where useful;
-4. independent literature/experiment comparisons;
-5. site measurements when available.
+2. PLUMES2.0 executable traces where relevant;
+3. SFEI Visual Plumes/UM3 as an external behavioural oracle where useful;
+4. the MIT Ebb Carbon PLUMES2.0 port as a secondary implementation and potentially reusable source after review;
+5. independent literature/experiment comparisons;
+6. site measurements/probes when available.
 
-Calibration cases and hold-back verification cases must be separate.
+Differences between references are evidence to investigate, not something to average away.
+
+Calibration cases and hold-back verification cases must be separate. Live/site measurements used for calibration must leave independent periods/locations for verification.
 
 ## 14. v1 success definition
 
-A useful first product slice is complete when one config can:
+A useful first product slice is complete when Plume can:
 
-1. describe one single-port outfall;
-2. ingest a historical time series of flow/discharge temperature and depth-resolved ambient forcing;
-3. run the qualified near-field solver across the selected period;
-4. reconstruct one or more ΔT fields/contours;
-5. compute configurable permit metrics for every timestamp;
-6. produce annual summary plots and an animation;
-7. preserve a reproducible local run manifest;
-8. run headlessly as a Python API/CLI so a future HeatHandler integration is thin.
+1. represent and run a single-round-port outfall behind the extensible outlet contract;
+2. load one snapshot and compare design variants, then save the chosen geometry as a normal config;
+3. ingest a historical time series of flow/discharge temperature and depth-resolved ambient forcing;
+4. run the qualified near-field solver across the selected period;
+5. reconstruct one or more ΔT fields/contours;
+6. compute configurable permit metrics for every timestamp;
+7. produce annual summary plots and an animation;
+8. preserve a reproducible local run manifest;
+9. run headlessly as a Python API/CLI so a future HeatHandler integration is thin.
