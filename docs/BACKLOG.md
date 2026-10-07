@@ -5,9 +5,11 @@ Live queue. Item numbers are identities, not priority. A ready item names the ob
 ## What is next
 
 ### P0-1 — Bootstrap repository workflow
-**State:** candidate on `bootstrap/plume-workflow-v1`.
+**State:** READY FOR INTEGRATION on `bootstrap/plume-workflow-v1`; retires when merged to `main`.
 
-**Retires when:** AGENTS/method/status/user-input/backlog/gates/reference owners exist, Python CI passes on the exact candidate, and the first PLUMES reference capture is explicitly routed rather than implicit.
+**Evidence:** repository owners exist; exact source/workflow head `32a4dda49b9904698e15b5102197c2a93abea6e9` passed Python CI; PLUMES reference capture is explicitly routed to P0-2 / `PLUMES-REF-1`.
+
+**Retires when:** the accepted bootstrap candidate is integrated to `main`.
 
 ### P0-2 — Capture canonical PLUMES2.0 golden cases
 **Why:** the archived reference is a Windows executable and cannot currently run in the remote Linux sandbox.
