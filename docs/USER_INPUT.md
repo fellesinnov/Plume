@@ -14,14 +14,21 @@ This file records accepted project direction that should survive chat/session bo
 
 - Plume's primary target is a **thermal-plume digital twin** for customer permit-support work, not merely a one-case screening calculator.
 - Customer-facing scope is thermal: excess/absolute temperature and the spatial/temporal plume relevant to permit limits.
-- Fixed configuration includes site/outfall geometry such as location, depth of discharge, diameter, angle and later multiport details.
+- Fixed configuration includes site/outfall geometry such as location, depth of discharge, diameter, angle/azimuth and later multiport details.
+- Outlet architecture must remain open to multiple geometries. First implementation can be a single round submerged port; future candidates may include multiport diffusers, vertical/horizontal jets, near-surface/surface discharge and other outlet adapters where the physics/reference evidence supports them.
 - Time-varying forcing can include flow, discharge temperature/process ΔT, ambient water-temperature layers, salinity/density layers and current.
 - Historical replay should support Copernicus Marine; later live probes/ADCP/SCADA should plug into the same provider contracts.
 - Expected outputs include permit-oriented time series, worst cases, threshold plume size/extent, surface hotspot metrics, section/plan plots and animations through a year.
 - Near-field physics is core. A qualified simple/prescribed-current far field may be added separately. Plume should not attempt to replace full coastal hydrodynamic/CFD models for bathymetric steering, shoreline circulation or recirculation.
+- Add an explicit **Design Mode** before annual simulation: load one representative/worst water column and one source operating state, then rapidly vary outlet depth, diameter, angle, azimuth, port count/spacing where supported, flow and discharge temperature; compare permit metrics/plots and save the selected geometry as a normal project config.
+- The design workflow should remain useful even before Copernicus is connected: a profile can come from inline/file/manual data. Later it can select a worst/representative historical timestamp from a provider cache.
 - Configs must be flexible/versioned and may choose what artifacts to retain.
 - Runtime provider data, caches, plots, fields, animations and reports should default to a configurable **gitignored workspace** so quick engineering work does not pollute source history.
 - Core engine/provider/result contracts should remain UI-independent so a future light HeatHandler integration is straightforward.
+- Digital-twin operation may later use simple field measurements/probes to compare/calibrate the model and monitor permit-relevant quantities such as surface temperature. Calibration evidence must remain distinct from independent verification.
 - Copernicus credentials must not be committed. A throwaway account may later be supplied to the ChatGPT sandbox through an ignored/local mechanism.
 - All third-party/reference distributions belong under `References/` and are immutable during normal work.
+- PLUMES2.0 is **not** privileged as physical truth. Accuracy matters more than parity with any one implementation. Use multiple independent references, literature and measurements to triangulate model behaviour.
+- GPL-3.0 reference software may be run freely as an external oracle/reference for this consulting/internal-service use case. Direct incorporation/adaptation into the Plume product remains a deliberate license/deployment decision so future customer installation remains flexible.
 - The pre-SPEC-0 prototype should be preserved in Git history/archive branch but removed from the active product tree so its experimental calibration does not become inherited model truth.
+- ChatGPT is the routine repository owner/writer for normal source/docs/branch/PR maintenance. The human will generally avoid direct repository edits except deliberate user-input/gate decisions. Existing explicit human merge authority remains unchanged unless separately revised.
