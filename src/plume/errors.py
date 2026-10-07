@@ -1,0 +1,29 @@
+"""Domain-specific errors exposed by the Plume core."""
+
+
+class PlumeError(Exception):
+    """Base class for expected Plume failures."""
+
+
+class ConfigError(PlumeError):
+    """Raised when a config cannot be parsed or normalized."""
+
+
+class UnsupportedSchemaVersionError(ConfigError):
+    """Raised when the config schema version is not implemented."""
+
+
+class UnsupportedOutletError(ConfigError):
+    """Raised when no outlet adapter is registered for a configured type."""
+
+
+class UnsupportedProviderError(ConfigError):
+    """Raised when no provider is registered for a descriptor."""
+
+
+class ProviderDataError(PlumeError):
+    """Raised when provider-backed data are missing or malformed."""
+
+
+class WorkspaceError(PlumeError):
+    """Raised when a workspace/run cannot be created safely."""
