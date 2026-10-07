@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "generated_from_plume_main": "20822afe25175a94ba2b7cb91579e4191b7bc52c",
+  "checked_in_distributions": [
+    {
+      "id": "plumes2-ssmc-v1",
+      "path": "References/PLUMES2.0-main",
+      "tree_git_sha": "d1d40f74ffc6538f3e1f3ea4ca9dd02d8b530856",
+      "executable": {
+        "path": "References/PLUMES2.0-main/plumes2.0v1.exe",
+        "git_blob_sha": "dce0fe6b488e233169aec267d0c28706f516d546",
+        "size_bytes": 3593728,
+        "sha256": null,
+        "sha256_status": "owed_binary_access"
+      }
+    },
+    {
+      "id": "plumes2-epa-2025-12-22",
+      "path": "References/plumes2.0_12_22_2025",
+      "tree_git_sha": "775bf09ceac5cdd4386505a6b765bee5e347b400",
+      "content_root_git_sha": "b684fd0f50bce8effaa91edba36ebf18628eab1f",
+      "executable": {
+        "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/plumes2.0.exe",
+        "git_blob_sha": "34c845d7142fee5ca1c8a6367ad52e4a4db770ae",
+        "size_bytes": 3719680,
+        "sha256": null,
+        "sha256_status": "owed_binary_access"
+      }
+    }
+  ],
+  "external_repositories": [
+    {
+      "id": "ebb-plumes-public",
+      "repository": "ebbcarbon/Plumes_Public",
+      "commit": "9791c80ff94f706603df0ae473667ccdffd359db",
+      "license": "MIT for port code; bundled upstream/reference material retains its own provenance",
+      "ref1_role": "adaptation_candidate"
+    },
+    {
+      "id": "sfei-visual-plumes-models",
+      "repository": "sfei/Visual-Plumes-Models",
+      "commit": "99283a481a84902ab248fcf3b6041b484daa1c1e",
+      "license": "GPL-3.0",
+      "ref1_role": "external_behavioral_oracle"
+    }
+  ]
+}
