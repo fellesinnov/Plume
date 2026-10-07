@@ -68,7 +68,7 @@ criteria:
     limit_delta_T_C: 2.0
 
 workspace:
-  root: workspace
+  root: ../workspace
   shared_provider_cache: true
 
 outputs:
