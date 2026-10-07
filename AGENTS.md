@@ -34,25 +34,29 @@ Reference-model agreement is not physical validation and must never be described
 - Preserve units and conventions explicitly. Do not silently change coordinate systems, bulk/centerline definitions, density conventions, calibration meanings, or termination semantics.
 - Separate calibration cases from verification/hold-back cases. Do not tune a coefficient against a case and then cite that same case as independent verification.
 - Prefer the simplest current architecture; this repository is still prototype-stage and does not owe backward compatibility unless a future owner says otherwise.
+- **Sandbox first, Actions by permission.** Prove everything practical in the ChatGPT sandbox. GitHub Actions consumes scarce project credits and must never be dispatched or enabled automatically without explicit human approval for that run. If sandbox evidence is sufficient, do not spend Actions credits merely to duplicate it.
 
 ## Actor model
 
 The normal path is deliberately lighter than BOOSTED:
 
 - **ChatGPT + GitHub**: architecture, source authoring, review, repository status, durable evidence and branch/PR work.
-- **GitHub Actions / sandbox**: normal mechanical closer for Python syntax, regression tests and deterministic batch checks.
+- **ChatGPT sandbox**: default mechanical closer for Python syntax, regression tests, deterministic batches, parsers and generated comparison evidence when the required environment can be reproduced there.
+- **GitHub Actions**: optional/manual cross-check only after explicit human approval; never an automatic tax on pushes or PRs.
 - **Local Luna/Windows**: exception path for evidence that specifically requires the archived Windows PLUMES executable, GUI interaction, or another OS-local dependency.
-- **Human**: modelling/product judgement, acceptance of ambiguous engineering policy, and final merge authority.
+- **Human**: modelling/product judgement, permission to spend GitHub Actions credits, acceptance of ambiguous engineering policy, and final merge authority.
 
-Use one writer lease at a time. Connector-authored source is a candidate until the required automated evidence is green. Do not make the human relay routine Python failures that CI can establish directly.
+Use one writer lease at a time. Connector-authored source is a candidate until its required deterministic evidence is green. Do not make the human relay routine Python failures that the sandbox can establish directly.
 
 ## Verification and completion
 
-For ordinary Python/model work, close the deterministic boundary with the repository CI workflow. A physics/closure/trajectory/dilution change additionally owes the relevant PLUMES reference comparison once the golden-reference harness exists.
+For ordinary Python/model work, close the deterministic boundary in the ChatGPT sandbox whenever practical. Record the exact commit/source identity and commands/results. Use GitHub Actions only when the human explicitly approves the run or when a repository-hosted environment itself is the subject of the test.
+
+A physics/closure/trajectory/dilution change additionally owes the relevant PLUMES reference comparison once the golden-reference harness exists.
 
 State exactly what was tested and what remains unproven. Never upgrade:
 
-- "CI green" to "validated",
+- "sandbox tests green" or "CI green" to "validated",
 - "matches PLUMES" to "physically correct",
 - one platform/reference case to a general support or applicability claim.
 
