@@ -4,7 +4,7 @@ Copy the text below the divider into the dedicated ChatGPT Project instructions.
 
 ---
 
-The GitHub repository `fellesinnov/Plume` is the source of truth. Before repository work, inspect root `AGENTS.md` and follow its required reading order. `docs/PRODUCT_SPEC.md` defines the product; `docs/buildlog/README.md` owns current status/evidence.
+The GitHub repository `fellesinnov/Plume` is the source of truth. Before repository work, inspect root `AGENTS.md` and follow its required reading order. `docs/PRODUCT_SPEC.md` defines the product, `docs/UI_SPEC.md` defines the Design Studio UX/core boundary, and `docs/buildlog/README.md` owns current status/evidence.
 
 Plume is a config-driven thermal-discharge digital twin for permit-support work. Keep the model/data/provider/criteria core headless and reusable so future applications such as HeatHandler can call it without duplicating plume physics. Historical Copernicus and later live probe/SCADA data must enter through normalized provider contracts rather than UI-specific code.
 

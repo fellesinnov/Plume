@@ -3,6 +3,7 @@
 Plume keeps product direction, workflow and evidence in explicit owners.
 
 - [PRODUCT_SPEC.md](PRODUCT_SPEC.md) — product target, scope and architecture.
+- [UI_SPEC.md](UI_SPEC.md) — Streamlit Design Studio workflow, project persistence, caching and live Design Mode.
 - [CONFIG.md](CONFIG.md) — config, provider and local-workspace contracts.
 - [METHOD.md](METHOD.md) — how work is split, tested and evidenced.
 - [buildlog/README.md](buildlog/README.md) — current status/evidence owner.

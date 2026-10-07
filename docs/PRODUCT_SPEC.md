@@ -23,6 +23,12 @@ Accuracy matters more than parity with any one legacy/reference implementation.
 
 ## 2. Primary use cases
 
+### Design Studio — choose the site and outlet first
+
+The preferred first UI is a Streamlit **Plume Design Studio** following `Project → Ocean → Design → Simulate → Results`. See [UI_SPEC.md](UI_SPEC.md).
+
+The Ocean view selects a location, acquires/caches an environmental period (default previous complete calendar year), plots the history, and lets the user pin a date/time as the design snapshot.
+
 ### Design Mode — choose the outlet first
 
 Before annual simulation, load one representative or deliberately adverse water column plus one source operating state and rapidly explore outlet geometry/operation.
@@ -38,7 +44,7 @@ Typical knobs:
 - flow;
 - absolute discharge temperature or process ΔT.
 
-Design Mode should show permit-relevant metrics and plume plots immediately enough for engineering comparison. The selected design is saved as a normal versioned project config, then reused unchanged for historical/digital-twin analysis.
+Design Mode should show permit-relevant metrics and plume plots live enough for engineering comparison. Geometry changes reuse the already-pinned environmental snapshot and must not trigger provider/network refetches. The selected design is saved as a normal versioned project config, then reused unchanged for historical/digital-twin analysis.
 
 The design profile can initially be inline or file-backed. Later it may be selected from Copernicus/provider history, such as a worst/representative timestamp.
 

@@ -7,12 +7,13 @@ Agent entry point for this repository. Detailed product, method and evidence own
 Read these in order before changing repository content:
 
 1. [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md) — what Plume is and is not.
-2. [docs/METHOD.md](docs/METHOD.md) — development and evidence method.
-3. [docs/buildlog/README.md](docs/buildlog/README.md) — current status and evidence boundary.
-4. [docs/USER_INPUT.md](docs/USER_INPUT.md) and [docs/BACKLOG.md](docs/BACKLOG.md) — accepted human direction and live queue.
-5. [docs/GATES.md](docs/GATES.md) — unresolved evidence/judgement gates.
-6. [docs/CONFIG.md](docs/CONFIG.md) — config, provider and local-workspace contracts.
-7. [docs/MODEL_REFERENCE.md](docs/MODEL_REFERENCE.md) — immutable external model/reference contract.
+2. [docs/UI_SPEC.md](docs/UI_SPEC.md) — Design Studio workflow and UI/core boundary.
+3. [docs/METHOD.md](docs/METHOD.md) — development and evidence method.
+4. [docs/buildlog/README.md](docs/buildlog/README.md) — current status and evidence boundary.
+5. [docs/USER_INPUT.md](docs/USER_INPUT.md) and [docs/BACKLOG.md](docs/BACKLOG.md) — accepted human direction and live queue.
+6. [docs/GATES.md](docs/GATES.md) — unresolved evidence/judgement gates.
+7. [docs/CONFIG.md](docs/CONFIG.md) — config, provider and local-workspace contracts.
+8. [docs/MODEL_REFERENCE.md](docs/MODEL_REFERENCE.md) — immutable external model/reference contract.
 
 For implementation work, inspect the implementing code and relevant tests/data after reading the owners above. When prose disagrees with implementation, check the implementation before making behavioural claims; accepted product/model decisions define intended behaviour and `docs/buildlog/README.md` owns current evidence/status.
 

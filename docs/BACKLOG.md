@@ -40,17 +40,17 @@ Live queue. A ready item names the observation that retires it.
 
 **Retires when:** the mockup-style plot is produced from a documented/qualified field reconstruction and deliberate profile/geometry changes cause predictable test failures.
 
-## DESIGN-1 — Worst/representative snapshot Design Mode
-**Scope:** load one normalized water-column/current snapshot and source operating state; rapidly compare supported outlet depth, diameter, vertical angle, azimuth, flow, discharge temperature and later multiport geometry; show permit metrics/plots; save candidate artifacts to ignored workspace and lock the selected design into a normal config.
+## DESIGN-1 — Live Design Studio snapshot mode
+**Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
 
-**Retires when:** one snapshot can be used to compare multiple deterministic geometry variants through the same MODEL/FIELD/criteria stack and export a selected configuration for annual simulation.
+**Retires when:** one pinned snapshot can compare multiple deterministic geometry variants through the same MODEL/FIELD/criteria stack with no provider refetch, save/reopen project revisions, and export/select the locked configuration for historical simulation.
 
-## TIME-1 — Historical digital-twin runner + Copernicus
-**Scope:** quasi-steady time runner; provider cache/provenance; Copernicus temperature, salinity and current profiles; annual metrics table. Design Mode should be able to select a cached historical timestamp as its snapshot.
+## TIME-1 — Ocean browser + historical runner + Copernicus
+**Scope:** add the Design Studio Ocean view plus quasi-steady time runner: map/coordinate site selection, default previous-complete-year fetch, shared provider cache/provenance, annual T/S/current plots, date/time selection of a cached profile for Design Mode, and annual metrics table. Geometry/config changes must reuse the ocean cache.
 
 **Retires when:** a reproducible historical interval can be run from one config with cached provider data and one metric row per forcing timestamp.
 
-## PERMIT-1 — Permit criteria, annual statistics and animation
+## PERMIT-1 — Simulate/Results views, permit statistics and animation
 **Scope:** config-driven ΔT/absolute-temperature criteria, receptor/mixing-zone checks, annual max/P95/P99/exceedance duration, section/plan animation.
 
 **Retires when:** an end-to-end synthetic customer case produces auditable criteria results, summary plots and animation from one config.

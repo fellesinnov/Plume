@@ -32,3 +32,15 @@ This file records accepted project direction that should survive chat/session bo
 - GPL-3.0 reference software may be run freely as an external oracle/reference for this consulting/internal-service use case. Direct incorporation/adaptation into the Plume product remains a deliberate license/deployment decision so future customer installation remains flexible.
 - The pre-SPEC-0 prototype should be preserved in Git history/archive branch but removed from the active product tree so its experimental calibration does not become inherited model truth.
 - ChatGPT is the routine repository owner/writer for normal source/docs/branch/PR maintenance. The human will generally avoid direct repository edits except deliberate user-input/gate decisions. Existing explicit human merge authority remains unchanged unless separately revised.
+
+## 2026-10-07 Design Studio refinement
+
+- Preferred first UI is a Streamlit-style **Plume Design Studio** analogous in usability to the HeatHandler configurator while keeping core code independent of Streamlit.
+- Main user flow: **Project → Ocean → Design → Simulate → Results**.
+- A named project stores location/site, criteria, selected design/config revision and run history in the gitignored workspace.
+- Ocean view selects a location, fetches/caches a historical environmental period (default previous complete calendar year when available), plots environmental history, and lets the user pick a date/time whose full T/S/current profile becomes the pinned Design Mode snapshot.
+- Live Design controls rerun plume calculations against the pinned snapshot without refetching Copernicus.
+- The primary section plot follows the supplied mockup: real ambient layers/profiles plus model-derived excess-temperature ΔT contours, physical depth/distance axes and explicit permit isotherms.
+- Saving creates a project/config revision; simulation uses the selected locked revision. Later edits mark old results stale for the new revision but preserve them.
+- Provider cache, model-result cache and render cache should invalidate independently so changing geometry does not redownload ocean data and changing plot appearance does not rerun physics.
+- Annual runs should not be forced to store dense spatial fields for every timestep; compact metrics/model state plus selected/cadenced fields should support fast rerendering and animation.

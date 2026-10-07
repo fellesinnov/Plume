@@ -216,21 +216,23 @@ workspace/
         <request-hash>/
           data.*
           metadata.json
-  design/
+  projects/
     <project-id>/
-      <session-id>/
-  runs/
-    <project-id>/
-      <run-id>/
-        manifest.json
-        config.normalized.yaml
-        inputs/
-        results/
-          timestep_metrics.*
-          fields/
-        plots/
-        animations/
-        logs/
+      project.yaml
+      revisions/
+      design/
+        <session-id>/
+      runs/
+        <run-id>/
+          manifest.json
+          config.normalized.yaml
+          inputs/
+          results/
+            timestep_metrics.*
+            fields/
+          plots/
+          animations/
+          logs/
 ```
 
 ### Shared provider cache
@@ -238,6 +240,12 @@ workspace/
 `workspace/_cache` is shared across configs/design sessions/runs. An identical provider request should reuse the same immutable cache entry.
 
 The cache key should include all request fields that can change the returned data: provider, dataset/variable, location/bounds, depth selection, time range, temporal aggregation and relevant provider version/options.
+
+### Project persistence
+
+A named customer/site project lives under `workspace/projects/<project-id>/` by default. `project.yaml` is the current local project state; `revisions/` preserves explicitly saved design/config revisions. Customer projects remain gitignored unless the user explicitly exports a portable config.
+
+A portable project config stores the site/provider specification and selected design. Machine-local cache paths and secret values are never required for portability; exact cache/input identities belong in run/design manifests.
 
 ### Run directory
 
@@ -251,7 +259,17 @@ At minimum, every run saves:
 
 Heavy artifacts are controlled by config.
 
-## 9. Output retention policy
+## 9. Cache invalidation
+
+Use independent cache identities:
+
+- provider cache = normalized external-data request;
+- model cache = normalized model/design config + normalized forcing/input identity + Plume model version;
+- render cache = model-result identity + rendering options.
+
+Changing geometry must not invalidate Copernicus/provider data. Changing figure styling must not invalidate model results. Changing a locked project design marks prior simulations as stale for the current revision without deleting those runs.
+
+## 10. Output retention policy
 
 The config decides what is saved. Typical switches:
 
@@ -266,7 +284,7 @@ The config decides what is saved. Typical switches:
 
 A fast engineering run may save only metrics and selected frames. A permit package may retain fields, figures and animation.
 
-## 10. Run identity and provenance
+## 11. Run identity and provenance
 
 Generated `manifest.json` should eventually contain:
 
@@ -284,7 +302,7 @@ Generated `manifest.json` should eventually contain:
 
 No secret value may be copied into the manifest.
 
-## 11. Portability / HeatHandler
+## 12. Portability / HeatHandler
 
 Core config and result objects should not mention Streamlit or HeatHandler.
 
