@@ -54,6 +54,17 @@ Subsequent commits through the current head are documentation/specification refi
 
 SPEC-0 changes repository/product contracts, not plume physics. No GitHub Actions run is required or authorised.
 
+### Design Studio refinement
+
+- UI/product contract added at `docs/UI_SPEC.md` on qualified spec head `365ef1de50d4cad193f62abdf80f27bab8ddd0bd`.
+- Preferred first shell is Streamlit, but physics/providers/config/cache/criteria stay headless.
+- Workflow is `Project → Ocean → Design → Simulate → Results`.
+- Ocean data is fetched/cached explicitly; selecting/designing against a pinned timestamp never refetches on geometry changes.
+- Named customer/site projects and revisions remain under gitignored `workspace/projects/` by default.
+- Provider, physics and render caches invalidate independently.
+- Annual runs always retain compact metrics/provenance but need not retain dense spatial fields for every timestep.
+- No GitHub Actions run was required or authorised for this docs/spec refinement.
+
 ### Integration state
 
 **READY FOR INTEGRATION.** Merge authority remains human-only under current repository governance.
