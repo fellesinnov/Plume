@@ -1,4 +1,24 @@
+#ALWAYS FOR PYTHON PROJECTS
+#FIRST TIME: 
+  #CTRL+SHIFT+P - Create Virtual Env - Quick create
+  #View Terminal (CTRL-Ø)
+  #Set-ExecutionPolicy Unrestricted -Scope Process
+"NEXT TIME: 
+  #.venv\Scripts\activate
+  pip install -r requirements.txt
+  pip freeze > requirements.txt
+
+I adjusted the model in outfall_screen.py and kept the old defaults as commented lines so you can roll back easily.
+
+The working calibration I set is:
+
+alpha_scale: 1.0 → 0.35
+centerline_ratio_asymptote: 1.7 → 2.0
+This is a deliberately slower-dilution setting for the “no current, deep-ish 18.5 m case” you described.
+
 # Submerged Thermal Outfall Screening Tool
+
+
 
 A fast, transparent **concept-design** model for deciding whether a single submerged pipe looks like a robust
 "garden-hose" discharge or whether the project should move to CORMIX/PLUMES, a diffuser study, and/or

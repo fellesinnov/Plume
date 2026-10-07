@@ -138,8 +138,16 @@ class CalibrationParams:
     # Approximate Gaussian -> top-hat conversion used by JETLAG-like formulations.
     gaussian_to_tophat: float = math.sqrt(2.0)
 
-    # Primary overall dilution calibration knob.
-    alpha_scale: float = 1.0
+    # Original screening defaults kept for reference:
+    # alpha_scale: float = 1.0
+    # centerline_ratio_asymptote: float = 1.7
+    #
+    # User-case calibration working point for a stagnant 3000 m3/h, DN800,
+    # ~18.5 m depth, no-current screening scenario. This deliberately slows the
+    # dilution growth to match the expected order of magnitude from the
+    # 4 C / 3 C / 2 C mixing-zone screening checks, while keeping the original
+    # values as a comment trail for rollback.
+    alpha_scale: float = 0.35
 
     # Forced entrainment by crossflow; Jirka/CorJet uses a coefficient of order 0.5.
     crossflow_entrainment: float = 0.5
@@ -148,8 +156,10 @@ class CalibrationParams:
     drag_coefficient: float = 1.3
 
     # CORMIX states bulk dilution Sf is approximately 1.7 x centerline dilution Sc
-    # for point/surface discharges in established jet/plume flow.
-    centerline_ratio_asymptote: float = 1.7
+    # for point/surface discharges in established jet/plume flow. A slightly higher
+    # asymptote (2.0) keeps the centerline criterion closer to the historical
+    # PLUMES-like trend for these stagnant screening cases.
+    centerline_ratio_asymptote: float = 2.0
 
     # Smooth development of the centerline correction from 1.0 at nozzle to asymptote.
     centerline_development_D: float = 8.0
