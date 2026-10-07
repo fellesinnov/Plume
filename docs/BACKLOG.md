@@ -1,0 +1,37 @@
+# Backlog
+
+Live queue. Item numbers are identities, not priority. A ready item names the observation that retires it.
+
+## What is next
+
+### P0-1 — Bootstrap repository workflow
+**State:** candidate on `bootstrap/plume-workflow-v1`.
+
+**Retires when:** AGENTS/method/status/user-input/backlog/gates/reference owners exist, Python CI passes on the exact candidate, and the first PLUMES reference capture is explicitly routed rather than implicit.
+
+### P0-2 — Capture canonical PLUMES2.0 golden cases
+**Why:** the archived reference is a Windows executable and cannot currently run in the remote Linux sandbox.
+
+**Scope:** choose a small representative first set (baseline warm discharge, high/low momentum, crossflow, shallow/deep or stratified as supported), run the exact archived executable on Windows, preserve exact inputs and raw outputs outside `PLUMES2.0-main/`, and record executable SHA-256/version/environment.
+
+**Retires when:** committed golden evidence can reproduce the exact reference outputs without relying on chat memory.
+
+### P0-3 — Build PLUMES output parser + comparison harness
+**Scope:** parse preserved raw PLUMES text into normalized trajectory/dilution data and compare the Python model using named metrics.
+
+**Retires when:** CI can run at least one golden case, a deliberate plausible mismatch goes red, and the report identifies exact reference/candidate identities.
+
+### P1-1 — Convert prototype checks to a normal Python test layout
+Move toward `src/` + `tests/` and pytest only after the reference baseline is pinned.
+
+**Retires when:** imports/tests are package-stable, current self-test coverage is preserved, and CI is green.
+
+### P1-2 — Define comparison acceptance bands from evidence
+Do not invent tolerances before seeing reference behaviour and numerical repeatability.
+
+**Retires when:** named metrics/tolerances are justified in a durable decision/model note and include independent hold-back cases.
+
+### P2-1 — Independent validation strategy
+Define the role of CORMIX, literature/experiment data, and site-specific engineering checks after PLUMES regression is working.
+
+**Retires when:** we can distinguish calibration, reference regression, and independent physical validation without conflating them.
