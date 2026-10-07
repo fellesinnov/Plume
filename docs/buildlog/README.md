@@ -1,5 +1,41 @@
 # Current build / evidence status
 
+## MODEL-1 candidate — 2026-10-07
+
+**Branch:** `model-1-single-port-kernel`.
+
+**Candidate source commit:** `0e4c9b0b6169a81a8a410ebd9fb33971959247e0`.
+
+MODEL-1 now has a source-ready single-round-port Lagrangian near-field candidate adapted from
+the pinned MIT Ebb Carbon architecture, with explicit ENU coordinates, conserved mass/vector
+momentum/Absolute Salinity/Conservative Temperature, depth-varying horizontal current, a
+GSW-backed TEOS-10 production boundary, explicit boundary/oscillation events, and both
+`UM3_REFERENCE` and published projected-area current-entrainment candidates behind one internal
+qualification seam.
+
+Focused sandbox evidence on the exact source/test blobs now on the branch:
+
+- MODEL-1 focused tests: **27 / 27 PASS**;
+- `compileall` over the reduced MODEL-1 sandbox copy: PASS;
+- editable install with `--no-deps --no-build-isolation`: PASS;
+- Ebb case18/`test23` selected early-jet dilution MARE **0.242 %**, max **0.307 %**;
+- Ebb case19/`test28` at 0.01 m/s selected dilution MARE **0.268 %**, max **0.349 %**;
+- no GitHub Actions run.
+
+The tested source/test blob identities were re-read from the remote branch and exactly match the
+sandbox candidate. The sandbox copy was intentionally reduced to the MODEL-1 seam, so the existing
+CORE-0/reference suites have **not** yet been rerun against the combined branch. The real `gsw`
+package is also absent in this no-network sandbox; the adapter contract is tested with a fake module
+and explicit no-fallback behavior, while real-GSW execution remains owed.
+
+**Integration state:** **HOLD.** `MODEL-CLOSURE-1` remains open because clean numerical Fan
+calibration/formulation observations and untouched Lee-Cheung hold-back observations have not yet
+been obtained with sufficient provenance; no plot digitization was used to manufacture goldens.
+`MODEL-TOL-1` therefore remains blocked. Full-branch regression and real-GSW execution are also
+owed before this candidate can be treated as integration-ready.
+
+Detailed record: [2026-10-07-model-1.md](2026-10-07-model-1.md).
+
 This file is the single owner for current repository status.
 
 ## CORE-0 integrated — 2026-10-07

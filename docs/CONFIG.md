@@ -1,6 +1,6 @@
 # Configuration, providers and workspace
 
-**Status:** SPEC-0 contract with REF-1 coordinate/thermodynamic conventions. CORE-0 implements the schema-v1 headless loader/normalizer, structural outlet-adapter registry, deterministic local providers and prepared-run manifest/workspace skeleton. No plume solver, Copernicus adapter or TEOS-10 state conversion is implied yet.
+**Status:** SPEC-0 contract with REF-1 coordinate/thermodynamic conventions. CORE-0 implements the schema-v1 headless loader/normalizer, structural outlet-adapter registry, deterministic local providers and prepared-run manifest/workspace skeleton. The MODEL-1 candidate adds the single-round-port near-field kernel and a GSW-backed TEOS-10 model-state boundary, but the physical current-entrainment closure remains gated by `MODEL-CLOSURE-1`; no Copernicus adapter or provider-side TEOS-10 conversion is implied yet.
 
 ## 1. Principles
 
@@ -134,7 +134,7 @@ The config may name credential *environment variable names* later, but never sto
 
 ## 5. Normalized provider contracts
 
-CORE-0 normalizes provider **shape and provenance**, not seawater thermodynamics. Inline/manual temperature and salinity values retain the explicit quantity meaning carried by their forcing key/config contract. MODEL-1 still owes the TEOS-10 conversion boundary described below before those values enter production plume physics.
+CORE-0 normalizes provider **shape and provenance**, not seawater thermodynamics. Inline/manual temperature and salinity values retain the explicit quantity meaning carried by their forcing key/config contract. The MODEL-1 candidate defines the model-facing TEOS-10 state as Absolute Salinity plus Conservative Temperature and provides the pressure-aware GSW density/output-temperature boundary; provider/user quantities still must be converted deliberately before entering that state.
 
 Provider adapters should return a small number of model-facing shapes.
 

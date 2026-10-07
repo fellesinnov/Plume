@@ -189,3 +189,26 @@ buoyancy-dominated jets are reserved as hold-back. See
 ## 9. Interpretation
 
 Reference agreement can show that Plume tracks a named implementation for named cases. It does **not** by itself establish physical truth, regulatory acceptance or applicability outside the compared mechanisms/envelope.
+
+## 10. MODEL-1 candidate implementation — 2026-10-07
+
+The `model-1-single-port-kernel` candidate implements the REF-1 near-field reuse decision without
+changing the reference hierarchy:
+
+- product code adapts only the pinned MIT Ebb Carbon architecture/relations, with the copyright and
+  MIT terms preserved in root `THIRD_PARTY_NOTICES.md`;
+- SFEI Visual Plumes remains GPL oracle/reference material only; no SFEI implementation code is
+  copied into the product package;
+- the product state transports mass, 3-D momentum, Absolute Salinity, Conservative Temperature and
+  ENU position, with GSW/TEOS-10 as the intended production thermodynamic backend;
+- decoded `UM3_REFERENCE` and the published projected-area candidate are both implemented behind
+  one internal entrainment interface while `MODEL-CLOSURE-1` remains open;
+- selected Ebb case18/test23 and case19/test28 early-jet dilution checks are software-regression
+  evidence only: 0.242 % / 0.268 % MARE respectively on the committed selected checkpoints;
+- clean numerical Fan calibration/formulation observations and untouched Lee-Cheung hold-back
+  observations are still owed, so the candidate does not freeze the physical closure or tolerance;
+- real GSW-Python execution is separately owed by `MODEL-TEOS-1`; injected-test-double success is
+  not promoted to production runtime evidence.
+
+See `docs/buildlog/2026-10-07-model-1.md` for the exact candidate evidence and HOLD decision.
+
