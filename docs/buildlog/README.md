@@ -2,71 +2,81 @@
 
 This file is the single owner for current repository status.
 
-## SPEC-0 candidate — 2026-10-07
+## REF-1 active — 2026-10-07
 
-**Authoritative main at sprint start:** `b691113b374b08a21302a23e17a196a78e325fb8`.
+**Authoritative `main` at sprint start:** `20822afe25175a94ba2b7cb91579e4191b7bc52c`.
 
-**Historical prototype snapshot:** branch `archive/prototype-v0` points at that exact commit.
+**Active branch:** `ref-1-reference-bakeoff`.
 
-**Candidate branch:** `spec-0-product-reset`.
+SPEC-0 is integrated on `main`. The active tree intentionally contains no Python plume
+implementation yet.
 
-**Qualified reset/source commit:** `57196f68f810d02f6ee825457f69565aaed7e7cb`.
+The detailed REF-1 scope, pinned references, preliminary findings, case matrix and retirement
+evidence live in [2026-10-07-ref-1.md](2026-10-07-ref-1.md).
 
-**Current candidate head:** `a13c7952e9e6f08c02c6d2b1ce7a4ca527639fcb`.
+### Active objective
 
-### Candidate result
+Choose an evidence-backed implementation starting point for the single-port thermal near-field
+core and establish the reproducible reference harness that MODEL-1 will inherit.
 
-- active product is defined as a thermal-discharge digital twin, not the historical screening script;
-- historical prototype/calibration is absent from the active candidate but preserved unchanged in Git;
-- `References/` is the immutable external evidence boundary;
-- the user mockup moved from `References/` to `docs/assets/initial-mockup.png`;
-- product/config/provider/workspace/permit-output contracts are defined before implementation;
-- an explicit **Design Mode** now precedes annual simulation: evaluate one representative/adverse snapshot, compare outlet geometry/operation, then lock the selected normal config;
-- outlet architecture is type-tagged/extensible: single round port first, multiport and other outlet geometries later through adapters;
-- generated/downloaded data defaults to ignored `workspace/`;
-- credentials are excluded from source;
-- GitHub Actions remains manual-only;
-- reference policy is accuracy-first triangulation, not PLUMES2.0 parity as physical truth;
-- SFEI GPL-3.0 Visual Plumes may be used as an external oracle; the MIT Ebb PLUMES2.0 port is a serious reuse candidate after REF-1 review.
+REF-1 is a **reference/model bakeoff**, not physical validation and not a permit claim.
 
-### Structural evidence
+### Pinned external candidates
 
-Against the qualified reset/source commit:
+- Ebb Carbon `ebbcarbon/Plumes_Public`:
+  `9791c80ff94f706603df0ae473667ccdffd359db` — MIT port, leading adaptation candidate.
+- SFEI `sfei/Visual-Plumes-Models`:
+  `99283a481a84902ab248fcf3b6041b484daa1c1e` — GPL-3.0, preferred independent behavioural oracle.
 
-- top-level active tree is limited to `.env.example`, `.github`, `.gitignore`, `AGENTS.md`, `README.md`, `References/`, `configs/`, and `docs/`;
-- active tree contains **no Python implementation files** and no `requirements.txt`;
-- `archive/prototype-v0` remains exactly `b691113b374b08a21302a23e17a196a78e325fb8`;
-- PLUMES reference files are byte-identical relative to sprint start; the only `References/` diff is the user-owned mockup rename into docs;
-- example config YAML parses and passes a focused contract smoke check;
-- manual workflow YAML parses and exposes only `workflow_dispatch`;
-- no GitHub Actions run has been started on `spec-0-product-reset`.
+The two checked-in PLUMES distributions remain immutable under `References/`.
 
-Subsequent commits through the current head are documentation/specification refinements only.
+### Evidence obtained so far
 
-### Reference research
+- both checked-in PLUMES distributions are pinned by repository tree/executable Git identities;
+  executable SHA-256 digests are still owed before `PLUMES-REF-1` can close;
+- their shipped example CSV inputs are the same;
+- the shipped example near-field tables are identical through the plume-surface event;
+- their visible shipped-example divergence begins in the far field and is accompanied by different
+  far-field diffusivity flags, so this pair does not establish a near-field build difference;
+- Ebb exposes a clean single-port Lagrangian control-volume seam with conserved mass, momentum,
+  temperature and salinity plus extensive executable-trace experiments;
+- SFEI provides an independent UM3 code path with stratified ambient, entrainment, multiport and
+  Brooks far-field behaviour;
+- Ebb's profile experiments establish that executable default, manual 3/2-power profile and a
+  literature Gaussian must not be conflated.
 
-- Both checked-in PLUMES distributions contain executables and data, not Fortran source.
-- The EPA Dec-2025 package contains useful additional near-/far-field traces.
-- No authentic public PLUMES2.0 Fortran source was found in the 2026-10-07 EPA/SSMC/web/GitHub search.
-- Public SFEI Visual Plumes/UM3 Python code (GPL-3.0) and Ebb Carbon PLUMES2.0 Python port (MIT) were identified as valuable independent references.
+### Current gates
 
-### Evidence policy for this sprint
+- `PLUMES-REF-1`: **OPEN** — exact SHA-256 plus controlled canonical build comparison owed.
+- `MODEL-TOL-1`: **BLOCKED** — REF-1 will not manufacture a tolerance.
+- `FIELD-PROFILE-1`: **OPEN** — REF-1 maps the evidence; FIELD-1 owns the choice unless evidence
+  is sufficient to retire it cleanly.
+- `FARFIELD-SCOPE-1`: **BLOCKED / mapped only in REF-1**.
+- multiport/merging is mapped for OUTLET-2 and is not allowed to expand MODEL-1.
 
-SPEC-0 changes repository/product contracts, not plume physics. No GitHub Actions run is required or authorised.
+### Execution policy
 
-### Design Studio refinement
+- `References/` remains untouched.
+- Derived manifests, normalized cases, parsers and comparison outputs belong outside
+  `References/`.
+- ChatGPT + GitHub is the writer/reviewer path; sandbox is the deterministic closer when runnable.
+- Local Windows/Luna is reserved for evidence that truly needs a new PLUMES GUI/executable run.
+- **No GitHub Actions run has been requested or authorised.**
 
-- UI/product contract added at `docs/UI_SPEC.md` on qualified spec head `365ef1de50d4cad193f62abdf80f27bab8ddd0bd`.
-- Preferred first shell is Streamlit, but physics/providers/config/cache/criteria stay headless.
-- Workflow is `Project → Ocean → Design → Simulate → Results`.
-- Ocean data is fetched/cached explicitly; selecting/designing against a pinned timestamp never refetches on geometry changes.
-- Named customer/site projects and revisions remain under gitignored `workspace/projects/` by default.
-- Provider, physics and render caches invalidate independently.
-- Annual runs always retain compact metrics/provenance but need not retain dense spatial fields for every timestep.
-- No GitHub Actions run was required or authorised for this docs/spec refinement.
+### Next action
+
+**REF-1A — identity + harness foundation:** obtain/record executable SHA-256, define the derived
+reference manifest/normalization contract, and establish the minimal canonical case set before any
+production model code is adopted.
 
 ### Integration state
 
-**READY FOR INTEGRATION.** Merge authority remains human-only under current repository governance.
+**HOLD — sprint active.** No merge recommendation exists yet. Merge authority remains human-only.
 
-The next seam after integration is **REF-1 reference bakeoff**, followed by **CORE-0**, **MODEL-1**, **FIELD-1**, then **DESIGN-1** before historical TIME-1.
+## Previous integrated checkpoint
+
+SPEC-0 product reset is integrated at the REF-1 starting `main` identity. Its durable record is
+[2026-10-07-spec-0.md](2026-10-07-spec-0.md).
+
+Planned product sequence remains **REF-1 → CORE-0 → MODEL-1 → FIELD-1 → DESIGN-1**, with later
+time-series/provider/far-field/permit-report seams following their owned gates.
