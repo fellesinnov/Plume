@@ -30,7 +30,7 @@ Live queue. A ready item names the observation that retires it.
 **Retires when:** reference roles and canonical cases are explicit, major disagreements are understood/routed, and MODEL-1 has an evidence-backed implementation starting point rather than a guessed closure set.
 
 ## CORE-0 — Implement package/config/workspace skeleton
-**State:** CANDIDATE on `core-0-package-config-workspace`; sandbox retirement evidence is green, not yet integrated to `main`.
+**State:** INTEGRATED on `main` via PR #5 at `c2c5600363241e30442182c01465417149f4fd23`.
 
 **Scope:** create the UI-independent Python package, versioned YAML/JSON config loader/normalizer, outlet-adapter contract, workspace/run manifest, provider interface and deterministic constant/inline/CSV providers.
 
@@ -38,7 +38,7 @@ Live queue. A ready item names the observation that retires it.
 
 **Retires when:** `configs/example.yaml` loads headlessly, produces a normalized config + manifest in an ignored workspace, unsupported outlet types fail explicitly, and deliberate schema/provider errors fail deterministically.
 
-**Candidate assessment:** retirement observations are satisfied on the branch. Integration still requires the repository's human merge authorisation.
+**Retired by:** the schema-v1 example now loads headlessly, deterministic provider/outlet/schema errors fail explicitly, and a prepared run writes normalized config plus provenance manifest in the ignored workspace. No plume-physics qualification is implied.
 
 ## MODEL-1 — Qualified single-round-port near-field kernel
 **Scope:** implement the first outlet adapter and thermal near-field kernel with conserved heat/salt, arbitrary ambient T/S profiles, prescribed depth-varying current vector, explicit coordinates and boundary events. Reuse/adapt proven permissive implementation material where advantageous instead of reinventing equations.
