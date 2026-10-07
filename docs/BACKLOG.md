@@ -12,7 +12,7 @@ Live queue. A ready item names the observation that retires it.
 **Retired by:** the active tree now defines the digital-twin product and no longer carries the historical screening implementation as current model truth.
 
 ## REF-1 — Reference bakeoff and qualification
-**State:** ACTIVE on `ref-1-reference-bakeoff`.
+**State:** READY FOR INTEGRATION on `ref-1-reference-bakeoff` / draft PR #3.
 
 **Why:** model implementation should start from multiple explicit references rather than one legacy executable or experimental prototype coefficients.
 
@@ -25,7 +25,7 @@ Live queue. A ready item names the observation that retires it.
 - define calibration and hold-back case sets;
 - recommend which implementation/material to reuse directly, wrap, or keep oracle-only.
 
-**Evidence so far:** REF-1A added the stdlib reference harness, pinned manifests/locks and an executable shipped-example golden. Actual checked-in outputs reproduce 55/55 identical near-field rows while the configured far-field laws differ. Exact executable SHA-256 and controlled identical-input cross-build runs remain owed; see `docs/buildlog/README.md`.
+**Evidence:** REF-1A added the stdlib reference harness, pinned manifests/locks and an executable shipped-example golden. Actual checked-in outputs reproduce 55/55 identical effective near-field cases while configured far-field laws differ. REF-1B selects Ebb's MIT LCV architecture as the adaptation source, SFEI as oracle, TEOS-10/ENU as production conventions, and routes the physical entrainment choice to MODEL-CLOSURE-1. REF-1C fixes Fan as formulation/calibration evidence and Lee-Cheung heated buoyant jets as untouched hold-back. See `docs/buildlog/README.md` and `docs/reference/`.
 
 **Retires when:** reference roles and canonical cases are explicit, major disagreements are understood/routed, and MODEL-1 has an evidence-backed implementation starting point rather than a guessed closure set.
 
