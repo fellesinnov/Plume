@@ -23,7 +23,9 @@ See [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md).
 
 ## Repository state
 
-SPEC-0 intentionally resets the active product tree before implementation begins. The earlier screening prototype and its experimental calibration are preserved at branch:
+SPEC-0 reset the active product tree before implementation. CORE-0 now provides the headless package/config/provider/workspace foundation; it deliberately does **not** implement plume physics. MODEL-1 owns the first qualified single-round-port near-field kernel.
+
+The earlier screening prototype and its experimental calibration are preserved at branch:
 
 `archive/prototype-v0`
 
@@ -40,19 +42,30 @@ Generated/downloaded material belongs in the local, gitignored workspace:
 ```text
 workspace/
   _cache/                  # reusable provider downloads, e.g. Copernicus
-  runs/
+  projects/
     <project-id>/
-      <run-id>/
-        manifest.json
-        config.normalized.yaml
-        inputs/
-        results/
-        plots/
-        animations/
-        logs/
+      project.yaml         # added when project persistence lands
+      revisions/
+      runs/
+        <run-id>/
+          manifest.json
+          config.normalized.yaml
+          inputs/
+          results/
+          plots/
+          animations/
+          logs/
 ```
 
 A config can choose what is retained. Heavy fields and animations can be disabled for fast engineering runs while metrics and cached forcing remain reusable.
+
+CORE-0 exposes a small headless preparation command:
+
+```bash
+python -m plume prepare configs/example.yaml
+```
+
+This validates/normalizes schema v1, resolves deterministic local providers, and creates a prepared run directory plus provenance manifest. It does not execute plume physics.
 
 ## Credentials
 
