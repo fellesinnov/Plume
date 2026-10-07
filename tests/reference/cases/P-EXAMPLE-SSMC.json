@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "case_id": "P-EXAMPLE-SSMC",
+  "purpose": "Control case for the checked-in SSMC-style PLUMES distribution; compare stable near-field output without treating its far-field session choice as model-version evidence.",
+  "role": "software_regression",
+  "reference": {
+    "kind": "checked_in_distribution",
+    "identity": "tree:d1d40f74ffc6538f3e1f3ea4ca9dd02d8b530856"
+  },
+  "inputs": [
+    {
+      "path": "References/PLUMES2.0-main/Example_project/Example_project.prj",
+      "git_blob_sha": "d89a1b00cd5dce59e7e2c6d7b81f38a241cfccca",
+      "size_bytes": 6746
+    },
+    {
+      "path": "References/PLUMES2.0-main/Example_project/Ambient_example.csv",
+      "git_blob_sha": "14e018dda3cfb4657a2e4972443becc5ef53331f",
+      "size_bytes": 1160
+    },
+    {
+      "path": "References/PLUMES2.0-main/Example_project/Diffuser_example.csv",
+      "git_blob_sha": "2b5e0cb3be5047c6b35256684965560bea6d439e",
+      "size_bytes": 626
+    },
+    {
+      "path": "References/PLUMES2.0-main/Example_project/Effluent_example.csv",
+      "git_blob_sha": "e44168801b6000458561edb0a346b760b07dd20b",
+      "size_bytes": 332
+    },
+    {
+      "path": "References/PLUMES2.0-main/Example_project/Mixing_zone_example.csv",
+      "git_blob_sha": "ff98580281b82db0a6451c05bbb907074745da66",
+      "size_bytes": 196
+    }
+  ],
+  "raw_outputs": [
+    {
+      "path": "References/PLUMES2.0-main/Example_project/ModelResults_TxtOutputs.dat",
+      "git_blob_sha": "765fff0e5d55d1ce91bfcb139e48843b148eed84",
+      "size_bytes": 6660
+    }
+  ],
+  "session_choices": {
+    "observed_far_field_diffusivity": "power_4_3",
+    "source": "raw output header"
+  },
+  "normalization": {
+    "parser": "plumes_modelresults_v1",
+    "coordinates": "surface_zero_z_positive_up"
+  }
+}

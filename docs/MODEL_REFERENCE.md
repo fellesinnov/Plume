@@ -103,15 +103,19 @@ A model can match reference software and still be physically wrong. A model can 
 
 ## 6. Golden/reference evidence layout
 
-Derived evidence should live outside `References/`, for example:
+Derived evidence lives outside `References/`. REF-1A establishes the first concrete layout:
 
 ```text
+tools/reference_harness/          # stdlib-only parsers/identity helpers; not product runtime
 tests/reference/
-  plumes2/
-  visual_plumes/
-  ebb_plumes/
-  literature/
+  reference-lock.json             # pinned distribution/repository identities
+  cases/                          # canonical case manifests
+  expected/                       # small derived golden summaries
+tests/reference_harness/          # parser/manifest/full-reference regressions
 ```
+
+Large normalized tables should only be committed when they are genuinely useful golden material;
+otherwise regenerate them from the immutable raw evidence plus the pinned manifest.
 
 A case manifest should record:
 
@@ -127,6 +131,61 @@ A case manifest should record:
 
 Raw output is evidence; normalized output is derived test material.
 
-## 7. Interpretation
+## 7. REF-1 pinned identities and normalization
+
+REF-1 uses exact source identities rather than floating branches:
+
+- Ebb Carbon `ebbcarbon/Plumes_Public` at
+  `9791c80ff94f706603df0ae473667ccdffd359db`;
+- SFEI `sfei/Visual-Plumes-Models` at
+  `99283a481a84902ab248fcf3b6041b484daa1c1e`;
+- checked-in PLUMES distribution tree/executable Git identities recorded in
+  `tests/reference/reference-lock.json`.
+
+The PLUMES result normalizer names the executable's signed vertical result as `z_m`: free
+surface zero, positive upward. It also derives `depth_below_surface_m = -z_m`. Flux-average
+dilution and centreline dilution remain distinct quantities.
+
+The checked-in executables are pinned by exact Git blob identity and byte size. That is the
+authoritative in-repository byte identity. `tools/reference_harness/hash_reference.py` can add a
+SHA-256 when an executable is exported or inspected in a binary-capable checkout, but a second
+digest is not required to identify an object already pinned inside Git.
+
+The shipped-example comparison is itself a warning about reference hygiene: both distributions
+produce 55 identical near-field rows through the surface event, while the far fields differ under
+different diffusivity settings. The project-file layout decoded independently by the Ebb port
+places the two differing flags in the far-field eddy-diffusivity selector. Therefore the pair is a
+controlled near-field cross-build check even though it is **not** a controlled far-field check.
+
+REF-1 assigns executable roles by evidence coverage rather than release age:
+
+- **SSMC-v1** is the primary near-field software-regression oracle because the Ebb decode and rich
+  executable-trace corpus are anchored to it;
+- **EPA Dec-2025** is the newer-build sentinel/secondary oracle and agrees exactly on the shipped
+  near-field case;
+- neither executable is a physical-truth reference.
+
+## 8. REF-1 near-field reuse decision
+
+The detailed mechanism matrix lives in
+[`reference/REF1_NEARFIELD_BAKEOFF.md`](reference/REF1_NEARFIELD_BAKEOFF.md).
+
+REF-1 selects:
+
+- **Ebb MIT code as the adaptation source** for the single-port Lagrangian control-volume
+  architecture, source contraction, element stretching, continuous integration and explicit
+  events;
+- **SFEI GPL code as an oracle/source witness only**;
+- decoded UM3 current entrainment as the software-reference closure, while keeping the
+  published/projected-area formulation available only for physical qualification;
+- **TEOS-10** as Plume's production thermodynamic target rather than inheriting Knudsen or EOS-80;
+- product coordinates as local ENU; legacy reference axes are adapter concerns.
+
+The final physical current-entrainment closure is deliberately routed to `MODEL-CLOSURE-1`.
+Fan (1967) is the formulation/calibration family; Lee & Cheung (1991) heated,
+buoyancy-dominated jets are reserved as hold-back. See
+[`reference/REF1_LITERATURE.md`](reference/REF1_LITERATURE.md).
+
+## 9. Interpretation
 
 Reference agreement can show that Plume tracks a named implementation for named cases. It does **not** by itself establish physical truth, regulatory acceptance or applicability outside the compared mechanisms/envelope.

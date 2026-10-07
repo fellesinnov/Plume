@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "case_id": "P-EXAMPLE-EPA-2025-12-22",
+  "purpose": "Control case for the checked-in EPA December-2025 PLUMES distribution; compare stable near-field output without treating its far-field session choice as model-version evidence.",
+  "role": "software_regression",
+  "reference": {
+    "kind": "checked_in_distribution",
+    "identity": "tree:775bf09ceac5cdd4386505a6b765bee5e347b400"
+  },
+  "inputs": [
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/Example_project.prj",
+      "git_blob_sha": "883e981014aad44e430859c488a9b45424fcb5c5",
+      "size_bytes": 6746
+    },
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/Ambient_example.csv",
+      "git_blob_sha": "14e018dda3cfb4657a2e4972443becc5ef53331f",
+      "size_bytes": 1160
+    },
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/Diffuser_example.csv",
+      "git_blob_sha": "2b5e0cb3be5047c6b35256684965560bea6d439e",
+      "size_bytes": 626
+    },
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/Effluent_example.csv",
+      "git_blob_sha": "e44168801b6000458561edb0a346b760b07dd20b",
+      "size_bytes": 332
+    },
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/Mixing_zone_example.csv",
+      "git_blob_sha": "ff98580281b82db0a6451c05bbb907074745da66",
+      "size_bytes": 196
+    }
+  ],
+  "raw_outputs": [
+    {
+      "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/Example Project/ModelResults_TxtOutputs.dat",
+      "git_blob_sha": "36cc2e2f27711e64182a70f45d48de7585daf07a",
+      "size_bytes": 6649
+    }
+  ],
+  "session_choices": {
+    "observed_far_field_diffusivity": "constant",
+    "source": "raw output header"
+  },
+  "normalization": {
+    "parser": "plumes_modelresults_v1",
+    "coordinates": "surface_zero_z_positive_up"
+  }
+}

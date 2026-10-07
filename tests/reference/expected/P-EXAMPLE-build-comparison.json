@@ -1,0 +1,49 @@
+{
+  "format": "plumes_example_comparison_v1",
+  "near_field": {
+    "left_rows": 55,
+    "right_rows": 55,
+    "identical_normalized_rows": true,
+    "first_difference": null,
+    "left_terminal": {
+      "step": 275,
+      "dilution_flux_avg": 169.754,
+      "plume_diameter_m": 6.481,
+      "x_m": 7.017,
+      "y_m": 2.082,
+      "z_m": -2.512,
+      "depth_below_surface_m": 2.512
+    },
+    "right_terminal": {
+      "step": 275,
+      "dilution_flux_avg": 169.754,
+      "plume_diameter_m": 6.481,
+      "x_m": 7.017,
+      "y_m": 2.082,
+      "z_m": -2.512,
+      "depth_below_surface_m": 2.512
+    },
+    "left_events": [
+      {"name": "plume_traps", "section": "near_field", "after_near_field_step": 250, "after_far_field_distance_m": null},
+      {"name": "merging_happened", "section": "near_field", "after_near_field_step": 255, "after_far_field_distance_m": null},
+      {"name": "plume_surfaces", "section": "near_field", "after_near_field_step": 270, "after_far_field_distance_m": null},
+      {"name": "reached_chronic_mixing_zone", "section": "far_field", "after_near_field_step": null, "after_far_field_distance_m": 100.0}
+    ],
+    "right_events": [
+      {"name": "plume_traps", "section": "near_field", "after_near_field_step": 250, "after_far_field_distance_m": null},
+      {"name": "merging_happened", "section": "near_field", "after_near_field_step": 255, "after_far_field_distance_m": null},
+      {"name": "plume_surfaces", "section": "near_field", "after_near_field_step": 270, "after_far_field_distance_m": null},
+      {"name": "reached_chronic_mixing_zone", "section": "far_field", "after_near_field_step": null, "after_far_field_distance_m": 100.0}
+    ]
+  },
+  "far_field": {
+    "left_diffusivity": "power_4_3",
+    "right_diffusivity": "constant",
+    "same_diffusivity": false,
+    "left_wastefield_width_m": 109.59,
+    "right_wastefield_width_m": 96.29,
+    "left_rows": 21,
+    "right_rows": 21,
+    "identical_normalized_rows": false
+  }
+}

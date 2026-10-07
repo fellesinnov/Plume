@@ -2,71 +2,138 @@
 
 This file is the single owner for current repository status.
 
-## SPEC-0 candidate — 2026-10-07
+## REF-1 candidate — 2026-10-07
 
-**Authoritative main at sprint start:** `b691113b374b08a21302a23e17a196a78e325fb8`.
+**Authoritative `main` at sprint start:** `20822afe25175a94ba2b7cb91579e4191b7bc52c`.
 
-**Historical prototype snapshot:** branch `archive/prototype-v0` points at that exact commit.
+**Candidate branch:** `ref-1-reference-bakeoff`.
 
-**Candidate branch:** `spec-0-product-reset`.
+**Draft PR:** #3.
 
-**Qualified reset/source commit:** `57196f68f810d02f6ee825457f69565aaed7e7cb`.
+SPEC-0 is integrated on `main`. REF-1 adds reference/qualification infrastructure and decisions
+only; there is still no production plume implementation.
 
-**Current candidate head:** `a13c7952e9e6f08c02c6d2b1ce7a4ca527639fcb`.
+Detailed records:
 
-### Candidate result
+- [2026-10-07-ref-1.md](2026-10-07-ref-1.md) — sprint scope/evidence;
+- [../reference/REF1_NEARFIELD_BAKEOFF.md](../reference/REF1_NEARFIELD_BAKEOFF.md) — mechanism/reuse decision;
+- [../reference/REF1_LITERATURE.md](../reference/REF1_LITERATURE.md) — independent physical-evidence split.
 
-- active product is defined as a thermal-discharge digital twin, not the historical screening script;
-- historical prototype/calibration is absent from the active candidate but preserved unchanged in Git;
-- `References/` is the immutable external evidence boundary;
-- the user mockup moved from `References/` to `docs/assets/initial-mockup.png`;
-- product/config/provider/workspace/permit-output contracts are defined before implementation;
-- an explicit **Design Mode** now precedes annual simulation: evaluate one representative/adverse snapshot, compare outlet geometry/operation, then lock the selected normal config;
-- outlet architecture is type-tagged/extensible: single round port first, multiport and other outlet geometries later through adapters;
-- generated/downloaded data defaults to ignored `workspace/`;
-- credentials are excluded from source;
-- GitHub Actions remains manual-only;
-- reference policy is accuracy-first triangulation, not PLUMES2.0 parity as physical truth;
-- SFEI GPL-3.0 Visual Plumes may be used as an external oracle; the MIT Ebb PLUMES2.0 port is a serious reuse candidate after REF-1 review.
+### REF-1 result
 
-### Structural evidence
+REF-1 now provides MODEL-1 with a concrete starting architecture rather than a guessed closure set:
 
-Against the qualified reset/source commit:
+- **adapt Ebb Carbon's MIT single-port Lagrangian-control-volume architecture**, with attribution;
+- keep SFEI GPL Visual Plumes as an independent source/behavioural oracle, not copied product code;
+- keep checked-in PLUMES executables/traces as frozen software-regression evidence, not physical
+  truth;
+- preserve mass + vector momentum conservation and explicit salt/heat conservation;
+- preserve the source contraction and element-stretching relations independently corroborated by
+  Ebb executable experiments and the SFEI implementation;
+- use ambient-relative velocity in the current-entrainment treatment;
+- retain the decoded `Um3Entrainment` behavior as the **software-reference closure**;
+- do **not** promote the legacy single-plume zero-curvature behavior to physical truth merely
+  because it matches PLUMES/SFEI;
+- route the final physical current-entrainment choice to `MODEL-CLOSURE-1`, using Fan for
+  formulation/calibration and untouched Lee-Cheung heated buoyant-jet data as hold-back;
+- use adaptive continuous integration and explicit boundary/oscillation events rather than copying
+  the GUI executable's step controller;
+- use **TEOS-10** thermodynamics for the production path, not the executable's Knudsen relation or
+  Ebb's EOS-80 default;
+- normalize product/model coordinates to local ENU with navigation azimuth; reference adapters own
+  legacy-axis conversion;
+- keep similarity-profile reconstruction in FIELD-1, merging in OUTLET-2 and Brooks/far-field work
+  in FARFIELD-1.
 
-- top-level active tree is limited to `.env.example`, `.github`, `.gitignore`, `AGENTS.md`, `README.md`, `References/`, `configs/`, and `docs/`;
-- active tree contains **no Python implementation files** and no `requirements.txt`;
-- `archive/prototype-v0` remains exactly `b691113b374b08a21302a23e17a196a78e325fb8`;
-- PLUMES reference files are byte-identical relative to sprint start; the only `References/` diff is the user-owned mockup rename into docs;
-- example config YAML parses and passes a focused contract smoke check;
-- manual workflow YAML parses and exposes only `workflow_dispatch`;
-- no GitHub Actions run has been started on `spec-0-product-reset`.
+### REF-1A — deterministic reference foundation
 
-Subsequent commits through the current head are documentation/specification refinements only.
+Implemented outside the future product runtime:
 
-### Reference research
+- `tools/reference_harness/`: stdlib manifest/parser/comparison/content-identity tooling;
+- `tests/reference/reference-lock.json`: checked-in and external exact identities;
+- `tests/reference/cases/`: canonical manifests;
+- `tests/reference/expected/`: small derived goldens;
+- `tests/reference_harness/`: deterministic/discriminator tests.
 
-- Both checked-in PLUMES distributions contain executables and data, not Fortran source.
-- The EPA Dec-2025 package contains useful additional near-/far-field traces.
-- No authentic public PLUMES2.0 Fortran source was found in the 2026-10-07 EPA/SSMC/web/GitHub search.
-- Public SFEI Visual Plumes/UM3 Python code (GPL-3.0) and Ebb Carbon PLUMES2.0 Python port (MIT) were identified as valuable independent references.
+PLUMES normalization explicitly distinguishes signed `z_m`, positive-down depth and flux-average
+dilution rather than inheriting ambiguous reference labels.
 
-### Evidence policy for this sprint
+No file under `References/` was changed.
 
-SPEC-0 changes repository/product contracts, not plume physics. No GitHub Actions run is required or authorised.
+### Checked-in PLUMES evidence
 
-### Design Studio refinement
+The two distributions are pinned by exact Git tree/blob identity and byte size.
 
-- UI/product contract added at `docs/UI_SPEC.md` on qualified spec head `365ef1de50d4cad193f62abdf80f27bab8ddd0bd`.
-- Preferred first shell is Streamlit, but physics/providers/config/cache/criteria stay headless.
-- Workflow is `Project → Ocean → Design → Simulate → Results`.
-- Ocean data is fetched/cached explicitly; selecting/designing against a pinned timestamp never refetches on geometry changes.
-- Named customer/site projects and revisions remain under gitignored `workspace/projects/` by default.
-- Provider, physics and render caches invalidate independently.
-- Annual runs always retain compact metrics/provenance but need not retain dense spatial fields for every timestep.
-- No GitHub Actions run was required or authorised for this docs/spec refinement.
+Their shipped example CSV inputs are the same. The two project files differ only in far-field
+option state relevant to the observed output difference. Parsing the actual raw outputs gives:
+
+- near field: **55 / 55 rows exactly identical**;
+- same trap / merge / surface event sequence;
+- same terminal row at step 275:
+  dilution 169.754, diameter 6.481 m, x/y/z = 7.017 / 2.082 / -2.512 m;
+- far field: **21 / 21 rows, non-identical**;
+- SSMC: `power_4_3`, wastefield width 109.59 m;
+- Dec-2025: `constant`, wastefield width 96.29 m.
+
+`PLUMES-REF-1` is therefore closed for the near-field reference role:
+
+- **SSMC-v1** = primary software-regression oracle because Ebb's rich decode/trace corpus is
+  anchored to it;
+- **EPA Dec-2025** = newer-build sentinel/secondary comparison.
+
+Neither is a physical-validation hierarchy.
+
+SHA-256 can still be recorded when a binary-capable checkout is convenient, but it duplicates the
+already-pinned in-repository byte identity and is not a reason to require a Windows laptop before
+integration.
+
+### Independent physical evidence
+
+REF-1 does **not** calibrate a production model.
+
+The physical qualification split is now explicit:
+
+- **Fan (1967)** — formulation/calibration family;
+- **Lee & Cheung (1991)** — reserved heated, buoyancy-dominated current hold-back;
+- recent independent 2026 UM3/DKHW comparison reports stronger UM3 agreement on the mostly
+  momentum-dominated Fan data than on the Lee-Cheung buoyancy-dominated data, reinforcing the
+  latter as the harder product-relevant hold-back.
+
+No plotted points have been digitized to manufacture numerical goldens. Raw/tabulated experimental
+data with clean provenance are owed by MODEL-1 before `MODEL-CLOSURE-1` and `MODEL-TOL-1`
+close.
+
+### Deterministic checks
+
+No GitHub Actions run.
+
+REF-1A sandbox prototype of the committed harness:
+
+- `python -m unittest discover -s tests/reference_harness -v`: **11 total, 8 PASS, 3 SKIP**;
+- the three skips require a full checkout containing the binary `References/` tree, unavailable
+  in this sandbox;
+- `python -m compileall` over harness + tests: PASS;
+- independent parsing of actual GitHub raw PLUMES text outputs reproduced the committed golden.
+
+The full-checkout regression is already present and will verify manifest paths, Git blob IDs/sizes,
+optional SHA-256 values and the derived golden whenever such a checkout is used.
+
+### Gates after REF-1
+
+- `PLUMES-REF-1`: **CLOSED** for the near-field reference role.
+- `MODEL-CLOSURE-1`: **OPEN**, intentionally owned by MODEL-1 physical qualification.
+- `MODEL-TOL-1`: **BLOCKED** until closure freeze + hold-back evidence.
+- `FIELD-PROFILE-1`: **OPEN**, owned by FIELD-1.
+- `FARFIELD-SCOPE-1`: **BLOCKED**, owned by FARFIELD-1.
+- multiport/merging remains OUTLET-2.
 
 ### Integration state
 
-**READY FOR INTEGRATION.** Merge authority remains human-only under current repository governance.
+**READY FOR INTEGRATION.**
 
-The next seam after integration is **REF-1 reference bakeoff**, followed by **CORE-0**, **MODEL-1**, **FIELD-1**, then **DESIGN-1** before historical TIME-1.
+REF-1's purpose was to establish reference roles, architecture and evidence boundaries before
+implementation. It has done that without pretending software parity is physical validation.
+
+No Actions run is required or authorised. Merge authority remains human-only.
+
+**Recommended next seam after integration:** `CORE-0`, then `MODEL-1`.

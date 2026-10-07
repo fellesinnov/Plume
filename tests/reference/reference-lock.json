@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "generated_from_plume_main": "20822afe25175a94ba2b7cb91579e4191b7bc52c",
+  "checked_in_distributions": [
+    {
+      "id": "plumes2-ssmc-v1",
+      "path": "References/PLUMES2.0-main",
+      "tree_git_sha": "d1d40f74ffc6538f3e1f3ea4ca9dd02d8b530856",
+      "executable": {
+        "path": "References/PLUMES2.0-main/plumes2.0v1.exe",
+        "git_blob_sha": "dce0fe6b488e233169aec267d0c28706f516d546",
+        "size_bytes": 3593728,
+        "sha256": null,
+        "sha256_status": "owed_binary_access"
+      }
+    },
+    {
+      "id": "plumes2-epa-2025-12-22",
+      "path": "References/plumes2.0_12_22_2025",
+      "tree_git_sha": "775bf09ceac5cdd4386505a6b765bee5e347b400",
+      "content_root_git_sha": "b684fd0f50bce8effaa91edba36ebf18628eab1f",
+      "executable": {
+        "path": "References/plumes2.0_12_22_2025/PLUMES2.0_12_22_2025/plumes2.0.exe",
+        "git_blob_sha": "34c845d7142fee5ca1c8a6367ad52e4a4db770ae",
+        "size_bytes": 3719680,
+        "sha256": null,
+        "sha256_status": "owed_binary_access"
+      }
+    }
+  ],
+  "external_repositories": [
+    {
+      "id": "ebb-plumes-public",
+      "repository": "ebbcarbon/Plumes_Public",
+      "commit": "9791c80ff94f706603df0ae473667ccdffd359db",
+      "license": "MIT for port code; bundled upstream/reference material retains its own provenance",
+      "ref1_role": "adaptation_candidate",
+      "evidence_files": {
+        "src/plumes2/config.py": "d75d86086dd61352c07c4a608eab8e6493faeb40",
+        "src/plumes2/nearfield/entrainment.py": "b86acfe3865021fd8ec01d10f3f83179f6a9d96a",
+        "src/plumes2/nearfield/solver.py": "9faea1c93397bfb0b2ab49b7ef65bcd86b0c61b3",
+        "src/plumes2/nearfield/state.py": "c9feb7fc26837a9e34dea44df789e851460a9905",
+        "src/plumes2/nearfield/terminate.py": "304d1e1cf723afc51ea962d6b31924919834f1ed",
+        "src/plumes2/seawater.py": "f4db8687909641bfe6b0ed674ec3af1f23630629",
+        "src/plumes2/crossplume.py": "b44b7db008f6eaf927a06054e73695f840f405a0",
+        "tests/nearfield/test_solver.py": "5a6fda49c39fa50125a34e76b245f51475477ea6"
+      },
+      "mechanism_cases": {
+        "E-NF-0": {
+          "description": "single-port zero-current isolation; test23",
+          "README.md": "c82fd43057005bd4a933ffb026305213e355cafc",
+          "test23.dat": "7611f9638d2b505012b83e3fbe0db7273b232c65",
+          "baseline_test21.prj": "bbc3a0aed9577542232e62f5a7bb85ad02cc12d6"
+        },
+        "E-NF-C": {
+          "description": "single-port ambient-current sweep",
+          "README.md": "a041ce870b42c9d72a1fb7d845d198a6b6d8042b",
+          "test28_0.01mps.dat": "3db4fac1600feca66700473ee33b973de0d3ce69",
+          "test27_0.02mps.dat": "a2418464fb3d212b245706b39d4827aa45ce44b9",
+          "test29_0.05mps.dat": "9b41dbee6ca40cd75725cd8056ae76aaaf092fdc",
+          "test30_0.10mps.dat": "90ccb7ae56e527b43ccad9ecc065c4a97fe4e804"
+        },
+        "E-NF-T": {
+          "description": "clean slow single-port trapping/oscillation case",
+          "README.md": "eab48e7dfd61d4d57caeff907e16220b04831209",
+          "test12_TxtOutputs.dat": "aed999531f937f53a39edbb7c63c7e6a107c1965"
+        }
+      }
+    },
+    {
+      "id": "sfei-visual-plumes-models",
+      "repository": "sfei/Visual-Plumes-Models",
+      "commit": "99283a481a84902ab248fcf3b6041b484daa1c1e",
+      "license": "GPL-3.0",
+      "ref1_role": "external_behavioral_oracle",
+      "evidence_files": {
+        "UMUnit.py": "7b66b80f34a84921c4538d08297261c0e750de74",
+        "ambient/calculations.py": "a325dd8973c95c1403c57507fdc8ef53e0b9bb7d",
+        "params/ModelParameters.py": "91aa30b1d770e9d8a0b030c87fe817fb01654252"
+      }
+    }
+  ]
+}
