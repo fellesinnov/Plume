@@ -1,6 +1,6 @@
 # Configuration, providers and workspace
 
-**Status:** SPEC-0 contract draft. No implementation is implied yet.
+**Status:** SPEC-0 contract draft with REF-1 coordinate/thermodynamic conventions. No implementation is implied yet.
 
 ## 1. Principles
 
@@ -63,6 +63,23 @@ outfall:
 Future types may include multiport diffusers and surface/near-surface outlets. Their schema can add port count, spacing/layout or other geometry without changing provider/time-runner contracts.
 
 Representation in config does not mean a physics implementation exists. The config validator must reject outlet types for which no selected model adapter exists.
+
+### Coordinate and angle convention
+
+The normalized product/model convention is local **ENU**, independent of PLUMES/Visual Plumes
+legacy axes:
+
+- `+x = east`;
+- `+y = north`;
+- `+z = up`;
+- local free surface `z = 0` for a design/simulation snapshot;
+- depth values are separately stored positive downward;
+- `azimuth_deg` is clockwise from true north: 0° north, 90° east;
+- `vertical_angle_deg` is measured from horizontal, positive upward;
+- ambient vectors use `u_east_mps` and `v_north_mps`.
+
+Reference adapters own any conversion required to compare against a PLUMES/SFEI local-axis
+convention. A reference convention must never silently become the product convention.
 
 ## 4. Forcing references
 
@@ -150,6 +167,41 @@ time, depth_m, u_east_mps, v_north_mps
 Raster/grid or normalized point cloud with explicit coordinate reference/datum.
 
 Every provider response must also return provenance/warnings separately from the numerical array.
+
+### Thermodynamic normalization
+
+The user/provider-facing schema may accept familiar temperature and practical-salinity values, but
+the near-field physics contract should not treat an ambiguous `temperature_C` or `salinity`
+number as sufficient thermodynamic state.
+
+REF-1 selects **TEOS-10** as the production thermodynamic target. Before the MODEL-1 kernel,
+seawater forcing should be normalized to enough information to derive/store:
+
+```text
+depth_m
+sea_pressure_dbar
+absolute_salinity_gkg
+conservative_temperature_C
+```
+
+plus provenance identifying the provider's original salinity/temperature quantities and the
+conversion applied.
+
+For inline/manual inputs in schema v1:
+
+- `salinity_profile_psu` means Practical Salinity unless an explicit later schema says otherwise;
+- a plain inline `temperature_profile_C` means in-situ ITS-90 temperature;
+- provider adapters such as Copernicus must preserve the provider variable meaning and convert
+  potential/in-situ temperature deliberately rather than relabel one as the other.
+
+Site latitude/longitude and pressure/depth provide the context needed for TEOS-10 conversions.
+The normalized model may then transport Absolute Salinity and Conservative Temperature/potential
+enthalpy and evaluate density at the local pressure.
+
+Legacy Knudsen/EOS-80 relations remain useful only inside reference/compatibility comparisons.
+They are not the customer-facing thermodynamic default.
+
+See `reference/REF1_NEARFIELD_BAKEOFF.md` for the evidence and rationale.
 
 ## 6. Design Mode
 
