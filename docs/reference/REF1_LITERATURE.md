@@ -132,3 +132,30 @@ MODEL-1 owes a deterministic qualification notebook/script or test harness that:
 
 Until raw numerical observations with clear provenance are available, these literature families are
 qualified targets, not synthetic numeric goldens.
+
+## Retrieval status — 2026-10-08
+
+A follow-up public-source pass sharpened the evidence boundary but did not turn either family into
+numeric goldens.
+
+- Seckin et al. (2026) explicitly identifies **99 Fan** observations and **107 Lee-Cheung**
+  observations in its UM3/DKHW comparison, confirming the intended population split and the
+  momentum-dominated vs buoyancy-dominated contrast:
+  <https://doi.org/10.1016/j.dynatmoce.2026.101662>
+- EPA/CORMIX documentation gives reproducible Fan crossflow **case inputs** (for example Run 20-12)
+  but describes the comparative observations as photographs/trajectory/width and plotted
+  concentration/dilution evidence rather than publishing a clean machine-readable observation
+  table:
+  <https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=9100KKWS.TXT>
+- Seckin, Ersu & Macit (2025) confirms **48 Lee-Cheung experiments / 107 data points** and restates
+  the published asymptotic dilution relations, but it does not expose a provenance-clear copy of
+  the original 107 rows:
+  <https://doi.org/10.1016/j.dynatmoce.2025.101561>
+- the Visual Plumes training material contains an abridged `Fan16.txt` verification example, but
+  Fan Run 16 is a stagnant/stratified verification case and cannot discriminate the cross-current
+  closure; it is therefore not substituted for the selected Fan crossflow calibration family:
+  <https://www.clu-in.org/conf/tio/r10mixingzone/2005-MZcourse-draft.pdf>
+
+Project consequence is unchanged: do not digitise plotted points to manufacture a calibration
+set, and do not consume Lee-Cheung before the Fan closure/coefficient decision is frozen.
+`MODEL-CLOSURE-1` and `MODEL-TOL-1` remain open/blocked respectively.

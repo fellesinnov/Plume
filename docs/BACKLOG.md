@@ -41,7 +41,11 @@ Live queue. A ready item names the observation that retires it.
 **Retired by:** the schema-v1 example now loads headlessly, deterministic provider/outlet/schema errors fail explicitly, and a prepared run writes normalized config plus provenance manifest in the ignored workspace. No plume-physics qualification is implied.
 
 ## MODEL-1 — Qualified single-round-port near-field kernel
+**State:** CANDIDATE / HOLD on `model-1-single-port-kernel`; source commit `0e4c9b0b6169a81a8a410ebd9fb33971959247e0`. Not integrated.
+
 **Scope:** implement the first outlet adapter and thermal near-field kernel with conserved heat/salt, arbitrary ambient T/S profiles, prescribed depth-varying current vector, explicit coordinates and boundary events. Reuse/adapt proven permissive implementation material where advantageous instead of reinventing equations.
+
+**Candidate evidence:** 27/27 focused MODEL-1 sandbox tests pass; selected Ebb test23/test28 software-reference dilution checks are within the existing named software-reference bar. Explicitly approved Actions run #6 on `0c18ca94d0ab93d944d996a7e970dcef2b784ea0` passed the full checkout/install/compile/**51-test** repository suite with `gsw 3.6.23` installed. A narrower numerical real-GSW smoke remains owed because the current real-package test only imports/constructs the adapter. Clean Fan calibration/formulation observations and untouched Lee-Cheung hold-back observations also remain owed. See `docs/buildlog/2026-10-07-model-1.md`.
 
 **Retires when:** deterministic conservation/trend tests pass and agreed calibration + hold-back reference cases meet evidence-backed metrics without tuning the hold-backs.
 

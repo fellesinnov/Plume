@@ -7,7 +7,12 @@ name = "plume-engine"
 version = "0.1.0"
 description = "Headless thermal-discharge digital twin core"
 requires-python = ">=3.11"
-dependencies = ["PyYAML>=6.0,<7"]
+dependencies = [
+    "PyYAML>=6.0,<7",
+    "numpy>=1.26,<3",
+    "scipy>=1.11,<2",
+    "gsw>=3.6,<4",
+]
 
 [project.scripts]
 plume = "plume.cli:main"
