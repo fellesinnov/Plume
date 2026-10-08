@@ -50,11 +50,13 @@ Live queue. A ready item names the observation that retires it.
 **Retires when:** deterministic conservation/trend tests pass and agreed calibration + hold-back reference cases meet evidence-backed metrics without tuning the hold-backs.
 
 ## FIELD-1 — Spatial ΔT reconstruction and primary plots
-**State:** NEXT.
+**State:** SOURCE CANDIDATE / integration HOLD on `field-1-spatial-reconstruction` (2026-10-08); physical field-profile qualification remains OPEN.
 
 **Scope:** convert integral plume state into an explicit similarity-profile temperature field; generate section/plan ΔT contours tied mathematically to the model.
 
-**Retires when:** the mockup-style plot is produced from a documented/qualified field reconstruction and deliberate profile/geometry changes cause predictable test failures.
+**Candidate evidence:** EPA-backed bounded 3/2-power radial profile, headless CT/SA-to-local-in-situ-temperature reconstruction, physically located 3-D tube/section/fixed-depth plan slices, optional Matplotlib ambient + Delta-T plot with computed isotherm; **13 passed, 1 real-GSW skipped** in reduced sandbox, compileall PASS. Plot demonstration currently uses illustrative manufactured trajectory, not a complete MODEL-1 solve. Full checkout MODEL-1/GSW runtime smoke and independent cross-plume thermal observations still owed. See `docs/reference/FIELD1_PROFILE.md` and `docs/buildlog/2026-10-08-field-1.md`.
+
+**Retires when:** the mockup-style plot is produced from the real MODEL-1/GSW solution with documented field reconstruction and adversarial profile/geometry checks, with independent physical field-profile qualification separately closed by `FIELD-PROFILE-1`.
 
 ## DESIGN-1 — Live Design Studio snapshot mode
 **Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
