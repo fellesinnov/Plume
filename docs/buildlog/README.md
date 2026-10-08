@@ -1,5 +1,19 @@
 # Current build / evidence status
 
+## FIELD-1 spatial-field/plots source candidate — 2026-10-08
+
+**Branch:** `field-1-spatial-reconstruction` from verified `main` `dc280f6d830b942ee20fa695bcd4672b72e6568e`. **Not merged.**
+
+FIELD-1 reconstructs a finite near-field 3-D thermal field from the MODEL-1 trajectory with an EPA-informed bounded 3/2-power cross-plume profile; exposes headless section/plan slices and a separate optional Matplotlib renderer with real computed 2 °C contours and distinct ambient/thermal colour scales. Its model/profile assumptions and provenance limitations are documented in [../reference/FIELD1_PROFILE.md](../reference/FIELD1_PROFILE.md).
+
+**Reduced sandbox evidence:** 13 focused tests PASS, 1 real-GSW test SKIP (package absent), `compileall` PASS. A compelling section/plan demo plot was generated from a **manufactured illustrative trajectory**—not a real MODEL-1/GSW end-to-end run. No GitHub Actions run, reference-file changes or credential use. The complete combined-repository/model/GSW runtime closure remains owed.
+
+**Integration recommendation:** **SOURCE CANDIDATE / HOLD for merge** until a complete checkout with the actual MODEL-1/GswThermodynamics proves the field/plot seam. The external physical-profile gate `FIELD-PROFILE-1` and previously open MODEL-1 physics gates remain open; no permitting/validation claim is implied. Human owns merge authority.
+
+Detailed sprint record: [2026-10-08-field-1.md](2026-10-08-field-1.md).
+
+---
+
 ## MODEL-1 implementation integrated — 2026-10-08
 
 **Merged branch:** `model-1-single-port-kernel`.
