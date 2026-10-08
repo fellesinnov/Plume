@@ -34,7 +34,7 @@ Live queue. A ready item names the observation that retires it.
 
 **Scope:** create the UI-independent Python package, versioned YAML/JSON config loader/normalizer, outlet-adapter contract, workspace/run manifest, provider interface and deterministic constant/inline/CSV providers.
 
-**Evidence:** schema-v1 YAML/JSON normalization, structural `single_round_port` adapter, `constant`, `constant_vector`, `inline_profile` and scalar-timeseries `csv` providers, headless `plume prepare`, and prepared-run provenance are implemented on the candidate branch. Sandbox: 13/13 focused tests PASS; `compileall` PASS; editable install + CLI prepare smoke PASS with build isolation disabled because the sandbox has no network. Deliberate unsupported outlet/provider/schema mutations fail deterministically. No Actions run.
+**Evidence:** schema-v1 YAML/JSON normalization, structural `single_round_port` adapter, `constant`, `constant_vector`, `inline_profile` and scalar-timeseries `csv` providers, headless `plume prepare`, and prepared-run provenance are implemented on the candidate branch. Sandbox: 13/15 focused tests PASS; `compileall` PASS; editable install + CLI prepare smoke PASS with build isolation disabled because the sandbox has no network. Deliberate unsupported outlet/provider/schema mutations fail deterministically. No Actions run.
 
 **Retires when:** `configs/example.yaml` loads headlessly, produces a normalized config + manifest in an ignored workspace, unsupported outlet types fail explicitly, and deliberate schema/provider errors fail deterministically.
 
@@ -54,7 +54,7 @@ Live queue. A ready item names the observation that retires it.
 
 **Scope:** convert integral plume state into an explicit similarity-profile temperature field; generate section/plan ΔT contours tied mathematically to the model.
 
-**Candidate evidence:** EPA-backed bounded 3/2-power radial profile, headless CT/SA-to-local-in-situ-temperature reconstruction, physically located 3-D tube/section/fixed-depth plan slices, optional Matplotlib ambient + Delta-T plot with computed isotherm; **13 passed, 1 real-GSW skipped** in reduced sandbox, compileall PASS. Plot demonstration currently uses illustrative manufactured trajectory, not a complete MODEL-1 solve. Full checkout MODEL-1/GSW runtime smoke and independent cross-plume thermal observations still owed. See `docs/reference/FIELD1_PROFILE.md` and `docs/buildlog/2026-10-08-field-1.md`.
+**Candidate evidence:** EPA-backed bounded 3/2-power radial profile, headless CT/SA-to-local-in-situ-temperature reconstruction, physically located 3-D tube/section/fixed-depth plan slices, optional Matplotlib ambient + Delta-T plot with computed isotherm; **15 passed, 1 real-GSW skipped** in reduced sandbox, compileall PASS. Plot demonstration currently uses illustrative manufactured trajectory, not a complete MODEL-1 solve. Full checkout MODEL-1/GSW runtime smoke and independent cross-plume thermal observations still owed. See `docs/reference/FIELD1_PROFILE.md` and `docs/buildlog/2026-10-08-field-1.md`.
 
 **Retires when:** the mockup-style plot is produced from the real MODEL-1/GSW solution with documented field reconstruction and adversarial profile/geometry checks, with independent physical field-profile qualification separately closed by `FIELD-PROFILE-1`.
 
