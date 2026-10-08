@@ -20,19 +20,22 @@ Focused sandbox evidence on the exact source/test blobs now on the branch:
 - editable install with `--no-deps --no-build-isolation`: PASS;
 - Ebb case18/`test23` selected early-jet dilution MARE **0.242 %**, max **0.307 %**;
 - Ebb case19/`test28` at 0.01 m/s selected dilution MARE **0.268 %**, max **0.349 %**;
-- no GitHub Actions run.
+- explicitly approved GitHub Actions run #6 on `0c18ca94d0ab93d944d996a7e970dcef2b784ea0`: **51 / 51 PASS** on CPython 3.11.17 / Ubuntu 24.04 with `gsw 3.6.23` installed.
 
 The tested source/test blob identities were re-read from the remote branch and exactly match the
-sandbox candidate. The sandbox copy was intentionally reduced to the MODEL-1 seam, so the existing
-CORE-0/reference suites have **not** yet been rerun against the combined branch. The real `gsw`
-package is also absent in this no-network sandbox; the adapter contract is tested with a fake module
-and explicit no-fallback behavior, while real-GSW execution remains owed.
+sandbox candidate. The approved Actions run then exercised the **combined repository** in a full
+checkout: structure check PASS, editable install PASS, `compileall` PASS, and **51 / 51 tests PASS**.
+That run installed `gsw 3.6.23`, and the existing boundary test imported/constructed the real
+`GswThermodynamics` successfully. However, the current real-package test does not yet execute
+`p_from_z`, `SA_from_SP`, `CT_from_t`, `rho`, and `t_from_CT` numerically against the installed
+package, so `MODEL-TEOS-1` remains open for that narrower smoke.
 
 **Integration state:** **HOLD.** `MODEL-CLOSURE-1` remains open because clean numerical Fan
 calibration/formulation observations and untouched Lee-Cheung hold-back observations have not yet
 been obtained with sufficient provenance; no plot digitization was used to manufacture goldens.
-`MODEL-TOL-1` therefore remains blocked. Full-branch regression and real-GSW execution are also
-owed before this candidate can be treated as integration-ready.
+`MODEL-TOL-1` therefore remains blocked. The full combined-repository regression is now closed;
+only the narrower real-GSW numerical smoke remains as mechanical debt alongside the physical
+qualification gate.
 
 Detailed record: [2026-10-07-model-1.md](2026-10-07-model-1.md).
 
