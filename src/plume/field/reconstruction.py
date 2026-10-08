@@ -107,7 +107,15 @@ def _trajectory_inputs(trajectory: Trajectory, ambient: AmbientColumn,
             not np.allclose(trajectory.depth_m, -center[:, 2], atol=1e-8, rtol=0)):
         raise ModelInputError("trajectory depth and ENU z must agree in the water column")
     levels = ambient.levels
-    depth = [level.depth_m for level in levels]
+    depth = np.array([level.depth_m for level in levels], dtype=float)
+    if (len(depth) < 2 or not np.all(np.isfinite(depth)) or
+            not np.all(np.diff(depth) > 0.0) or
+            abs(depth[0]) > 1e-9 or abs(depth[-1] - water_depth_m) > 1e-9):
+        raise ModelInputError("ambient profile must explicitly cover full water column")
+    if any(not (math.isfinite(level.seawater.conservative_temperature_C) and
+                math.isfinite(level.seawater.absolute_salinity_gkg))
+           for level in levels):
+        raise ModelInputError("ambient salinity/temperature must be finite")
     ambient_ct = np.interp(trajectory.depth_m, depth,
                            [level.seawater.conservative_temperature_C for level in levels])
     ambient_sa = np.interp(trajectory.depth_m, depth,
