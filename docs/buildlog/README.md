@@ -6,7 +6,7 @@
 
 FIELD-1 reconstructs a finite near-field 3-D thermal field from the MODEL-1 trajectory with an EPA-informed bounded 3/2-power cross-plume profile; exposes headless section/plan slices and a separate optional Matplotlib renderer with real computed 2 °C contours and distinct ambient/thermal colour scales. Its model/profile assumptions and provenance limitations are documented in [../reference/FIELD1_PROFILE.md](../reference/FIELD1_PROFILE.md).
 
-**Reduced sandbox evidence:** 13 focused tests PASS, 1 real-GSW test SKIP (package absent), `compileall` PASS. A compelling section/plan demo plot was generated from a **manufactured illustrative trajectory**—not a real MODEL-1/GSW end-to-end run. No GitHub Actions run, reference-file changes or credential use. The complete combined-repository/model/GSW runtime closure remains owed.
+**Reduced sandbox evidence:** 15 focused tests PASS, 1 real-GSW test SKIP (package absent), `compileall` PASS. A compelling section/plan demo plot was generated from a **manufactured illustrative trajectory**—not a real MODEL-1/GSW end-to-end run. No GitHub Actions run, reference-file changes or credential use. The complete combined-repository/model/GSW runtime closure remains owed.
 
 **Integration recommendation:** **SOURCE CANDIDATE / HOLD for merge** until a complete checkout with the actual MODEL-1/GswThermodynamics proves the field/plot seam. The external physical-profile gate `FIELD-PROFILE-1` and previously open MODEL-1 physics gates remain open; no permitting/validation claim is implied. Human owns merge authority.
 
@@ -77,7 +77,7 @@ Integrated evidence:
 - deterministic local provider contracts/implementations;
 - config-relative paths and corrected demo workspace root;
 - headless `plume prepare` producing normalized config + provenance manifest;
-- sandbox **13/13 focused tests PASS**;
+- sandbox **13/15 focused tests PASS**;
 - `compileall` PASS;
 - editable package + CLI prepare smoke PASS without build isolation;
 - no GitHub Actions run;
