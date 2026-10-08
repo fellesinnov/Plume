@@ -1,12 +1,14 @@
 # Current build / evidence status
 
-## MODEL-1 candidate — 2026-10-07
+## MODEL-1 implementation integrated — 2026-10-08
 
-**Branch:** `model-1-single-port-kernel`.
+**Merged branch:** `model-1-single-port-kernel`.
 
-**Candidate source commit:** `0e4c9b0b6169a81a8a410ebd9fb33971959247e0`.
+**Merged PR:** #7.
 
-MODEL-1 now has a source-ready single-round-port Lagrangian near-field candidate adapted from
+**Integrated on `main`:** `1d92bae1b2e1e2bf310a67646f73cfb86042e133`.
+
+MODEL-1 now has an integrated single-round-port Lagrangian near-field implementation baseline adapted from
 the pinned MIT Ebb Carbon architecture, with explicit ENU coordinates, conserved mass/vector
 momentum/Absolute Salinity/Conservative Temperature, depth-varying horizontal current, a
 GSW-backed TEOS-10 production boundary, explicit boundary/oscillation events, and both
@@ -30,14 +32,17 @@ That run installed `gsw 3.6.23`, and the existing boundary test imported/constru
 `p_from_z`, `SA_from_SP`, `CT_from_t`, `rho`, and `t_from_CT` numerically against the installed
 package, so `MODEL-TEOS-1` remains open for that narrower smoke.
 
-**Integration state:** **HOLD.** `MODEL-CLOSURE-1` remains open because clean numerical Fan
-calibration/formulation observations and untouched Lee-Cheung hold-back observations have not yet
-been obtained with sufficient provenance; no plot digitization was used to manufacture goldens.
-`MODEL-TOL-1` therefore remains blocked. The full combined-repository regression is now closed;
-only the narrower real-GSW numerical smoke remains as mechanical debt alongside the physical
-qualification gate.
+**Integration state:** **IMPLEMENTATION INTEGRATED / PHYSICAL QUALIFICATION OPEN.** PR #7 was
+explicitly authorised and squash-merged to `main` at `1d92bae1b2e1e2bf310a67646f73cfb86042e133`.
+This integration does **not** retire `MODEL-CLOSURE-1`: clean numerical Fan formulation/calibration
+observations and the untouched Lee-Cheung hold-back are still owed, so no production closure or
+physical acceptance tolerance is frozen. `MODEL-TOL-1` remains blocked, and `MODEL-TEOS-1` remains
+open for the narrow real-GSW numerical smoke. Downstream development may proceed while preserving
+that qualification state explicitly in results/provenance.
 
 Detailed record: [2026-10-07-model-1.md](2026-10-07-model-1.md).
+
+**Next seam:** `FIELD-1` — spatial ΔT reconstruction and primary plots.
 
 This file is the single owner for current repository status.
 
