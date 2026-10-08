@@ -4,13 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  structure:
+  repository:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check SPEC-0 repository structure
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check repository structure
         shell: bash
         run: |
           set -euo pipefail
@@ -21,4 +26,15 @@ jobs:
           test -d References
           test ! -e outfall_screen.py
           test ! -e requirements.txt
-          echo "Manual repository structure check passed."
+          echo "Repository structure check passed."
+
+      - name: Install package and test runner
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+
+      - name: Compile Python sources
+        run: python -m compileall -q src tests tools
+
+      - name: Run repository tests
+        run: python -m pytest -q
