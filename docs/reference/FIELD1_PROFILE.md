@@ -71,7 +71,7 @@ This is **in-situ temperature excess relative to local ambient**, not raw `delta
 
 `plume.field` implements pure NumPy reconstruction and accesses the core thermodynamics abstraction. `plume.render` is an **optional** Matplotlib consumer, installed as `plume-engine[plot]`; it cannot alter physics or fetch providers.
 
-The renderer displays the ambient water-column background on a separately labelled in-situ temperature colour scale and the thermal plume on a separately labelled `delta_T` colour scale. It outlines the **calculated** configured threshold (default 2 deg C), never a manufactured drawn contour. It must label the near-field qualification limitations.
+The initial plot theme intentionally visualizes **warm** excess only; if a cold anomaly is supplied it **raises** instead of falsely drawing no plume. A signed warm/cold palette is future renderer work, not a restriction on the headless field output. The renderer displays the ambient water-column background on a separately labelled in-situ temperature colour scale and the thermal plume on a separately labelled `delta_T` colour scale. It outlines the **calculated** configured threshold (default 2 deg C), never a manufactured drawn contour. It must label the near-field qualification limitations.
 
 Generated customer/demo PNG/SVG files belong in gitignored `workspace/`. The synthetic diagnostic preview produced during FIELD-1 uses an **illustrative manufactured trajectory**, not a full MODEL-1/GSW simulation. It is not checked in as a golden physical figure.
 
@@ -84,7 +84,7 @@ Sandbox fixture tests cover:
 - early/late axial end cap and radial support rejection;
 - sensitivity to radius and dilution;
 - an off-section plume refusing to project a false hotspot onto the section;
-- local ambient depth handling and salinity transport;
+- local ambient depth handling, explicit full-column coverage (no extrapolation) and salinity transport;
 - curved 3-D nearest-segment choice, numerical chunk invariance, invalid-sign/NaN rejection;
 - section heading, plan depth and optional Matplotlib separation;
 - a separately optional official-GSW conversion smoke when the package is installed.
