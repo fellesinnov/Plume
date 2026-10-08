@@ -75,7 +75,7 @@ def test_integrated_profile_mass_mean_is_exact_in_developed_and_near_source_limi
     r = np.linspace(0, 1, 20001)
     for dilution, peak in ((1., 1.), (2., 2.), (4., PEAK_TO_MEAN_LIMIT), (10., PEAK_TO_MEAN_LIMIT)):
         w = radial_weight(r, dilution)
-        avg = np.trapezoid(2 * r * w, r)
+        avg = np.sum(np.diff(r) * (r[1:] * w[1:] + r[:-1] * w[:-1]))
         assert abs(avg - 1.) < 1e-7
         assert radial_weight(0., dilution) == pytest.approx(peak)
         assert radial_weight(1.01, dilution) == 0.
