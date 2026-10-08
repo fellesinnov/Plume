@@ -24,6 +24,10 @@ def render_field_pair(section: FieldSlice, plan: FieldSlice, *,
         raise ModelInputError("expected (vertical section, physical horizontal plan)")
     if not math.isfinite(threshold_delta_T_C) or threshold_delta_T_C <= 0:
         raise ModelInputError("thermal threshold must be positive and finite")
+    for field in (section, plan):
+        dt = field.values.delta_temperature_C
+        if not np.all(np.isfinite(dt)) or np.any(dt < -1e-9):
+            raise ModelInputError("warm-only renderer cannot silently hide cold/nonfinite thermal anomalies")
     try:
         import matplotlib.pyplot as plt
         from matplotlib.colors import Normalize
