@@ -229,3 +229,24 @@ def test_real_gsw_conversion_smoke_if_installed():
         practical_salinity=35., in_situ_temperature_C=10.,
         depth_m=10., latitude_deg=60., longitude_deg=5.)
     assert math.isfinite(thermo.in_situ_temperature_C(state, depth_m=10., latitude_deg=60.))
+
+
+def test_incomplete_ambient_profile_rejected_not_silently_extrapolated():
+    class TruncatedColumn:
+        levels = (Level(2., State(35., 11.)), Level(15., State(35., 9.)))
+
+    with pytest.raises(ModelInputError, match="full water column"):
+        reconstruct_points(straight(), ambient=TruncatedColumn(),
+                           thermodynamics=SimpleThermo(), latitude_deg=60.,
+                           water_depth_m=20., east_m=3., north_m=0., depth_m=10.)
+
+
+def test_cold_plume_values_remain_physical_but_warm_only_plot_rejects_them():
+    values = field(straight(anomaly=-3.), x=4.)
+    assert float(values.delta_temperature_C) < 0.
+    from plume.field import FieldSlice
+    from plume.render import render_field_pair
+    cold = FieldSlice(values, "section", np.array([0., 1.]), np.array([0., 1.]), 90.)
+    warm = FieldSlice(values, "plan", np.array([0., 1.]), np.array([0., 1.]), 10.)
+    with pytest.raises(ModelInputError, match="warm-only"):
+        render_field_pair(cold, warm)
