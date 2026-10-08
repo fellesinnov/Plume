@@ -2,6 +2,11 @@ name: Manual repository check
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - model-1-single-port-kernel
+    paths:
+      - .github/workflows/ci.yml
 
 jobs:
   repository:
