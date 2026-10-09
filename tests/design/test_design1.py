@@ -199,3 +199,37 @@ def test_evaluation_config_mutation_is_rejected_before_any_revision_is_written(t
         store.save_revision(created, result)
     assert not list((created.project_dir / "revisions").iterdir())
     assert store.open("integrity").locked_revision_id is None
+
+
+def test_preview_threshold_reuses_solved_fields_without_changing_project_criteria(tmp_path):
+    from plume.design import sampled_isotherm_indicators
+
+    base = _template(tmp_path)
+    pinned = pin_snapshot(base)
+    evaluated = evaluate_design(base.normalized, pinned, thermodynamics=LinearThermo(),
+                                section_resolution=(41, 31), plan_resolution=(41, 31))
+    with (
+        patch("plume.design.snapshot.load_provider", side_effect=AssertionError("provider reloaded")),
+        patch("plume.design.evaluate.solve_near_field", side_effect=AssertionError("model reran")),
+    ):
+        low = sampled_isotherm_indicators(evaluated.section, evaluated.plan,
+                                         threshold_delta_T_C=0.5)
+        default = sampled_isotherm_indicators(evaluated.section, evaluated.plan,
+                                             threshold_delta_T_C=2.0)
+        high = sampled_isotherm_indicators(evaluated.section, evaluated.plan,
+                                          threshold_delta_T_C=1e5)
+    for key in ("threshold_delta_T_C", "section_threshold_max_distance_m",
+                "plan_threshold_farthest_radius_m", "plan_threshold_sampled_area_m2",
+                "grid_boundary_threshold_contact"):
+        assert default[key] == evaluated.metrics[key]
+    assert low["plan_threshold_sampled_area_m2"] >= default["plan_threshold_sampled_area_m2"]
+    assert high["plan_threshold_sampled_area_m2"] == 0
+    assert high["plan_threshold_farthest_radius_m"] is None
+    assert not high["grid_boundary_threshold_contact"]
+    assert evaluated.normalized_config["criteria"][0]["threshold_delta_T_C"] == 2.0
+    assert evaluated.config_sha256 == _digest(evaluated.normalized_config)
+    assert pinned.snapshot_sha256 == evaluated.snapshot.snapshot_sha256
+    with pytest.raises(ModelInputError, match="positive and finite"):
+        sampled_isotherm_indicators(evaluated.section, evaluated.plan, threshold_delta_T_C=-1)
+    with pytest.raises(ModelInputError, match="positive and finite"):
+        sampled_isotherm_indicators(evaluated.section, evaluated.plan, threshold_delta_T_C=float("nan"))

@@ -92,6 +92,39 @@ def _threshold(normalized: Mapping[str, Any]) -> float:
     return value
 
 
+def sampled_isotherm_indicators(section: FieldSlice, plan: FieldSlice, *,
+                               threshold_delta_T_C: float) -> dict[str, float | bool | None]:
+    """Measure a selected ΔT isotherm on existing MODEL/FIELD slices only.
+
+    Results are grid-sampled near-field indicators, not continuous 3-D extents,
+    validated physics, far-field outcomes or permit-compliance verdicts.
+    None means no above-threshold sample *in this slice*, not no warming.
+    """
+    level = float(threshold_delta_T_C)
+    if not math.isfinite(level) or level <= 0:
+        raise ModelInputError("display isotherm threshold must be positive and finite")
+    if section.plane != "section" or plan.plane != "plan":
+        raise ModelInputError("requires physical section and plan slices")
+    sec_mask = section.values.modeled & (section.values.delta_temperature_C >= level)
+    plan_mask = plan.values.modeled & (plan.values.delta_temperature_C >= level)
+    sec_x, _ = np.meshgrid(section.horizontal_axis_m, section.vertical_axis_m)
+    plan_x, plan_y = np.meshgrid(plan.horizontal_axis_m, plan.vertical_axis_m)
+    cell_area = (float(np.diff(plan.horizontal_axis_m).mean()) *
+                 float(np.diff(plan.vertical_axis_m).mean()))
+    clipped = bool(any(np.any(edge) for mask in (sec_mask, plan_mask)
+                       for edge in (mask[0, :], mask[-1, :],
+                                    mask[:, 0], mask[:, -1])))
+    return {
+        "threshold_delta_T_C": level,
+        "section_threshold_max_distance_m":
+            float(np.max(sec_x[sec_mask])) if sec_mask.any() else None,
+        "plan_threshold_farthest_radius_m":
+            float(np.max(np.hypot(plan_x[plan_mask], plan_y[plan_mask]))) if plan_mask.any() else None,
+        "plan_threshold_sampled_area_m2": float(np.count_nonzero(plan_mask) * cell_area),
+        "grid_boundary_threshold_contact": clipped,
+    }
+
+
 def evaluate_design(candidate: Mapping[str, Any], snapshot: PinnedSnapshot, *,
                     thermodynamics: Thermodynamics | None = None,
                     section_resolution: tuple[int, int] = (101, 71),
@@ -189,23 +222,11 @@ def evaluate_design(candidate: Mapping[str, Any], snapshot: PinnedSnapshot, *,
                                                plan_resolution[1]),
                            depth_m=plan_depth, samples=90)
     threshold = _threshold(normalized)
-    section_mask = section.values.modeled & (section.values.delta_temperature_C >= threshold)
-    plan_mask = plan.values.modeled & (plan.values.delta_temperature_C >= threshold)
-    sx, sy = np.meshgrid(section.horizontal_axis_m, section.vertical_axis_m)
-    px, py = np.meshgrid(plan.horizontal_axis_m, plan.vertical_axis_m)
-    cell_area = ((plan.horizontal_axis_m[-1] - plan.horizontal_axis_m[0]) / (plan_resolution[0] - 1)
-                 * (plan.vertical_axis_m[-1] - plan.vertical_axis_m[0]) / (plan_resolution[1] - 1))
-    clipped = bool((np.any(section_mask[0, :]) or np.any(section_mask[-1, :])
-                    or np.any(section_mask[:, 0]) or np.any(section_mask[:, -1])
-                    or np.any(plan_mask[0, :]) or np.any(plan_mask[-1, :])
-                    or np.any(plan_mask[:, 0]) or np.any(plan_mask[:, -1])))
+    sampled = sampled_isotherm_indicators(section, plan, threshold_delta_T_C=threshold)
     metrics = {
-        "threshold_delta_T_C": threshold,
+        **sampled,
         "section_peak_delta_T_C": float(np.max(section.values.delta_temperature_C)),
         "plan_peak_delta_T_C": float(np.max(plan.values.delta_temperature_C)),
-        "section_threshold_max_distance_m": float(np.max(sx[section_mask])) if section_mask.any() else None,
-        "plan_threshold_farthest_radius_m": float(np.max(np.hypot(px[plan_mask], py[plan_mask]))) if plan_mask.any() else None,
-        "plan_threshold_sampled_area_m2": float(np.count_nonzero(plan_mask) * cell_area),
         "plan_slice_depth_m": plan_depth,
         "section_heading_deg": heading,
         "source_ambient_temperature_C": outlet_temp,
@@ -216,7 +237,6 @@ def evaluate_design(candidate: Mapping[str, Any], snapshot: PinnedSnapshot, *,
         "final_bulk_dilution": float(trajectory.dilution[-1]),
         "termination_reason": str(solution.reason),
         "end_time_s": solution.end_time_s,
-        "grid_boundary_threshold_contact": clipped,
         "criterion_status": "NOT_ASSESSED: spatial slice indicators are not a 3-D/receptor permit test",
         "model_status": "UNVALIDATED: MODEL-CLOSURE-1 and FIELD-PROFILE-1 open",
     }

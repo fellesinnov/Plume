@@ -250,3 +250,30 @@ def test_cold_plume_values_remain_physical_but_warm_only_plot_rejects_them():
     warm = FieldSlice(values, "plan", np.array([0., 1.]), np.array([0., 1.]), 10.)
     with pytest.raises(ModelInputError, match="warm-only"):
         render_field_pair(cold, warm)
+
+
+def test_preview_isotherm_does_not_change_heatmap_colour_scale():
+    pytest.importorskip("matplotlib")
+    from plume.field import FieldSlice
+    from plume.render import render_field_pair
+    import matplotlib.pyplot as plt
+
+    x = np.linspace(-1., 10., 31)
+    depths = np.linspace(0., 20., 31)
+    sx, sz = np.meshgrid(x, depths)
+    section = FieldSlice(field(straight(), x=sx, z=sz), "section", x, depths, 90.)
+    north = np.linspace(-2., 2., 21)
+    ex, ny = np.meshgrid(x, north)
+    plan = FieldSlice(field(straight(), x=ex, y=ny), "plan", x, north, 10.)
+    figures = [render_field_pair(section, plan, threshold_delta_T_C=t)
+               for t in (2.0, 25.0)]
+    try:
+        # Mesh collection 0 is ambient; collection 1 is computed ΔT.
+        scale = [fig.axes[0].collections[1].get_clim() for fig in figures]
+        assert scale[0] == scale[1]
+        assert scale[0][1] > 0
+        assert "2°C" in figures[0].texts[-1].get_text()
+        assert "25°C" in figures[1].texts[-1].get_text()
+    finally:
+        for fig in figures:
+            plt.close(fig)

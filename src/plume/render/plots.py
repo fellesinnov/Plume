@@ -42,7 +42,8 @@ def render_field_pair(section: FieldSlice, plan: FieldSlice, *,
         lo, hi = lo - 0.5, hi + 0.5
     max_excess = max(0.1, float(np.max(section.values.delta_temperature_C)),
                      float(np.max(plan.values.delta_temperature_C)))
-    vmax = max(threshold_delta_T_C * 1.2, max_excess)
+    # A plot-only isotherm change must not recolour the same thermal field.
+    vmax = max_excess
 
     with plt.style.context("dark_background"):
         fig = plt.figure(figsize=(15.4, 8.7), facecolor="#111927")

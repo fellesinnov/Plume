@@ -16,7 +16,7 @@ import streamlit as st
 
 from plume.design import (
     ProjectStore, candidate_config, evaluate_design, export_portable_yaml,
-    export_snapshot_yaml, pin_snapshot,
+    export_snapshot_yaml, pin_snapshot, sampled_isotherm_indicators,
 )
 from plume.config import load_config
 from plume.errors import PlumeError
@@ -196,23 +196,31 @@ def _design(project, store: ProjectStore):
     with right:
         st.caption(("LOCKED DESIGN" if is_saved else "UNSAVED CANDIDATE") +
                    f"  ·  MODEL/FIELD UNVALIDATED  ·  calculate {elapsed:.2f}s (cached by candidate)")
+        preview_level = _numeric("Preview cyan contour ΔT [°C]", m["threshold_delta_T_C"],
+                                 lo=0.05, hi=60.0, step=0.25)
+        sampled = sampled_isotherm_indicators(
+            evaluation.section, evaluation.plan, threshold_delta_T_C=preview_level)
+        st.caption(f"Plot preview only; saved project criterion remains ΔT "
+                   f"{m['threshold_delta_T_C']:g} °C. Changing this contour "
+                   "does not rerun the model.")
         k1, k2, k3 = st.columns(3)
         k1.metric("Section peak ΔT", f"{m['section_peak_delta_T_C']:.2f} °C")
         k2.metric("Plan peak ΔT", f"{m['plan_peak_delta_T_C']:.2f} °C")
-        length = m["plan_threshold_farthest_radius_m"]
-        k3.metric(f"ΔT {m['threshold_delta_T_C']:g}°C plan radius",
+        length = sampled["plan_threshold_farthest_radius_m"]
+        k3.metric(f"ΔT {preview_level:g}°C plan radius",
                   "not sampled" if length is None else f"{length:.1f} m")
         fig = render_field_pair(
             evaluation.section, evaluation.plan,
-            threshold_delta_T_C=m["threshold_delta_T_C"],
+            threshold_delta_T_C=preview_level,
             title=f"{project.config.normalized['project']['name']} / pinned {snapshot.at_utc}")
         st.pyplot(fig, use_container_width=True)
         import matplotlib.pyplot as plt
         plt.close(fig)
-        st.caption("Cyan is model-derived configured ΔT contour; heat colours are local in-situ excess. "
-                   "Background is absolute ambient temperature. Plan is a single horizontal depth slice, "
-                   "not a column maximum. No prediction beyond the near-field support.")
-        if m["grid_boundary_threshold_contact"]:
+        st.caption("Cyan is the selected preview ΔT isotherm; heat colours are local in-situ excess. "
+                   "Background is absolute ambient temperature. The darker outer footprint is the "
+                   "modeled near-field support boundary, NOT a zero-heating contour. "
+                   "Plan is a single horizontal depth slice, not a column maximum.")
+        if sampled["grid_boundary_threshold_contact"]:
             st.warning("Threshold reaches a plotted grid boundary: sampled extent may be clipped.")
         st.caption(f"Termination: {m['termination_reason']} · final bulk dilution "
                    f"{m['final_bulk_dilution']:.2f} · plan depth {m['plan_slice_depth_m']:.1f} m")
@@ -226,7 +234,8 @@ def _design(project, store: ProjectStore):
                           "Diameter [m]": diam, "Flow [m³/h]": flow,
                           "Azimuth [°]": az, "Angle [°]": angle,
                           "Section ΔT peak [°C]": m["section_peak_delta_T_C"],
-                          "Plan radius ΔT limit [m]": m["plan_threshold_farthest_radius_m"],
+                          "Preview ΔT contour [°C]": preview_level,
+                          "Plan radius at preview ΔT [m]": sampled["plan_threshold_farthest_radius_m"],
                           "Bulk dilution": m["final_bulk_dilution"]})
     with b:
         if st.button("Save & lock design revision", type="primary", use_container_width=True):

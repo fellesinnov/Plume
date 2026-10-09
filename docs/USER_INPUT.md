@@ -44,3 +44,9 @@ This file records accepted project direction that should survive chat/session bo
 - Saving creates a project/config revision; simulation uses the selected locked revision. Later edits mark old results stale for the new revision but preserve them.
 - Provider cache, model-result cache and render cache should invalidate independently so changing geometry does not redownload ocean data and changing plot appearance does not rerun physics.
 - Annual runs should not be forced to store dense spatial fields for every timestep; compact metrics/model state plus selected/cadenced fields should support fast rerendering and animation.
+
+## 2026-10-09 DESIGN-1 laptop feedback
+
+- User demonstrated a real Windows Streamlit session: Project creation, local Ocean pin, live computed section/plan rerenders, variant comparison, saving and exporting. The plot's cyan +2 °C excess-temperature isotherm was positively received.
+- Requested an adjustable line/tolerance, initially defaulting to +2 °C. Implement first as an explicitly labelled **visualisation-only preview**: changing the level set must reuse the same solved field and keep the saved config's criteria intact. A future criterion-editing workflow needs an explicit design/permit decision, not an implicit on-screen display change.
+- Reported Windows `pytest` 77 passed / 1 failed due to immutable reference worktree byte-size mismatch; protect checked-in reference bytes using Git checkout attributes, not by modifying any `References/` content or relaxing the exact manifest locks.
