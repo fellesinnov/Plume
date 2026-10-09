@@ -277,3 +277,37 @@ def test_preview_isotherm_does_not_change_heatmap_colour_scale():
     finally:
         for fig in figures:
             plt.close(fig)
+
+
+def test_compact_studio_renderer_keeps_title_axes_legends_and_footer_apart():
+    """Regression for narrow Streamlit columns scaling the combined figure."""
+    pytest.importorskip("matplotlib")
+    from plume.field import FieldSlice
+    from plume.render import render_field_pair
+    import matplotlib.pyplot as plt
+
+    along = np.linspace(-1, 10, 31)
+    depths = np.linspace(0, 20, 31)
+    ex, zz = np.meshgrid(along, depths)
+    section = FieldSlice(field(straight(), x=ex, z=zz),
+                         "section", along, depths, 90.)
+    north = np.linspace(-2, 2, 21)
+    east, ny = np.meshgrid(along, north)
+    plan = FieldSlice(field(straight(), x=east, y=ny),
+                      "plan", along, north, 10.)
+    fig = render_field_pair(section, plan, threshold_delta_T_C=1.5,
+                            title="Studio live pinned design (UNVALIDATED)")
+    try:
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        title = fig._suptitle.get_window_extent(renderer)
+        sec_title = fig.axes[0].title.get_window_extent(renderer)
+        sec_xlabel = fig.axes[0].xaxis.label.get_window_extent(renderer)
+        plan_title = fig.axes[1].title.get_window_extent(renderer)
+        footer = fig.texts[-1].get_window_extent(renderer)
+        ambient_legend_label = fig.axes[-1].xaxis.label.get_window_extent(renderer)
+        assert title.y0 - sec_title.y1 > 20
+        assert sec_xlabel.y0 - plan_title.y1 > 20
+        assert ambient_legend_label.y0 - footer.y1 > 12
+    finally:
+        plt.close(fig)

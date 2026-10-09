@@ -203,11 +203,13 @@ def _design(project, store: ProjectStore):
         st.caption(f"Plot preview only; saved project criterion remains ΔT "
                    f"{m['threshold_delta_T_C']:g} °C. Changing this contour "
                    "does not rerun the model.")
-        k1, k2, k3 = st.columns(3)
-        k1.metric("Section peak ΔT", f"{m['section_peak_delta_T_C']:.2f} °C")
-        k2.metric("Plan peak ΔT", f"{m['plan_peak_delta_T_C']:.2f} °C")
+        # Streamlit columns get narrow on travel laptops. Keep temperature
+        # values readable and let the longer threshold label span the row.
+        peak_left, peak_right = st.columns(2)
+        peak_left.metric("Section peak ΔT", f"{m['section_peak_delta_T_C']:.2f} °C")
+        peak_right.metric("Plan peak ΔT", f"{m['plan_peak_delta_T_C']:.2f} °C")
         length = sampled["plan_threshold_farthest_radius_m"]
-        k3.metric(f"ΔT {preview_level:g}°C plan radius",
+        st.metric(f"ΔT {preview_level:g} °C sampled plan radius",
                   "not sampled" if length is None else f"{length:.1f} m")
         fig = render_field_pair(
             evaluation.section, evaluation.plan,

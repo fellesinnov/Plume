@@ -1,5 +1,10 @@
 # Current build / evidence status
 
+## DESIGN-1 second Windows check — 2026-10-09
+
+**User-observed:** `compileall` succeeded and `pytest` reported **79 PASS / 1 FAIL** after the fast cyan ΔT contour preview was added; the sole reference-manifest byte mismatch remained 6890 vs 6746 in the *existing Windows worktree*. We reproduced that attributes do **not** retrospectively rewrite existing CRLF working files and that bounded `git restore --source=HEAD --worktree -- <specific reference>` restores the original LF bytes when `References/** -text` is active. The contour works quickly; screenshot reveals narrow viewport metric truncation/combined figure title overlap, so a source-only presentation fix and Agg layout regression are proposed. Two incidental user commits added only `src/*.egg-info` install metadata, cleaned from branch and ignored. Exact laptop `git rev-parse HEAD` was not supplied. Full green exact-head suite and responsive screenshot **OWED**; **mechanical HOLD**. See [laptop feedback](2026-10-09-design-1-laptop-feedback.md).
+
+
 ## DESIGN-1 laptop feedback and Windows reference-byte root cause — 2026-10-09
 
 **Source candidate / integration HOLD.** User-observed Streamlit Windows session produced live computed section/plan plots, comparison, save/lock and two YAML exports. The user-reported full suite was **77 pass / 1 fail**; sole failure: Windows worktree `Example_project.prj` is 6,890 B versus 6,746 B pinned blob. Exact source Git blob independently confirms 144 LF and zero CR, explaining the +144-byte CRLF conversion. Root `.gitattributes` now protects `References/** -text` on fresh checkout, **without modifying reference evidence**. A new display-only cyan isotherm threshold and cached-slice sampled radius are source-authored, with exact-blob sandbox compile/helper checks, but **not Windows-retested on the new branch head**. Await exact-SHA full green checkout + preview/reopen walkthrough. Physical qualification still OPEN/BLOCKED. See [2026-10-09 laptop feedback](2026-10-09-design-1-laptop-feedback.md).

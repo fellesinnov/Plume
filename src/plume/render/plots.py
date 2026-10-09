@@ -46,9 +46,12 @@ def render_field_pair(section: FieldSlice, plan: FieldSlice, *,
     vmax = max_excess
 
     with plt.style.context("dark_background"):
-        fig = plt.figure(figsize=(15.4, 8.7), facecolor="#111927")
-        gs = fig.add_gridspec(2, 2, left=0.075, right=0.91, top=0.89,
-                              bottom=0.16, width_ratios=[26, 1], hspace=0.39,
+        # Vertical breathing room matters when Streamlit scales this stacked
+        # figure into a narrow column: preserve room for axes titles/labels,
+        # two separate legends and the qualification footer.
+        fig = plt.figure(figsize=(15.4, 10.8), facecolor="#111927")
+        gs = fig.add_gridspec(2, 2, left=0.075, right=0.91, top=0.83,
+                              bottom=0.18, width_ratios=[26, 1], hspace=0.62,
                               wspace=0.12)
         axes = (fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[1, 0]))
         delta_bar_ax = fig.add_subplot(gs[:, 1])
@@ -81,13 +84,13 @@ def render_field_pair(section: FieldSlice, plan: FieldSlice, *,
                  alpha=0.7, linestyle="None", zorder=8)
         cbar = fig.colorbar(plume, cax=delta_bar_ax, orientation="vertical")
         cbar.set_label("Thermal excess ΔT [°C] vs local ambient")
-        ambient_bar_ax = fig.add_axes([0.33, 0.083, 0.32, 0.016])
+        ambient_bar_ax = fig.add_axes([0.33, 0.095, 0.32, 0.016])
         cb2 = fig.colorbar(ScalarMappable(norm=Normalize(lo, hi), cmap="Blues_r"),
                            cax=ambient_bar_ax, orientation="horizontal")
         cb2.set_label("Ambient in-situ T [°C]")
-        fig.suptitle(title, fontsize=17, fontweight="bold", x=0.075, y=0.96, ha="left")
-        fig.text(0.075, 0.025,
+        fig.suptitle(title, fontsize=14, fontweight="bold", x=0.075, y=0.96, ha="left")
+        fig.text(0.075, 0.018,
                  "Reference 3/2-profile (source-bounded) • near-field ONLY • "
                  f"cyan = ΔT {threshold_delta_T_C:g}°C • unvalidated physical contours",
-                 fontsize=9, alpha=0.8)
+                 fontsize=8, alpha=0.8)
     return fig
