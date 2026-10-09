@@ -76,3 +76,7 @@ Copy `.env.example` to an ignored `.env` or inject environment variables directl
 ## Development
 
 Read [AGENTS.md](AGENTS.md) before repository work. GitHub Actions is manual-only and requires explicit human approval; normal deterministic verification is sandbox-first.
+
+## DESIGN-1: local Design Studio candidate
+
+The next source candidate adds a headless pinned environmental-snapshot evaluator and local project design revisions, with a Streamlit app shell. Install with `pip install -e '.[studio]'`, then run `streamlit run apps/design_studio.py` from the repository root. See [docs/DESIGN_STUDIO.md](docs/DESIGN_STUDIO.md). Live design calculations reuse MODEL-1 + FIELD-1; data acquisition remains an explicit Ocean action. The local mode does not fetch Copernicus data. Physical closure and field-profile qualification remain **UNVALIDATED**; annual simulations and permit verdicts are future work.

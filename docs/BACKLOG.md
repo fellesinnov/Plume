@@ -59,6 +59,8 @@ Live queue. A ready item names the observation that retires it.
 **Next work:** `DESIGN-1` for headless design snapshots/live Project/Design UI. FIELD-1 is implementation-integrated; no further merge decision is owed for PR #9. Keep the model-status flag visibly **UNVALIDATED**. `FIELD-PROFILE-1`, `MODEL-CLOSURE-1`, `MODEL-TOL-1` remain separately owed independent physical evidence; no permitting claims.
 
 ## DESIGN-1 — Live Design Studio snapshot mode
+**State:** SOURCE CANDIDATE on `design-1-live-studio`; standalone code compilation PASS; full pinned-identity GSW/Streamlit runtime checks and exact project roundtrip owed. See `docs/buildlog/2026-10-08-design-1.md`. No integration or physical qualification claim.
+
 **Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
 
 **Retires when:** one pinned snapshot can compare multiple deterministic geometry variants through the same MODEL/FIELD/criteria stack with no provider refetch, save/reopen project revisions, and export/select the locked configuration for historical simulation.

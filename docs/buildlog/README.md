@@ -1,5 +1,9 @@
 # Current build / evidence status
 
+## DESIGN-1 local pinned-snapshot Studio candidate — 2026-10-08
+
+Writer branch `design-1-live-studio` cut from `main` `a95806fd0738d990a56ddd37571cfab38d9f7f5f`. Headless pin/evaluate/project-revision code plus a Streamlit Project/Ocean(local)/Design shell is a **SOURCE CANDIDATE**; local standalone `compileall` PASS only. Combined package/official GSW numerical runtime, exact-provider-no-refetch and revision/export regression evidence, and interactive Streamlit smoke are **OWED** before integration. Model/field physical qualification (`MODEL-CLOSURE-1`, `FIELD-PROFILE-1`, `MODEL-TOL-1`) remains OPEN/BLOCKED; no permit pass/fail. No Actions run or merge authorised. See [`2026-10-08-design-1.md`](2026-10-08-design-1.md).
+
 ## FIELD-1 spatial-field/plots implementation integrated — 2026-10-08
 
 **Human-authorised squash merge:** [PR #9](https://github.com/fellesinnov/Plume/pull/9) from `field-1-spatial-reconstruction` into `main` at **`6160b0e889fc879b050a288a8147d06a2275413a`**, from original main `dc280f6d830b942ee20fa695bcd4672b72e6568e`. The exact final PR head was `b5d1bc5825f34b7a416c970855f0305d0efabe7e`. GitHub confirmed PR #9 merged and `main` at the squash SHA. No automatic Actions dispatch or reference changes were part of merge.

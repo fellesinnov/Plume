@@ -101,7 +101,7 @@ flow_m3h:
   value_column: flow_m3h
 ```
 
-CORE-0's schema-v1 `csv` implementation is deliberately limited to a scalar time series (`time`, `value`) with timezone-aware, strictly increasing timestamps. Depth-profile and vector CSV shapes can extend the same provider interface when a concrete use case requires them.
+CORE-0's schema-v1 `csv` implementation is deliberately limited to a scalar time series (`time`, `value`) with timezone-aware, strictly increasing timestamps. DESIGN-1 adds `csv_depth_profile` for static temperature/salinity depth columns (`path`, `depth_column`, `value_column`), which is hashed/provenance tracked, requires finite increasing depth and retains its original files. Pinned snapshots require explicit full-water-column surface and seabed levels. Depth-profile and vector CSV shapes can extend the same provider interface when a concrete use case requires them.
 
 A profile:
 
