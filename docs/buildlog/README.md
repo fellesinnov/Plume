@@ -1,5 +1,10 @@
 # Current build / evidence status
 
+## DESIGN-1 Windows reference-identity harness convergence — 2026-10-09
+
+**Source convergence only; exact-head full Windows test still OWED.** The user reports **80 pass / 1 fail** after the live Streamlit preview and responsive UI fixes. The sole failure is the same Windows CRLF worktree reference size mismatch (6890 vs original Git 6746). DESIGN-1-WIN-REFQA now checks exact **original Git blob size and SHA**, allowing only a proven read-only *in-memory* reversal of checkout-only CRLF for known text fixtures on Windows and issuing an explicit warning that working copies are not raw byte-exact. Mutated data still fail; executables remain strict. Bounded sandbox **6/6 focused tests PASS**, exact-sized 6746/6890 synthetic discriminator PASS, source compilation PASS. Full suite on exact new PR head and narrow Studio smoke remain **OWED**. `References/` and Actions workflow unchanged; physical gates OPEN. [Detailed log](2026-10-09-design-1-windows-reference-qa.md).
+
+
 ## DESIGN-1 second Windows check — 2026-10-09
 
 **User-observed:** `compileall` succeeded and `pytest` reported **79 PASS / 1 FAIL** after the fast cyan ΔT contour preview was added; the sole reference-manifest byte mismatch remained 6890 vs 6746 in the *existing Windows worktree*. We reproduced that attributes do **not** retrospectively rewrite existing CRLF working files and that bounded `git restore --source=HEAD --worktree -- <specific reference>` restores the original LF bytes when `References/** -text` is active. The contour works quickly; screenshot reveals narrow viewport metric truncation/combined figure title overlap, so a source-only presentation fix and Agg layout regression are proposed. Two incidental user commits added only `src/*.egg-info` install metadata, cleaned from branch and ignored. Exact laptop `git rev-parse HEAD` was not supplied. Full green exact-head suite and responsive screenshot **OWED**; **mechanical HOLD**. See [laptop feedback](2026-10-09-design-1-laptop-feedback.md).

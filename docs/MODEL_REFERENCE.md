@@ -151,6 +151,19 @@ authoritative in-repository byte identity. `tools/reference_harness/hash_referen
 SHA-256 when an executable is exported or inspected in a binary-capable checkout, but a second
 digest is not required to identify an object already pinned inside Git.
 
+### Windows worktree line-ending divergence is not original reference data
+
+Older Windows clones can retain CRLF-expanded **working copies** of originally LF text fixtures
+even after the root `.gitattributes` has changed to protect `References/** -text`. The exact
+original **committed Git blob** SHA and byte length remain authoritative. A read-only reference
+harness is permitted to reverse CRLF to LF **in memory only** for known text fixtures **only when**
+the reconstructed bytes match the manifest's original pinned Git blob SHA **and** original byte
+size exactly. Such a match emits an explicit warning that the current worktree is not byte-exact.
+Arbitrary modifications, broken identities, and executable-byte mismatches must continue to fail.
+For original-byte experiments or distribution comparisons, obtain byte-identical data directly
+from the frozen Git object; neither normalize in place nor update immutable references/manifests
+to silence a checkout warning. See `buildlog/2026-10-09-design-1-windows-reference-qa.md`.
+
 The shipped-example comparison is itself a warning about reference hygiene: both distributions
 produce 55 identical near-field rows through the surface event, while the far fields differ under
 different diffusivity settings. The project-file layout decoded independently by the Ebb port
