@@ -51,12 +51,18 @@ def _reset_project(project_id: str, workspace_root: Path) -> None:
         st.session_state.pop("evaluations", None)
         st.session_state.pop("comparisons", None)
         st.session_state.pop("snapshot_clock", None)
+        st.session_state.pop("history", None)
+        st.session_state.pop("history_selected_clock", None)
+        st.session_state.pop("historical_config_identity", None)
+        st.session_state.pop("selected_time_run", None)
         for key in list(st.session_state):
             if key.startswith("design_control_"):
                 del st.session_state[key]
 
 
 def _new_project(store: ProjectStore) -> None:
+    from time_studio import map_point_selector
+    selected_lat, selected_lon = map_point_selector(latitude=60.0, longitude=5.0)
     with st.form("new-project"):
         st.subheader("Start a project")
         template_path = st.text_input("Source config (YAML/JSON)",
@@ -64,10 +70,12 @@ def _new_project(store: ProjectStore) -> None:
         c1, c2 = st.columns(2)
         with c1:
             pid = st.text_input("Project ID", value="site_study")
-            lat = st.number_input("Latitude [°N]", value=60.0, min_value=-90.0, max_value=90.0)
+            lat = st.number_input("Latitude [°N]", value=selected_lat,
+                                  min_value=-90.0, max_value=90.0, key="create_project_lat")
         with c2:
             name = st.text_input("Project name", value="Site study")
-            lon = st.number_input("Longitude [°E]", value=5.0, min_value=-180.0, max_value=180.0)
+            lon = st.number_input("Longitude [°E]", value=selected_lon,
+                                  min_value=-180.0, max_value=180.0, key="create_project_lon")
         if st.form_submit_button("Create workspace project", type="primary"):
             try:
                 cfg = load_config(template_path)
@@ -259,9 +267,12 @@ def _design(project, store: ProjectStore):
                                    file_name=f"{project.project_id}.yaml", mime="text/yaml")
             except PlumeError as exc:
                 st.caption(str(exc))
-            st.download_button("Download self-contained locked snapshot YAML",
-                               export_snapshot_yaml(project, locked_snapshot),
-                               file_name=f"{project.project_id}_snapshot.yaml", mime="text/yaml")
+            try:
+                snapshot_yaml = export_snapshot_yaml(project, locked_snapshot)
+                st.download_button("Download self-contained locked snapshot YAML", snapshot_yaml,
+                                   file_name=f"{project.project_id}_snapshot.yaml", mime="text/yaml")
+            except PlumeError as exc:
+                st.caption(f"Lossless snapshot YAML unavailable: {exc}")
             st.caption("Snapshot YAML represents one pinned hour; it is NOT an annual forcing history. "
                        "No machine-local cache paths or credentials are embedded.")
 
@@ -282,7 +293,7 @@ def main() -> None:
         st.session_state["selected_project"] = "New project"
     selected = st.sidebar.selectbox("Workspace projects", ["New project", *ids],
                                     key="selected_project")
-    st.sidebar.caption("Local workspace only · no Copernicus credentials required")
+    st.sidebar.caption("Local project storage · Copernicus optional; credentials never stored in configs")
     st.title("Plume · Thermal discharge twin")
     st.caption("Design candidate / source physics: reference-formulated, not physically validated")
     stages = ["Project", "Ocean", "Design", "Simulate", "Results"]
@@ -311,15 +322,16 @@ def main() -> None:
         st.caption("Saved revisions and projects remain in the configured ignored workspace. "
                    "Historical runs are not produced in DESIGN-1.")
     elif stage == "Ocean":
-        _ocean(project)
+        from time_studio import ocean_stage
+        ocean_stage(project, store)
     elif stage == "Design":
         _design(project, store)
     elif stage == "Simulate":
-        st.info("TIME-1 will implement historical replay against the locked config and "
-                "reuse cached ocean forcing. DESIGN-1 does not invent annual results.")
+        from time_studio import simulate_stage
+        simulate_stage(project, store)
     else:
-        st.info("PERMIT-1 will implement annual criteria, receptor compliance statistics "
-                "and animation. DESIGN-1 only provides unvalidated snapshot design indicators.")
+        from time_studio import results_stage
+        results_stage(project)
 
 
 if __name__ == "__main__":

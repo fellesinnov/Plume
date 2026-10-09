@@ -246,6 +246,14 @@ The reusable `plume.history.acquire_history` API returns an indexed history, req
 
 The history source descriptors must be the **original normalized time-varying flow and temperature providers**, not DESIGN-1's locked one-hour constant design controls. TIME-1B will handle Copernicus native potential temperature/native Practical Salinity and convert deliberately at the model boundary, preserving actual requested/used ocean cell. See [TIME_1A.md](TIME_1A.md).
 
+### TIME-1B/C optional Copernicus + historical runner source contracts
+
+`provider: copernicus` must explicitly name `role: temperature|salinity|current`, `dataset_id`, and native `temperature_kind: potential_pt0|in_situ_ITS90` / `salinity_kind: practical` when appropriate. Dataset-native `standard_name` and `units` must match declared quantities: silent potential↔in-situ relabeling, absolute-SP substitution, Kelvin/cm/s ambiguity or role-mismatched options are rejected. The provider selects a nearest viable *wet* rectilinear cell within an explicit bounded radius and reports requested versus actual WGS84 coordinates, native depths, dataset/variables and masks; it permits **only bracketed vertical interpolation** to seabed and a disclosed bounded shallow top-cell hold to 0 m. Downloaded deeper levels masked below the **requested** seabed are irrelevant to wet-cell screening, but never support bottom extrapolation.
+
+Where thetao and so come from separate Copernicus products, the history keeps `thetao` labelled `time_depth_potential` until selecting an exact UTC hour; the pinned snapshot pairs same-hour SP and converts with official GSW before model input, with provenance. Provider cache is keyed independently of geometry; remote content freshness requires explicit refresh/retention policy. The remote adapter is optional (`pip install -e '.[ocean]'`), credentials from environment only.
+
+`plume.runner` consumes a saved locked Design revision and the **original** source-provider descriptors retained in its pinned snapshot. A three-step default/bounded quasi-steady runner invokes the headless MODEL-1/FIELD-1 per complete UTC instant, records `MISSING` rows for unavailable forcing and digest-verified workspace results. It never manufactures PERMIT-1 legal pass/fail. See [TIME_1.md](TIME_1.md).
+
 ## 7. Copernicus provider
 
 Reuse the proven HeatHandler ideas without coupling the repositories:

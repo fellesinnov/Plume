@@ -54,3 +54,7 @@ This file records accepted project direction that should survive chat/session bo
 ## 2026-10-09 TIME-1A authorisation
 
 - User explicitly authorised `GO TIME-1A!` for a cloud-only first historical ocean foundation while traveling. Prior accepted scope: timestamped temperature/salinity/current contracts, reusable normalized provider cache, deterministic selection/replay inputs, no refetch on outlet geometry edits, and illustrative strictly synthetic diagnostic plot. No approval for Actions or `main` merge; Copernicus service integration and Ocean UI belong to later TIME-1B.
+
+## 2026-10-09 TIME source completion request
+
+- User asked to **finish TIME source development in the cloud** and reserve one laptop session for the mechanical/runtime closer. Accepted scope: TIME-1A + optional real Copernicus-native Ocean/Map + bounded locked historical replay/Results, with the first demo working entirely from deterministic synthetic CSV data and no credentials. No user authorisation for GitHub Actions, physical-calibration claims or merging PR #11 into `main`.
