@@ -2,12 +2,22 @@ name: Manual repository check
 
 on:
   workflow_dispatch:
+  # TEMPORARY one human-approved FIELD-1 post-fix closure run, remove after registration.
+  push:
+    branches:
+      - field-1-spatial-reconstruction
+    paths:
+      - .github/workflows/ci.yml
+
+permissions:
+  contents: read
 
 jobs:
   repository:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
+      - name: Checkout and report exact source identity
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -15,10 +25,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Check repository structure
+      - name: Verify full repository structure
         shell: bash
         run: |
           set -euo pipefail
+          git rev-parse HEAD
           test -f AGENTS.md
           test -f docs/PRODUCT_SPEC.md
           test -f docs/CONFIG.md
@@ -26,15 +37,56 @@ jobs:
           test -d References
           test ! -e outfall_screen.py
           test ! -e requirements.txt
-          echo "Repository structure check passed."
+          echo "FIELD1_STRUCTURE_PASS"
 
-      - name: Install package and test runner
+      - name: Install official GSW, plot extra and test runner
+        id: install
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e . pytest
+          python -m pip install -e ".[plot]" pytest
+          python -c "import gsw, numpy, scipy, matplotlib; print('FIELD1_PACKAGES',gsw.__version__,numpy.__version__,scipy.__version__,matplotlib.__version__)"
 
-      - name: Compile Python sources
+      - name: Compile complete source and tests
         run: python -m compileall -q src tests tools
 
-      - name: Run repository tests
-        run: python -m pytest -q
+      - name: Execute complete repository suite including live GSW roundtrip
+        run: python -m pytest -q -rs
+
+      - name: Generate real solver GSW field plot and manifest
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        env:
+          MPLBACKEND: Agg
+        run: python tools/field1_live_demo.py --workspace workspace
+
+      - name: Verify generated plot provenance and artifact identity
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+          root = Path("workspace/field1/live_gsw_demo")
+          image = root / "model1_gsw_field1_section_plan.png"
+          manifest = root / "provenance.json"
+          assert image.is_file() and image.stat().st_size > 10000, "PNG missing or too small"
+          assert manifest.is_file(), "provenance missing"
+          data = json.loads(manifest.read_text(encoding="utf-8"))
+          sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          assert data["model_git_sha"] == sha, "model commit mismatch"
+          assert data["section_peak_excess_C"] > 0
+          assert data["plan_peak_excess_C"] > 0
+          assert data["profile_and_model_qualification"].startswith("UNVALIDATED")
+          print("FIELD1_PLOT_BYTES", image.stat().st_size)
+          print("FIELD1_VERIFIED_SHA", sha)
+          print("FIELD1_VERIFIED_PROVENANCE", json.dumps(data, sort_keys=True))
+          PY
+
+      - name: Upload actual MODEL-1/GSW FIELD-1 artifact
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: field1-postfix-real-gsw
+          path: workspace/field1/live_gsw_demo/
+          if-no-files-found: warn
+          retention-days: 7
