@@ -1,16 +1,18 @@
 # Current build / evidence status
 
-## FIELD-1 spatial-field/plots source candidate — 2026-10-08
+## FIELD-1 spatial-field/plots implementation — Actions GREEN, integration ready — 2026-10-08
 
 **Branch:** `field-1-spatial-reconstruction` from verified `main` `dc280f6d830b942ee20fa695bcd4672b72e6568e`. **Not merged.**
 
 FIELD-1 reconstructs a finite near-field 3-D thermal field from the MODEL-1 trajectory with an EPA-informed bounded 3/2-power cross-plume profile; exposes headless section/plan slices and a separate optional Matplotlib renderer with real computed 2 °C contours and distinct ambient/thermal colour scales. Its model/profile assumptions and provenance limitations are documented in [../reference/FIELD1_PROFILE.md](../reference/FIELD1_PROFILE.md).
 
+**Current verified closure:** Explicitly human-approved [Actions run #37873598483](https://github.com/fellesinnov/Plume/actions/runs/37873598483), test commit `734a864e88cebe40bff3af6483bbb46c922a6d95`, Ubuntu CPython 3.11.17 with **official GSW 3.6.23** and optional Matplotlib: full repository structure PASS; editable install PASS; `compileall` PASS; **69/69 tests PASS, 0 failed/0 skipped** (including live GSW numerical round-trip, MODEL-1 → FIELD-1 integration and all reference/CORE checks); real-solver inline-synthetic section/plan plot and provenance PASS. Artifact `field1-postfix-real-gsw` ID **11590768922** (149,636-byte PNG and JSON) was downloaded and visually inspected, with exact provenance SHA confirmed. The one-run scoped push trigger was immediately restored to its original **manual-only** workflow blob `d4937d653e9fe6a47bcb563d92a23bec5293dd4c`, and exactly one run occurred on this authorisation. The trigger changed only the workflow file relative to the pre-trigger candidate; after restoration, source/test files are unchanged. This retires FIELD-1 **mechanical integration HOLD** and the narrow `MODEL-TEOS-1` production numerical GSW runtime gate. **Recommendation: INTEGRATE implementation only, pending explicit human merge permission.** Physical `FIELD-PROFILE-1` and `MODEL-CLOSURE-1` remain **OPEN**, `MODEL-TOL-1` **BLOCKED**; no permit acceptance/physical validation claim.
+
 **Earlier reduced sandbox evidence (pre-closer source):** 15 focused tests PASS, 1 real-GSW test SKIP (package absent), `compileall` PASS. A section/plan demo was generated from a **manufactured illustrative trajectory**, not a MODEL-1/GSW run.
 
 **2026-10-08 approved one-run Actions closer:** [Run #37864313011](https://github.com/fellesinnov/Plume/actions/runs/37864313011) on `580f75be1371c08c931cea9366a5ccb6130c133b` installed **real GSW 3.6.23** and successfully generated, checked and uploaded a real MODEL-1 → GSW → FIELD-1 diagnostic section/plan plot + provenance from one **synthetic inline** design case. The figure (149,636 bytes; artifact `11587103805`) reports final bulk dilution **8.927**, section peak **9.988 °C** and plan-slice peak **6.243 °C**. **The overall workflow FAILED:** `compileall` found a literal backslash/newline syntax defect in the new integration test, so the repository `pytest` suite **did not run**. The source typo was corrected at `dccd0f5f9112068e31e50ba045bd20eab2186788`; sandbox `py_compile` PASS on exactly matching corrected test blob `5f8dbbed4f5bc392fd32d21a7a3f3f9ad6535d33`. **No rerun** was requested. The workflow was restored immediately to its original manual-only blob (`d4937d653e9fe6a47bcb563d92a23bec5293dd4c`), and the approved run count remained one.
 
-**Integration recommendation:** **SOURCE CANDIDATE / HOLD for merge** pending an actual complete-regression pass with real GSW against the corrected candidate. MODEL-1/TEOS numerical source paths have executed in the synthetic demo, but the explicit numeric GSW-roundtrip test did not run; `MODEL-TEOS-1` is still open. `FIELD-PROFILE-1`, `MODEL-CLOSURE-1` and `MODEL-TOL-1` remain physically unqualified. This does not support a permitting claim. No `References/` changes or credentials; GitHub Actions requires renewed, explicit run approval; human retains merge authority. See [2026-10-08-field-1.md](2026-10-08-field-1.md).
+**Earlier first-run status (now superseded by the successful run above):** the first approved Actions run failed at compileall because of an escaped newline, despite passing the real solver/GSW plot diagnostic. The corrected source then passed the **second, separately human-approved** Actions run with all 69 tests. Physical gate debt remains open, and no `References/` changes, credentials, unapproved Actions, or merge occurred. Human retains exclusive merge authority. See [2026-10-08-field-1.md](2026-10-08-field-1.md).
 
 Detailed sprint record: [2026-10-08-field-1.md](2026-10-08-field-1.md).
 
@@ -46,14 +48,14 @@ checkout: structure check PASS, editable install PASS, `compileall` PASS, and **
 That run installed `gsw 3.6.23`, and the existing boundary test imported/constructed the real
 `GswThermodynamics` successfully. However, the current real-package test does not yet execute
 `p_from_z`, `SA_from_SP`, `CT_from_t`, `rho`, and `t_from_CT` numerically against the installed
-package, so `MODEL-TEOS-1` remains open for that narrower smoke.
+package, so `MODEL-TEOS-1` was still open **at the time of MODEL-1 integration**; the later FIELD-1 approved 69-test run above closed this numeric runtime gate.
 
 **Integration state:** **IMPLEMENTATION INTEGRATED / PHYSICAL QUALIFICATION OPEN.** PR #7 was
 explicitly authorised and squash-merged to `main` at `1d92bae1b2e1e2bf310a67646f73cfb86042e133`.
 This integration does **not** retire `MODEL-CLOSURE-1`: clean numerical Fan formulation/calibration
 observations and the untouched Lee-Cheung hold-back are still owed, so no production closure or
-physical acceptance tolerance is frozen. `MODEL-TOL-1` remains blocked, and `MODEL-TEOS-1` remains
-open for the narrow real-GSW numerical smoke. Downstream development may proceed while preserving
+physical acceptance tolerance is frozen. `MODEL-TOL-1` remains blocked, and `MODEL-TEOS-1` was open
+at that earlier MODEL-1 integration point, before FIELD-1's real-GSW numerical closure. Downstream development may proceed while preserving
 that qualification state explicitly in results/provenance.
 
 Detailed record: [2026-10-07-model-1.md](2026-10-07-model-1.md).
