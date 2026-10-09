@@ -121,7 +121,10 @@ def _pick_wet_cell(ds: Any, names: tuple[str, ...], lat: float, lon: float, seab
         raise ProviderDataError("Copernicus wet-cell search area too large; narrow search radius")
     candidates = sorted((( _haversine_km(lat, lon, float(y), float(x)), yi, xi)
                          for yi, y in enumerate(lats) for xi, x in enumerate(lons)), key=lambda v:v[0])
-    for dist, yi, xi in candidates[:64]:
+    # Visit all candidates within max_dist (bounded by the 20,000-cell query cap).
+    # Arbitrarily stopping at the 64th dry near-shore point can miss the first
+    # truly wet cell even when it is still well within the permitted radius.
+    for dist, yi, xi in candidates:
         if dist > max_dist:
             break
         arrays = [_data_matrix(ds, name, yi, xi)[:, :needed] for name in names]

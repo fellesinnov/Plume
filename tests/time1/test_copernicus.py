@@ -219,3 +219,18 @@ def test_role_specific_copernicus_options_are_never_silently_dropped():
         spec('salinity', temperature_kind='potential_pt0')
     with pytest.raises(ConfigError, match='ignored salinity conversion'):
         spec('temperature', temperature_kind='in_situ_ITS90', salinity_variable='so')
+
+
+def test_wet_fallback_can_search_past_64_dry_cells_within_explicit_distance():
+    import plume.providers.copernicus as c
+    lat = np.array([60.])
+    lon = np.linspace(5., 5.03, 70)
+    depth = np.array([.5, 5., 25.])
+    vals = np.full((2, 3, 1, 70), np.nan, dtype=float)
+    vals[:, :, 0, 69] = 35.
+    ds = xr.Dataset({'so': (('time','depth','latitude','longitude'), vals)}, coords={
+        'time': np.array(['2025-01-01','2025-01-02'], dtype='datetime64[s]'),
+        'depth': depth, 'latitude': lat, 'longitude': lon})
+    yi, xi, km = c._pick_wet_cell(ds, ('so',), 60., 5., 20., 8., 1.1)
+    assert (yi, xi) == (0, 69)
+    assert 0. < km < 2.
