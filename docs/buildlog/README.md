@@ -1,5 +1,10 @@
 # Current build / evidence status
 
+## DESIGN-1 laptop feedback and Windows reference-byte root cause — 2026-10-09
+
+**Source candidate / integration HOLD.** User-observed Streamlit Windows session produced live computed section/plan plots, comparison, save/lock and two YAML exports. The user-reported full suite was **77 pass / 1 fail**; sole failure: Windows worktree `Example_project.prj` is 6,890 B versus 6,746 B pinned blob. Exact source Git blob independently confirms 144 LF and zero CR, explaining the +144-byte CRLF conversion. Root `.gitattributes` now protects `References/** -text` on fresh checkout, **without modifying reference evidence**. A new display-only cyan isotherm threshold and cached-slice sampled radius are source-authored, with exact-blob sandbox compile/helper checks, but **not Windows-retested on the new branch head**. Await exact-SHA full green checkout + preview/reopen walkthrough. Physical qualification still OPEN/BLOCKED. See [2026-10-09 laptop feedback](2026-10-09-design-1-laptop-feedback.md).
+
+
 ## DESIGN-1-EXEC source convergence — 2026-10-09
 
 [Execution/evidence record](2026-10-09-design-1-exec.md): PR #10 now includes config-integrity and workspace-scoped session repairs, both with red-before/green-after focused discriminators. Isolated authored-source compilation PASS; 1/1 standalone UI reset test PASS; actual snapshot/provider/project source smoke PASS only with deliberately injected contract stubs. **Full exact-head checkout, real GSW MODEL-1/FIELD-1 evaluation and interactive Streamlit run remain UNPROVEN; integration HOLD.** A new prospective full-GSW two-variant/no-provider-refetch and computed-PNG regression is authored and syntax-checked, **not executed**. No Actions dispatch, reference edits or merge. Model physical gates remain OPEN/BLOCKED.
