@@ -77,6 +77,6 @@ Copy `.env.example` to an ignored `.env` or inject environment variables directl
 
 Read [AGENTS.md](AGENTS.md) before repository work. GitHub Actions is manual-only and requires explicit human approval; normal deterministic verification is sandbox-first.
 
-## DESIGN-1: local Design Studio candidate
+## DESIGN-1: integrated local Design Studio
 
-The next source candidate adds a headless pinned environmental-snapshot evaluator and local project design revisions, with a Streamlit app shell. Install with `pip install -e '.[studio]'`, then run `streamlit run apps/design_studio.py` from the repository root. See [docs/DESIGN_STUDIO.md](docs/DESIGN_STUDIO.md). Live design calculations reuse MODEL-1 + FIELD-1; data acquisition remains an explicit Ocean action. The local mode does not fetch Copernicus data. Physical closure and field-profile qualification remain **UNVALIDATED**; annual simulations and permit verdicts are future work.
+The [DESIGN-1 implementation](docs/buildlog/2026-10-09-design-1-integrated.md) is integrated into `main` via PR #10. It adds a reusable headless pinned water-column design evaluator, actual MODEL-1 + FIELD-1 thermal fields, ignored-workspace project revisions, and the Streamlit Project/Ocean(local)/Design shell. Run `pip install -e '.[studio]'`, then `streamlit run apps/design_studio.py` from the repository root. See [docs/DESIGN_STUDIO.md](docs/DESIGN_STUDIO.md). Data acquisition in this version uses local inline/CSV providers; Copernicus history and annual simulations are `TIME-1`, and permit criteria evaluation is later `PERMIT-1`. **UNVALIDATED:** independent model closure and field-profile physical qualification are still owed; plots are not permit pass/fail findings.

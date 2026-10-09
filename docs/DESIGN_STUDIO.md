@@ -1,6 +1,6 @@
 # Run the DESIGN-1 local Design Studio
 
-**State:** DESIGN-1 implementation candidate, not a physically qualified model or permit evaluator.
+**State:** DESIGN-1 implementation integrated on `main` via human-authorised PR #10; still **not** a physically qualified model or permit evaluator.
 
 Install Plume from the repository root with plotting and Streamlit:
 
