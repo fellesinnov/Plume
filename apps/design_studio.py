@@ -167,7 +167,8 @@ def _design(project, store: ProjectStore):
         cache = st.session_state.setdefault("evaluations", {})
         if key not in cache:
             began = time.perf_counter()
-            cache[key] = (evaluate_design(candidate, snapshot), time.perf_counter() - began)
+            with st.spinner("Evaluating near-field model and reconstructed field…"):
+                cache[key] = (evaluate_design(candidate, snapshot), time.perf_counter() - began)
             if len(cache) > 12:
                 cache.pop(next(iter(cache)))
         evaluation, elapsed = cache[key]
@@ -176,7 +177,10 @@ def _design(project, store: ProjectStore):
             st.error(f"No current result: {exc}")
         return
     m = evaluation.metrics
+    locked_snapshot = store.load_locked_snapshot(project) if project.is_locked else None
     is_saved = bool(project.locked_revision_id and project.locked_config_sha256 and
+                    locked_snapshot is not None and
+                    locked_snapshot.snapshot_sha256 == snapshot.snapshot_sha256 and
                     candidate_key == _candidate_lock_fingerprint(project.config.normalized))
     with right:
         st.caption(("LOCKED DESIGN" if is_saved else "UNSAVED CANDIDATE") +
@@ -233,8 +237,8 @@ def _design(project, store: ProjectStore):
                                    file_name=f"{project.project_id}.yaml", mime="text/yaml")
             except PlumeError as exc:
                 st.caption(str(exc))
-            st.download_button("Download self-contained pinned snapshot YAML",
-                               export_snapshot_yaml(project, snapshot),
+            st.download_button("Download self-contained locked snapshot YAML",
+                               export_snapshot_yaml(project, locked_snapshot),
                                file_name=f"{project.project_id}_snapshot.yaml", mime="text/yaml")
             st.caption("Snapshot YAML represents one pinned hour; it is NOT an annual forcing history. "
                        "No machine-local cache paths or credentials are embedded.")

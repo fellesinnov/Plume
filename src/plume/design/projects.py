@@ -226,6 +226,13 @@ def export_snapshot_yaml(project: DesignProject, snapshot: PinnedSnapshot) -> st
 
     if not project.is_locked:
         raise WorkspaceError("save a locked revision before exporting")
+    saved_path = project.project_dir / "revisions" / project.locked_revision_id / "snapshot.json"
+    try:
+        stored = PinnedSnapshot.from_record(json.loads(saved_path.read_text(encoding="utf-8")))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise WorkspaceError("locked snapshot cannot be read") from exc
+    if snapshot.snapshot_sha256 != stored.snapshot_sha256:
+        raise WorkspaceError("export requires the selected locked revision's pinned snapshot")
     if project.config.normalized["site"] != snapshot.site or _digest(
         project.config.normalized["forcing"]["ambient"]
     ) != snapshot.ambient_spec_sha256:

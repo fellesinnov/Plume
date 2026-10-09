@@ -159,6 +159,15 @@ def test_save_reopen_and_lock_revisions_without_overwriting(tmp_path):
     assert second_lock.config.normalized["outfall"]["diameter_m"] == .50
     assert second_lock.config.source_dir == second_lock.project_dir
     assert (second_lock.project_dir / "project.yaml").is_file()
+    import yaml
+    from plume.design import export_snapshot_yaml
+    locked_snapshot = store.load_locked_snapshot(second_lock)
+    exported = yaml.safe_load(export_snapshot_yaml(second_lock, locked_snapshot))
+    assert exported["outfall"]["diameter_m"] == .50
+    assert exported["forcing"]["ambient"]["temperature_profile_C"]["provider"] == "inline_profile"
+    wrong_timestamp = pin_snapshot(second_lock.config, at_utc="2025-01-01T01:00:00Z")
+    with pytest.raises(WorkspaceError, match="locked revision"):
+        export_snapshot_yaml(second_lock, wrong_timestamp)
 
 
 def test_exact_csv_scalar_time_pin_and_out_of_range_fail(tmp_path):
