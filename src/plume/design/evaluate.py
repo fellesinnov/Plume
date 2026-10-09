@@ -101,6 +101,7 @@ def evaluate_design(candidate: Mapping[str, Any], snapshot: PinnedSnapshot, *,
     Uses *exactly* MODEL-1 solve_near_field and FIELD-1 slices; the evaluation
     only picks physical view grids and derives bounded slice-level indicators.
     """
+    snapshot.verify_identity()
     normalized = normalize_config(candidate)
     if normalized["site"] != snapshot.site or _digest(normalized["forcing"]["ambient"]) != snapshot.ambient_spec_sha256:
         raise ProviderDataError("site or ambient provider changed; repin environmental snapshot")

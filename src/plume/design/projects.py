@@ -168,6 +168,7 @@ class ProjectStore:
         current = self.open(project.project_id)
         if current.locked_revision_id != project.locked_revision_id:
             raise WorkspaceError("locked revision changed since project was opened; reopen before saving")
+        evaluation.snapshot.verify_identity()
         raw = evaluation.normalized_config
         if raw["project"]["id"] != project.project_id or raw["site"] != evaluation.snapshot.site:
             raise WorkspaceError("design project/site mismatch")
@@ -226,6 +227,7 @@ def export_snapshot_yaml(project: DesignProject, snapshot: PinnedSnapshot) -> st
 
     if not project.is_locked:
         raise WorkspaceError("save a locked revision before exporting")
+    snapshot.verify_identity()
     saved_path = project.project_dir / "revisions" / project.locked_revision_id / "snapshot.json"
     try:
         stored = PinnedSnapshot.from_record(json.loads(saved_path.read_text(encoding="utf-8")))

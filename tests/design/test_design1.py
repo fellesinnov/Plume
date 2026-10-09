@@ -112,6 +112,10 @@ def test_snapshot_roundtrip_and_corruption_fails(tmp_path):
     modified["temperature_profile_C"][0][1] = 50
     with pytest.raises(ProviderDataError, match="identity"):
         PinnedSnapshot.from_record(modified)
+    fresh = pin_snapshot(_template(tmp_path))
+    fresh.source_scalars["delta_T_C"] = 99  # nested dict mutation of frozen outer object
+    with pytest.raises(ProviderDataError, match="changed since pin"):
+        evaluate_design(_template(tmp_path).normalized, fresh, thermodynamics=LinearThermo())
 
 
 def test_csv_depth_profile_pins_with_digest_and_fails_on_unordered_rows(tmp_path):

@@ -89,7 +89,13 @@ class PinnedSnapshot:
             "providers": self.providers,
         }
 
+    def verify_identity(self) -> None:
+        """Detect in-place mutation of nested data despite the frozen outer dataclass."""
+        if _digest(self.payload()) != self.snapshot_sha256:
+            raise ProviderDataError("pinned snapshot changed since pin; repin before evaluating or saving")
+
     def as_record(self) -> dict[str, Any]:
+        self.verify_identity()
         return {**self.payload(), "snapshot_sha256": self.snapshot_sha256, "qualification": "UNVALIDATED"}
 
     @classmethod
