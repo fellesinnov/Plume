@@ -2,7 +2,7 @@
 
 ## DESIGN-1 local pinned-snapshot Studio candidate — 2026-10-08
 
-Writer branch `design-1-live-studio` cut from `main` `a95806fd0738d990a56ddd37571cfab38d9f7f5f`. Headless pin/evaluate/project-revision code plus a Streamlit Project/Ocean(local)/Design shell is a **SOURCE CANDIDATE**; local standalone `compileall` PASS only. Combined package/official GSW numerical runtime, exact-provider-no-refetch and revision/export regression evidence, and interactive Streamlit smoke are **OWED** before integration. Model/field physical qualification (`MODEL-CLOSURE-1`, `FIELD-PROFILE-1`, `MODEL-TOL-1`) remains OPEN/BLOCKED; no permit pass/fail. No Actions run or merge authorised. See [`2026-10-08-design-1.md`](2026-10-08-design-1.md).
+Writer branch `design-1-live-studio` cut from `main` `a95806fd0738d990a56ddd37571cfab38d9f7f5f`. Headless pin/evaluate/project-revision code plus a Streamlit Project/Ocean(local)/Design shell is a **SOURCE CANDIDATE**; local standalone `compileall` **PASS**, plus isolated provider/snapshot/project source smokes with contract stubs **PASS** (not full product dependencies). Combined package/official GSW numerical runtime, full `pytest`, exact-provider-no-refetch against real model and interactive Streamlit smoke are **OWED** before integration. Model/field physical qualification (`MODEL-CLOSURE-1`, `FIELD-PROFILE-1`, `MODEL-TOL-1`) remains OPEN/BLOCKED; no permit pass/fail. No Actions run or merge authorised. See [`2026-10-08-design-1.md`](2026-10-08-design-1.md).
 
 ## FIELD-1 spatial-field/plots implementation integrated — 2026-10-08
 
