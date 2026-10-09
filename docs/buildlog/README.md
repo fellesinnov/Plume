@@ -1,5 +1,29 @@
 # Current build / evidence status
 
+## DESIGN-1 Windows reference-identity harness convergence — 2026-10-09
+
+**Source convergence only; exact-head full Windows test still OWED.** The user reports **80 pass / 1 fail** after the live Streamlit preview and responsive UI fixes. The sole failure is the same Windows CRLF worktree reference size mismatch (6890 vs original Git 6746). DESIGN-1-WIN-REFQA now checks exact **original Git blob size and SHA**, allowing only a proven read-only *in-memory* reversal of checkout-only CRLF for known text fixtures on Windows and issuing an explicit warning that working copies are not raw byte-exact. Mutated data still fail; executables remain strict. Bounded sandbox **6/6 focused tests PASS**, exact-sized 6746/6890 synthetic discriminator PASS, source compilation PASS. Full suite on exact new PR head and narrow Studio smoke remain **OWED**. `References/` and Actions workflow unchanged; physical gates OPEN. [Detailed log](2026-10-09-design-1-windows-reference-qa.md).
+
+
+## DESIGN-1 second Windows check — 2026-10-09
+
+**User-observed:** `compileall` succeeded and `pytest` reported **79 PASS / 1 FAIL** after the fast cyan ΔT contour preview was added; the sole reference-manifest byte mismatch remained 6890 vs 6746 in the *existing Windows worktree*. We reproduced that attributes do **not** retrospectively rewrite existing CRLF working files and that bounded `git restore --source=HEAD --worktree -- <specific reference>` restores the original LF bytes when `References/** -text` is active. The contour works quickly; screenshot reveals narrow viewport metric truncation/combined figure title overlap, so a source-only presentation fix and Agg layout regression are proposed. Two incidental user commits added only `src/*.egg-info` install metadata, cleaned from branch and ignored. Exact laptop `git rev-parse HEAD` was not supplied. Full green exact-head suite and responsive screenshot **OWED**; **mechanical HOLD**. See [laptop feedback](2026-10-09-design-1-laptop-feedback.md).
+
+
+## DESIGN-1 laptop feedback and Windows reference-byte root cause — 2026-10-09
+
+**Source candidate / integration HOLD.** User-observed Streamlit Windows session produced live computed section/plan plots, comparison, save/lock and two YAML exports. The user-reported full suite was **77 pass / 1 fail**; sole failure: Windows worktree `Example_project.prj` is 6,890 B versus 6,746 B pinned blob. Exact source Git blob independently confirms 144 LF and zero CR, explaining the +144-byte CRLF conversion. Root `.gitattributes` now protects `References/** -text` on fresh checkout, **without modifying reference evidence**. A new display-only cyan isotherm threshold and cached-slice sampled radius are source-authored, with exact-blob sandbox compile/helper checks, but **not Windows-retested on the new branch head**. Await exact-SHA full green checkout + preview/reopen walkthrough. Physical qualification still OPEN/BLOCKED. See [2026-10-09 laptop feedback](2026-10-09-design-1-laptop-feedback.md).
+
+
+## DESIGN-1-EXEC source convergence — 2026-10-09
+
+[Execution/evidence record](2026-10-09-design-1-exec.md): PR #10 now includes config-integrity and workspace-scoped session repairs, both with red-before/green-after focused discriminators. Isolated authored-source compilation PASS; 1/1 standalone UI reset test PASS; actual snapshot/provider/project source smoke PASS only with deliberately injected contract stubs. **Full exact-head checkout, real GSW MODEL-1/FIELD-1 evaluation and interactive Streamlit run remain UNPROVEN; integration HOLD.** A new prospective full-GSW two-variant/no-provider-refetch and computed-PNG regression is authored and syntax-checked, **not executed**. No Actions dispatch, reference edits or merge. Model physical gates remain OPEN/BLOCKED.
+
+
+## DESIGN-1 local pinned-snapshot Studio candidate — 2026-10-08
+
+Writer branch `design-1-live-studio` cut from `main` `a95806fd0738d990a56ddd37571cfab38d9f7f5f`. Headless pin/evaluate/project-revision code plus a Streamlit Project/Ocean(local)/Design shell is a **SOURCE CANDIDATE**; local standalone `compileall` **PASS**, plus isolated provider/snapshot/project source smokes with contract stubs **PASS** (not full product dependencies). Combined package/official GSW numerical runtime, full `pytest`, exact-provider-no-refetch against real model and interactive Streamlit smoke are **OWED** before integration. Model/field physical qualification (`MODEL-CLOSURE-1`, `FIELD-PROFILE-1`, `MODEL-TOL-1`) remains OPEN/BLOCKED; no permit pass/fail. No Actions run or merge authorised. See [`2026-10-08-design-1.md`](2026-10-08-design-1.md).
+
 ## FIELD-1 spatial-field/plots implementation integrated — 2026-10-08
 
 **Human-authorised squash merge:** [PR #9](https://github.com/fellesinnov/Plume/pull/9) from `field-1-spatial-reconstruction` into `main` at **`6160b0e889fc879b050a288a8147d06a2275413a`**, from original main `dc280f6d830b942ee20fa695bcd4672b72e6568e`. The exact final PR head was `b5d1bc5825f34b7a416c970855f0305d0efabe7e`. GitHub confirmed PR #9 merged and `main` at the squash SHA. No automatic Actions dispatch or reference changes were part of merge.

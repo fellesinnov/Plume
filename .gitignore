@@ -20,3 +20,6 @@ workspace/
 # Common generated outputs if a user explicitly points outside workspace/
 outputs/
 reports/
+
+# Editable-install metadata generated under src/ (never version it)
+*.egg-info/

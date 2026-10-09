@@ -7,6 +7,7 @@ from typing import Any, Mapping
 from ..errors import ConfigError, UnsupportedProviderError
 from .base import Provider, ProviderContext, ProviderProvenance, ProviderResult
 from .builtin import ConstantProvider, ConstantVectorProvider, CsvProvider, InlineProfileProvider
+from .depth_csv import CsvDepthProfileProvider
 
 _PROVIDERS: dict[str, Provider] = {
     provider.name: provider
@@ -15,6 +16,7 @@ _PROVIDERS: dict[str, Provider] = {
         ConstantVectorProvider(),
         InlineProfileProvider(),
         CsvProvider(),
+        CsvDepthProfileProvider(),
     )
 }
 

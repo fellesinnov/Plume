@@ -166,6 +166,10 @@ A plan view should complement the section when current/azimuth makes horizontal 
 
 The contour shape must come from the qualified field-reconstruction model/similarity profile. UI code must never manufacture a prettier plume shape than the model predicts.
 
+### Plot-only isotherm preview
+
+Provide a lightweight visual ΔT threshold control (defaulting to the configured isotherm criterion, typically 2 °C). Moving the cyan contour should reuse an already-solved/reconstructed field, update corresponding **sampled-slice** extent indicators, and not refetch ambient data or recompute MODEL-1. This is a **preview of a level set**, not an edit to the locked permit criterion: the two values must be visibly distinguished. Changing a true regulatory criterion is a separate config/versioned revision decision (PERMIT-1). The heatmap colour scale must not shift solely because a display contour changes. The dark outer limit of near-field support is not a zero-excess contour.
+
 ### Live metrics
 
 Depending on supported physics/criteria, show compact design metrics such as:

@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 plot = ["matplotlib>=3.8,<4"]
+studio = ["matplotlib>=3.8,<4", "streamlit>=1.39,<2"]
 
 [project.scripts]
 plume = "plume.cli:main"
