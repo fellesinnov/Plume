@@ -100,7 +100,9 @@ def _run_and_check(thermo, *, real_gsw: bool):
     assert sampled.modeled.all()
     assert np.isfinite(sampled.delta_temperature_C).all()
     assert (sampled.delta_temperature_C > 0).all()
-    assert sampled.delta_temperature_C[0] == pytest.approx(\n        10.0, abs=0.02 if real_gsw else 2e-6\n    )
+    assert sampled.delta_temperature_C[0] == pytest.approx(
+        10.0, abs=0.02 if real_gsw else 2e-6
+    )
     assert float(sampled.delta_temperature_C.max()) <= 10.2
 
     # Near-source support is finite; off-center or downstream cannot be
