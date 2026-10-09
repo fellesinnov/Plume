@@ -34,7 +34,7 @@ Live queue. A ready item names the observation that retires it.
 
 **Scope:** create the UI-independent Python package, versioned YAML/JSON config loader/normalizer, outlet-adapter contract, workspace/run manifest, provider interface and deterministic constant/inline/CSV providers.
 
-**Evidence:** schema-v1 YAML/JSON normalization, structural `single_round_port` adapter, `constant`, `constant_vector`, `inline_profile` and scalar-timeseries `csv` providers, headless `plume prepare`, and prepared-run provenance are implemented on the candidate branch. Sandbox: 13/13 focused tests PASS; `compileall` PASS; editable install + CLI prepare smoke PASS with build isolation disabled because the sandbox has no network. Deliberate unsupported outlet/provider/schema mutations fail deterministically. No Actions run.
+**Evidence:** schema-v1 YAML/JSON normalization, structural `single_round_port` adapter, `constant`, `constant_vector`, `inline_profile` and scalar-timeseries `csv` providers, headless `plume prepare`, and prepared-run provenance are implemented on the candidate branch. Sandbox: 13/15 focused tests PASS; `compileall` PASS; editable install + CLI prepare smoke PASS with build isolation disabled because the sandbox has no network. Deliberate unsupported outlet/provider/schema mutations fail deterministically. No Actions run.
 
 **Retires when:** `configs/example.yaml` loads headlessly, produces a normalized config + manifest in an ignored workspace, unsupported outlet types fail explicitly, and deliberate schema/provider errors fail deterministically.
 
@@ -50,11 +50,13 @@ Live queue. A ready item names the observation that retires it.
 **Retires when:** deterministic conservation/trend tests pass and agreed calibration + hold-back reference cases meet evidence-backed metrics without tuning the hold-backs.
 
 ## FIELD-1 — Spatial ΔT reconstruction and primary plots
-**State:** NEXT.
+**State:** **IMPLEMENTATION READY TO INTEGRATE** on draft PR #9, branch `field-1-spatial-reconstruction` (2026-10-08); human merge permission still required. **Physical field-profile qualification remains OPEN**.
 
-**Scope:** convert integral plume state into an explicit similarity-profile temperature field; generate section/plan ΔT contours tied mathematically to the model.
+**Scope:** convert integral plume state into a defined radial near-field thermal field and generate computed, physically situated section/plan ΔT contours.
 
-**Retires when:** the mockup-style plot is produced from a documented/qualified field reconstruction and deliberate profile/geometry changes cause predictable test failures.
+**Retirement evidence for FIELD-1 implementation:** Human-approved Actions [#37873598483](https://github.com/fellesinnov/Plume/actions/runs/37873598483) on source-identical test commit `734a864e88cebe40bff3af6483bbb46c922a6d95`: complete repository editable install/compile PASS; **69/69 tests PASS, 0 skipped**, including real official GSW 3.6.23 numeric TEOS-10 round-trip and actual MODEL-1 → FIELD-1 solver/3-D reconstruction; real-solver section/plan PNG and provenance generated and independently inspected (artifact `11590768922`). The earlier run #37864313011 had failed a test-file syntax check; its defect was fixed before this passing run. The one-off trigger was restored immediately to manual-only, with no repeat run. Full evidence in `docs/buildlog/2026-10-08-field-1.md`, qualification assumptions in `docs/reference/FIELD1_PROFILE.md`.
+
+**Next work:** request explicit human merge permission for implementation-only integration, then `DESIGN-1` for headless design snapshots/live Project/Design UI. Keep the model-status flag visibly **UNVALIDATED**. `FIELD-PROFILE-1`, `MODEL-CLOSURE-1`, `MODEL-TOL-1` remain separately owed independent physical evidence; no permitting claims.
 
 ## DESIGN-1 — Live Design Studio snapshot mode
 **Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
