@@ -2,7 +2,7 @@
 
 ## DESIGN-1-EXEC source convergence — 2026-10-09
 
-[Execution/evidence record](2026-10-09-design-1-exec.md): PR #10 now includes config-integrity and workspace-scoped session repairs, both with red-before/green-after focused discriminators. Isolated authored-source compilation PASS; 1/1 standalone UI reset test PASS; actual snapshot/provider/project source smoke PASS only with deliberately injected contract stubs. **Full exact-head checkout, real GSW MODEL-1/FIELD-1 evaluation and interactive Streamlit run remain UNPROVEN; integration HOLD.** No Actions dispatch, reference edits or merge. Model physical gates remain OPEN/BLOCKED.
+[Execution/evidence record](2026-10-09-design-1-exec.md): PR #10 now includes config-integrity and workspace-scoped session repairs, both with red-before/green-after focused discriminators. Isolated authored-source compilation PASS; 1/1 standalone UI reset test PASS; actual snapshot/provider/project source smoke PASS only with deliberately injected contract stubs. **Full exact-head checkout, real GSW MODEL-1/FIELD-1 evaluation and interactive Streamlit run remain UNPROVEN; integration HOLD.** A new prospective full-GSW two-variant/no-provider-refetch and computed-PNG regression is authored and syntax-checked, **not executed**. No Actions dispatch, reference edits or merge. Model physical gates remain OPEN/BLOCKED.
 
 
 ## DESIGN-1 local pinned-snapshot Studio candidate — 2026-10-08
