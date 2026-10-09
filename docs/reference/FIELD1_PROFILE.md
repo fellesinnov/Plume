@@ -73,7 +73,7 @@ This is **in-situ temperature excess relative to local ambient**, not raw `delta
 
 The initial plot theme intentionally visualizes **warm** excess only; if a cold anomaly is supplied it **raises** instead of falsely drawing no plume. A signed warm/cold palette is future renderer work, not a restriction on the headless field output. The renderer displays the ambient water-column background on a separately labelled in-situ temperature colour scale and the thermal plume on a separately labelled `delta_T` colour scale. It outlines the **calculated** configured threshold (default 2 deg C), never a manufactured drawn contour. It must label the near-field qualification limitations.
 
-Generated customer/demo PNG/SVG files belong in gitignored `workspace/`. The synthetic diagnostic preview produced during FIELD-1 uses an **illustrative manufactured trajectory**, not a full MODEL-1/GSW simulation. It is not checked in as a golden physical figure.
+Generated customer/demo PNG/SVG files belong in gitignored `workspace/`. The **first** FIELD-1 illustrative preview used a manufactured trajectory; a **separate** later approved Actions run #37864313011 executed actual MODEL-1 + official GSW 3.6.23 + FIELD-1 using **synthetic inline forcing** and generated the model-derived section/plan image and provenance in ignored `workspace/` (artifact 11587103805). Neither demonstration is physical field validation or an independent reference golden.
 
 ## 6. Discriminating evidence and open gates
 
@@ -89,6 +89,6 @@ Sandbox fixture tests cover:
 - section heading, plan depth and optional Matplotlib separation;
 - a separately optional official-GSW conversion smoke when the package is installed.
 
-The focused sandbox verifies **mathematical implementation of the named assumptions**, not their independent physical applicability. A complete checkout test against the actual MODEL-1 `NearFieldSolution` and numeric real-GSW smoke remain owed. Strongly stratified/nonmonotonic ambient, velocity-weighted cross-section behavior, near-source-profile blending, curvature and laboratory/field isopleths remain open physical evidence.
+The focused reduced sandbox verifies **mathematical implementation of the named assumptions**, not independent physical applicability. The approved Actions run's real MODEL-1/GSW full-chain **diagnostic script succeeded** (8 s configured stop, final bulk dilution 8.92655, section peak local ΔT 9.98793 °C, plan-slice peak local ΔT 6.24314 °C). But `compileall` failed on a newly introduced escaped-newline typo in `tests/field/test_field1_integration.py`, so the full `pytest` suite and explicit GSW round-trip test did **not** execute. The test syntax typo was fixed after the run and its exact Git blob separately syntax-compiled. A complete combined-regression run on the corrected candidate remains owed; the real-GSW diagnostic alone must not be promoted to suite PASS. Strongly stratified/nonmonotonic ambient, velocity-weighted cross-section behavior, near-source-profile blending, curvature and laboratory/field isopleths remain open physical evidence.
 
 No `References/` files were modified. `FIELD-PROFILE-1` stays **OPEN** until a defensible published/observed cross-plume comparison and independent hold-back are available. Similarly `MODEL-CLOSURE-1`/`MODEL-TOL-1` remain open; FIELD-1 does not create a production-qualified plume.
