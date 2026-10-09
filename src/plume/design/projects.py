@@ -170,6 +170,10 @@ class ProjectStore:
             raise WorkspaceError("locked revision changed since project was opened; reopen before saving")
         evaluation.snapshot.verify_identity()
         raw = evaluation.normalized_config
+        # A frozen evaluation dataclass still contains a mutable configuration.
+        # Never persist a post-evaluation edit under the old result/metric identity.
+        if _digest(raw) != evaluation.config_sha256:
+            raise WorkspaceError("design config changed since evaluation; recompute before saving")
         if raw["project"]["id"] != project.project_id or raw["site"] != evaluation.snapshot.site:
             raise WorkspaceError("design project/site mismatch")
         if _digest(raw["forcing"]["ambient"]) != evaluation.snapshot.ambient_spec_sha256:

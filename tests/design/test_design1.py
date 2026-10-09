@@ -185,3 +185,17 @@ def test_exact_csv_scalar_time_pin_and_out_of_range_fail(tmp_path):
     assert pin.source_scalars["flow_m3h"] == 600
     with pytest.raises(ProviderDataError, match="no exact sample"):
         pin_snapshot(loaded, at_utc="2025-01-01T02:00:00Z")
+
+
+def test_evaluation_config_mutation_is_rejected_before_any_revision_is_written(tmp_path):
+    store = ProjectStore(tmp_path / "ignored-workspace")
+    created = store.create(_template(tmp_path), project_id="integrity", name="Integrity")
+    pin = pin_snapshot(created.config)
+    result = evaluate_design(created.config.normalized, pin, thermodynamics=LinearThermo(),
+                             section_resolution=(41, 31), plan_resolution=(41, 31))
+    # The outer dataclass is frozen, but the normalized config is a mutable dict.
+    result.normalized_config["outfall"]["diameter_m"] = 0.9
+    with pytest.raises(WorkspaceError, match="changed since evaluation"):
+        store.save_revision(created, result)
+    assert not list((created.project_dir / "revisions").iterdir())
+    assert store.open("integrity").locked_revision_id is None

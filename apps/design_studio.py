@@ -41,9 +41,12 @@ def _workspace() -> Path:
     return Path(st.sidebar.text_input("Local workspace", value=default)).expanduser().resolve()
 
 
-def _reset_project(project_id: str) -> None:
-    if st.session_state.get("loaded_id") != project_id:
-        st.session_state["loaded_id"] = project_id
+def _reset_project(project_id: str, workspace_root: Path) -> None:
+    # A project ID is only unique *within* its workspace. Switching workspaces
+    # must not carry a pinned environmental column or design cache across sites.
+    key = (str(workspace_root.resolve()), project_id)
+    if st.session_state.get("loaded_id") != key:
+        st.session_state["loaded_id"] = key
         st.session_state.pop("snapshot", None)
         st.session_state.pop("evaluations", None)
         st.session_state.pop("comparisons", None)
@@ -276,7 +279,7 @@ def main() -> None:
     if selected == "New project":
         _new_project(store)
         return
-    _reset_project(selected)
+    _reset_project(selected, store.root)
     try:
         project = store.open(selected)
     except PlumeError as exc:
