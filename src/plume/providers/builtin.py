@@ -233,4 +233,7 @@ def _parse_timestamp(value: Any) -> datetime:
 
 def _format_datetime(value: datetime) -> str:
     value = value.astimezone(timezone.utc)
-    return value.isoformat(timespec="seconds").replace("+00:00", "Z")
+    # Preserve the real sampled instant. Silently truncating fractional
+    # seconds could alias a plant reading to a whole-hour TIME-1A clock slot.
+    precision = "microseconds" if value.microsecond else "seconds"
+    return value.isoformat(timespec=precision).replace("+00:00", "Z")

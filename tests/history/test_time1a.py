@@ -361,3 +361,41 @@ def test_year_selection_membership_indexes_are_derived_but_not_in_serialized_rec
     assert cached.cache_hit
     assert cached._available_index == first._available_index
     assert cached.snapshot_at(cfg, TIMES[2]).snapshot_sha256 == first.snapshot_at(cfg, TIMES[2]).snapshot_sha256
+
+
+
+def test_scalar_plant_sample_fractional_second_must_not_alias_clock_hour(tmp_path):
+    """An actual 00:00:00.5 measurement may not masquerade as 00:00:00."""
+    cfg = _cfg(tmp_path)
+    plant = tmp_path / "flow.csv"
+    plant.write_text(plant.read_text().replace("2025-01-01T00:00:00Z,450",
+                                                 "2025-01-01T00:00:00.500Z,450"))
+    history = acquire_history(cfg, workspace_override=tmp_path / "workspace")
+    assert history.available_times == (TIMES[2],)
+    assert "source.flow_m3h" in history.missing_by_time[TIMES[0]]
+    assert history.snapshot_at(cfg, TIMES[2]).source_scalars["flow_m3h"] == 550
+
+
+def test_fractional_clock_start_or_end_is_never_silently_truncated(tmp_path):
+    from plume.history.history import _clock_times
+    clock = {"start": "2025-01-01T00:00:00.500Z", "end": "2025-01-01T03:00:00Z", "step": "PT1H"}
+    with pytest.raises(ProviderDataError, match="whole-second UTC clock boundaries"):
+        _clock_times(clock)
+    clock = {"start": "2025-01-01T00:00:00Z", "end": "2025-01-01T03:00:00.500Z", "step": "PT1H"}
+    with pytest.raises(ProviderDataError, match="whole-second UTC clock boundaries"):
+        _clock_times(clock)
+
+
+
+def test_schema_rejects_fractional_clock_boundaries_before_canonicalization(tmp_path):
+    """Config normalization may not hide a half-second shift in model forcing."""
+    from plume.config import normalize_config
+    from plume.errors import ConfigError
+    original = _cfg(tmp_path).normalized
+    for boundary in ("start", "end"):
+        raw = copy.deepcopy(original)
+        raw["forcing"]["clock"][boundary] = (
+            "2025-01-01T00:00:00.500Z" if boundary == "start" else
+            "2025-01-01T03:00:00.500Z")
+        with pytest.raises(ConfigError, match="whole-second UTC timestamps"):
+            normalize_config(raw)

@@ -33,6 +33,8 @@ _LOCAL_FILES = {"csv", "csv_depth_profile", "csv_time_depth_profile", "csv_time_
 def _clock_times(clock: Mapping[str, Any]) -> tuple[str, ...]:
     start = _parse_timestamp(str(clock["start"]))
     end = _parse_timestamp(str(clock["end"]))
+    if start.microsecond or end.microsecond:
+        raise ProviderDataError("TIME-1A requires whole-second UTC clock boundaries; subsecond clock endpoints are unsupported")
     match = _STEP.fullmatch(str(clock["step"]))
     if match is None:
         raise ProviderDataError("historical clock step is not an ISO-8601 day/time duration")

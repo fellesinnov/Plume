@@ -164,6 +164,10 @@ def _normalize_clock(raw: Any) -> dict[str, Any]:
     _reject_unknown(mapping, {"start", "end", "step"}, "forcing.clock")
     start = _datetime_utc(mapping.get("start"), "forcing.clock.start")
     end = _datetime_utc(mapping.get("end"), "forcing.clock.end")
+    # Canonical schema-v1 times are whole-second. A fractional start/end
+    # would otherwise be silently dropped by the fixed-second formatter.
+    if start.microsecond or end.microsecond:
+        raise ConfigError("forcing.clock start and end must use whole-second UTC timestamps")
     if end <= start:
         raise ConfigError("forcing.clock.end must be after forcing.clock.start")
     step = _string(mapping.get("step"), "forcing.clock.step")

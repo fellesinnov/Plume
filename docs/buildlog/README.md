@@ -2,7 +2,7 @@
 
 ## TIME-1A historical data foundation — 2026-10-09 (source candidate)
 
-**SCOPE:** normalized time/depth scalar and ENU-current CSV providers, whole-second UTC timestamp selection with explicit missing slots, SHA-bound reusable workspace cache, preserved time-varying plant providers and optional depth-current MODEL-1 bridge, all headless. Branch `time-1a-historical-foundation` cut from verified `main` **`750e94ecc1ad487e30e672cf8879a4ca868c4364`**. **Bounded isolated sandbox evidence:** 17/17 focused tests PASS, including missing-hour/no-interpolation, corrupted-cache and CSV-input-change discriminators, no-provider-reload after acquisition, original source CSV retained, legacy static snapshots, project CSV path rebasing and strict current-shear export guard, and 8,760 hourly synthetic static forcing pins; source compile PASS. These checks use local **config/provider/workspace contract stubs** because the sandbox lacks complete GitHub checkout, official GSW and Streamlit; **do not promote to full integration**. Synthetic 14-day temperature/current input heatmap created in ignored sandbox workspace (335/336 valid hourly columns, one explicit gap). **HOLD** for complete exact-head install/regression suite and optional official-GSW model seam. No Actions run, no merge, no credential use, `References/` unchanged. See [TIME-1A source evidence](2026-10-09-time-1a.md) and [API contract](../TIME_1A.md).
+**SCOPE:** normalized time/depth scalar and ENU-current CSV providers, whole-second UTC timestamp selection with explicit missing slots, SHA-bound reusable workspace cache, preserved time-varying plant providers and optional depth-current MODEL-1 bridge, all headless. Branch `time-1a-historical-foundation` cut from verified `main` **`750e94ecc1ad487e30e672cf8879a4ca868c4364`**. **Bounded isolated sandbox evidence:** 20/20 focused tests PASS, including subsecond sample anti-aliasing, missing-hour/no-interpolation, corrupted-cache and CSV-input-change discriminators, no-provider-reload after acquisition, original source CSV retained, legacy static snapshots, project CSV path rebasing and strict current-shear export guard, and 8,760 hourly synthetic static forcing pins; source compile PASS. These checks use local **config/provider/workspace contract stubs** because the sandbox lacks complete GitHub checkout, official GSW and Streamlit; **do not promote to full integration**. Synthetic 14-day temperature/current input heatmap created in ignored sandbox workspace (335/336 valid hourly columns, one explicit gap). **HOLD** for complete exact-head install/regression suite and optional official-GSW model seam. No Actions run, no merge, no credential use, `References/` unchanged. See [TIME-1A source evidence](2026-10-09-time-1a.md) and [API contract](../TIME_1A.md).
 
 
 ## DESIGN-1 IMPLEMENTATION INTEGRATED — 2026-10-09
@@ -115,7 +115,7 @@ Integrated evidence:
 - deterministic local provider contracts/implementations;
 - config-relative paths and corrected demo workspace root;
 - headless `plume prepare` producing normalized config + provenance manifest;
-- sandbox **17/17 focused tests PASS**;
+- sandbox **20/20 focused tests PASS**;
 - `compileall` PASS;
 - editable package + CLI prepare smoke PASS without build isolation;
 - no GitHub Actions run;
