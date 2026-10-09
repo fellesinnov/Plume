@@ -50,13 +50,13 @@ Live queue. A ready item names the observation that retires it.
 **Retires when:** deterministic conservation/trend tests pass and agreed calibration + hold-back reference cases meet evidence-backed metrics without tuning the hold-backs.
 
 ## FIELD-1 — Spatial ΔT reconstruction and primary plots
-**State:** **IMPLEMENTATION READY TO INTEGRATE** on draft PR #9, branch `field-1-spatial-reconstruction` (2026-10-08); human merge permission still required. **Physical field-profile qualification remains OPEN**.
+**State:** **IMPLEMENTATION INTEGRATED** into `main` by explicit human-authorised squash merge of [PR #9](https://github.com/fellesinnov/Plume/pull/9) on 2026-10-08, merge commit `6160b0e889fc879b050a288a8147d06a2275413a`. **Physical field-profile qualification remains OPEN**.
 
 **Scope:** convert integral plume state into a defined radial near-field thermal field and generate computed, physically situated section/plan ΔT contours.
 
 **Retirement evidence for FIELD-1 implementation:** Human-approved Actions [#37873598483](https://github.com/fellesinnov/Plume/actions/runs/37873598483) on source-identical test commit `734a864e88cebe40bff3af6483bbb46c922a6d95`: complete repository editable install/compile PASS; **69/69 tests PASS, 0 skipped**, including real official GSW 3.6.23 numeric TEOS-10 round-trip and actual MODEL-1 → FIELD-1 solver/3-D reconstruction; real-solver section/plan PNG and provenance generated and independently inspected (artifact `11590768922`). The earlier run #37864313011 had failed a test-file syntax check; its defect was fixed before this passing run. The one-off trigger was restored immediately to manual-only, with no repeat run. Full evidence in `docs/buildlog/2026-10-08-field-1.md`, qualification assumptions in `docs/reference/FIELD1_PROFILE.md`.
 
-**Next work:** request explicit human merge permission for implementation-only integration, then `DESIGN-1` for headless design snapshots/live Project/Design UI. Keep the model-status flag visibly **UNVALIDATED**. `FIELD-PROFILE-1`, `MODEL-CLOSURE-1`, `MODEL-TOL-1` remain separately owed independent physical evidence; no permitting claims.
+**Next work:** `DESIGN-1` for headless design snapshots/live Project/Design UI. FIELD-1 is implementation-integrated; no further merge decision is owed for PR #9. Keep the model-status flag visibly **UNVALIDATED**. `FIELD-PROFILE-1`, `MODEL-CLOSURE-1`, `MODEL-TOL-1` remain separately owed independent physical evidence; no permitting claims.
 
 ## DESIGN-1 — Live Design Studio snapshot mode
 **Scope:** implement the Streamlit Project/Design workflow against the headless core: create/open a named project, load/pin an inline/file environmental snapshot, vary supported outlet depth/diameter/angle/azimuth/flow/discharge temperature live, show model-derived section/plan plume plots and permit metrics, preserve revisions in the ignored workspace, and lock the selected design into a normal config.
