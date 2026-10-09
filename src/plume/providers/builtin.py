@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -177,7 +178,8 @@ class CsvProvider:
         time_column = str(spec["time_column"])
         value_column = str(spec["value_column"])
         records: list[dict[str, Any]] = []
-        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        # Never hash one version of a file and parse a later edited version.
+        with io.TextIOWrapper(io.BytesIO(raw_bytes), encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             fieldnames = reader.fieldnames or []
             for required in (time_column, value_column):

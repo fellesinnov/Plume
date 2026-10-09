@@ -27,7 +27,10 @@ def _timestamp(value: str) -> str:
         dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
         if dt.tzinfo is None or dt.utcoffset() is None:
             raise ValueError("timezone missing")
-        return dt.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        dt = dt.astimezone(timezone.utc)
+        if dt.microsecond:
+            raise ValueError("fractional design/history timestamp cannot be rounded to whole seconds")
+        return dt.isoformat(timespec="seconds").replace("+00:00", "Z")
     except (ValueError, TypeError, AttributeError) as exc:
         raise ProviderDataError("design timestamp must be timezone-aware ISO-8601") from exc
 

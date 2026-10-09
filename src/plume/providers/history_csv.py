@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import math
 from pathlib import Path
 from typing import Any, Mapping
@@ -28,7 +29,9 @@ def _load_csv(spec: Mapping[str, Any], context: ProviderContext, *, columns: tup
     digest = hashlib.sha256(data).hexdigest()
     records: list[dict[str, Any]] = []
     previous: tuple[str, float] | None = None
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+    # Parse the EXACT bytes we hashed. Reading the path a second time could
+    # silently pair a stale digest with records from an edited source file.
+    with io.TextIOWrapper(io.BytesIO(data), encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for column in columns:
             if column not in (reader.fieldnames or []):

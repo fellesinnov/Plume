@@ -91,7 +91,7 @@ def _validate_profile(rows: tuple[Mapping[str, Any], ...], *, name: str,
 
 def _select_records(item: Mapping[str, Any], timestamp: str) -> tuple[Mapping[str, Any], ...]:
     kind = str(item["data_kind"])
-    if kind in {"time_depth_profile", "time_depth_vector", "scalar_time_series"}:
+    if kind in {"time_depth_profile", "time_depth_potential", "time_depth_vector", "scalar_time_series"}:
         return tuple(item["records_by_time"].get(timestamp, ()))  # O(1) slot lookup, not annual scan
     return tuple(item["records"])
 
@@ -99,7 +99,9 @@ def _select_records(item: Mapping[str, Any], timestamp: str) -> tuple[Mapping[st
 def _check_sample(item: Mapping[str, Any], key: str, at: str, water_depth: float) -> bool:
     kind = str(item["data_kind"])
     if key in {"ambient.temperature_profile_C", "ambient.salinity_profile_psu"}:
-        supported = {"depth_profile", "time_depth_profile"}
+        supported = ({"depth_profile", "time_depth_profile", "time_depth_potential"}
+                     if key == "ambient.temperature_profile_C" else
+                     {"depth_profile", "time_depth_profile"})
     elif key == "ambient.current_profile":
         supported = {"vector_constant", "time_depth_vector"}
     else:
@@ -107,7 +109,7 @@ def _check_sample(item: Mapping[str, Any], key: str, at: str, water_depth: float
     if kind not in supported:
         raise ProviderDataError(f"{key}: wrong historical provider shape {kind!r}; expected {sorted(supported)}")
     selected = _select_records(item, at)
-    if kind in {"depth_profile", "time_depth_profile"}:
+    if kind in {"depth_profile", "time_depth_profile", "time_depth_potential"}:
         if not selected:
             return False
         _validate_profile(tuple({"depth_m": row["depth_m"], "value": row["value"]}
@@ -143,7 +145,7 @@ def _check_sample(item: Mapping[str, Any], key: str, at: str, water_depth: float
 def _series_as_record(result: ProviderResult) -> dict[str, Any]:
     item: dict[str, Any] = {"data_kind": result.data_kind,
                             "provenance": result.manifest_summary()}
-    if result.data_kind in {"time_depth_profile", "time_depth_vector", "scalar_time_series"}:
+    if result.data_kind in {"time_depth_profile", "time_depth_potential", "time_depth_vector", "scalar_time_series"}:
         by_time: dict[str, list[dict[str, Any]]] = {}
         for record in result.records:
             by_time.setdefault(str(record["time"]), []).append(dict(record))
@@ -250,6 +252,15 @@ class HistoricalForcing:
         cur_item = self.series["ambient.current_profile"]
         temp = tuple((float(r["depth_m"]), float(r["value"])) for r in _select_records(temp_item, when))
         salt = tuple((float(r["depth_m"]), float(r["value"])) for r in _select_records(salt_item, when))
+        potential_paired = temp_item["data_kind"] == "time_depth_potential"
+        if potential_paired:
+            from .temperature import paired_pt0_to_insitu
+            actual = temp_item["provenance"]["request"]
+            temp = paired_pt0_to_insitu(
+                temp, salt,
+                latitude_deg=float(actual["actual_latitude_deg"]),
+                longitude_deg=float(actual["actual_longitude_deg"]),
+            )
         selected = _select_records(cur_item, when)
         profile = None
         if cur_item["data_kind"] == "time_depth_vector":
@@ -274,6 +285,10 @@ class HistoricalForcing:
             "providers": {f"forcing.{key}": copy.deepcopy(value["provenance"])
                           for key, value in self.series.items()},
         }
+        if potential_paired:
+            payload["providers"]["forcing.ambient.temperature_profile_C"]["request"][
+                "selected_snapshot_temperature_conversion"
+            ] = "paired_SP_at_same_UTC_and_depth_via_GSW_pt0_to_in_situ_ITS90"
         if profile is not None:
             payload["current_profile_east_north_mps"] = profile
         return PinnedSnapshot.from_record({**payload, "snapshot_sha256": _digest(payload)})
@@ -315,7 +330,8 @@ def acquire_history(config: LoadedConfig, *, workspace_override: str | Path | No
             raise ProviderDataError("history cache request does not match normalized source")
         return cached
 
-    context = ProviderContext(config_dir=config.source_dir)
+    context = ProviderContext(config_dir=config.source_dir,
+                              site=request["site"], clock=request["clock"])
     series: dict[str, dict[str, Any]] = {}
     for group in ("source", "ambient"):
         for key, spec in sorted(request[group].items()):
@@ -325,6 +341,19 @@ def acquire_history(config: LoadedConfig, *, workspace_override: str | Path | No
             if local is not None and result.provenance.input_sha256 != local["sha256"]:
                 raise ProviderDataError(f"{name}: source file changed during historical acquisition; retry")
             series[name] = _series_as_record(result)
+    # A modeled vertical profile cannot silently combine widely separated
+    # coastal grid cells. All Copernicus physical quantities must use mutually
+    # coherent actual wet-cell coordinates, not just the user's point.
+    actual_cells = [(name, float(item["provenance"]["request"]["actual_latitude_deg"]),
+                     float(item["provenance"]["request"]["actual_longitude_deg"]))
+                    for name, item in series.items()
+                    if name.startswith("ambient.") and item["provenance"]["provider"] == "copernicus"]
+    if len(actual_cells) > 1:
+        from ..providers.copernicus import _haversine_km
+        for i, (key_a, lat_a, lon_a) in enumerate(actual_cells):
+            for key_b, lat_b, lon_b in actual_cells[i+1:]:
+                if _haversine_km(lat_a, lon_a, lat_b, lon_b) > 2.0:
+                    raise ProviderDataError(f"Copernicus wet cells for {key_a} and {key_b} differ by >2 km; do not merge as one water column")
     required = set(f"source.{key}" for key in request["source"]) | set(
         f"ambient.{key}" for key in request["ambient"])
     if set(series) != required:

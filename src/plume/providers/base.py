@@ -12,6 +12,10 @@ class ProviderContext:
     """Runtime context kept outside the portable provider descriptor."""
 
     config_dir: Path
+    # Optional history request scope for remote gridded providers. Existing
+    # local callers can continue supplying only config_dir.
+    site: Mapping[str, float] | None = None
+    clock: Mapping[str, str] | None = None
 
 
 @dataclass(frozen=True)

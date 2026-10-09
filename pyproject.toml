@@ -16,7 +16,9 @@ dependencies = [
 
 [project.optional-dependencies]
 plot = ["matplotlib>=3.8,<4"]
-studio = ["matplotlib>=3.8,<4", "streamlit>=1.39,<2"]
+studio = ["matplotlib>=3.8,<4", "streamlit>=1.39,<2",
+          "folium>=0.18,<1", "streamlit-folium>=0.23,<1"]
+ocean = ["copernicusmarine>=2.0,<3", "xarray>=2024.6,<2028"]
 
 [project.scripts]
 plume = "plume.cli:main"
