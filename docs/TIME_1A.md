@@ -65,6 +65,14 @@ The deterministic request SHA includes site coordinates/water depth, entire forc
 
 Note: local CSV bytes are re-hashed at **acquisition** to prevent stale cache hits; they are not reread on design selection. For future remote Copernicus providers, explicit dataset, actual wet-cell, version, temporal/spatial/depth selection and remote freshness policy will be required; this release does **not** implement that adapter or credentials.
 
+## Project persistence and lossless export guardrails
+
+`ProjectStore.create`/revision saves rebase all historical CSV paths (`csv_time_depth_profile`, `csv_time_vector_profile` as well as existing `csv` and `csv_depth_profile`) relative to the project workspace, without altering the source files. A portable project YAML without companion historical CSV data is rejected rather than silently orphaning those inputs.
+
+TIME-1A's pinned snapshots preserve full-depth east/north current shear as JSON, but the existing DESIGN-1 one-hour `export_snapshot_yaml` format can only represent a spatially uniform `constant_vector`. **Exporting a depth-varying current into that format now explicitly raises `WorkspaceError`** rather than dropping shear. A future lossless inline/static vector-profile provider is required before offering self-contained one-hour YAML export for such a case. The locked full snapshot JSON remains intact; a project may still be opened and evaluated headlessly.
+
+The history implementation also derives non-serialized frozenset indexes for whole-year clock/availability membership. Annual selection is O(number of selected depth levels) after one SHA verification; cached data remain unchanged by those indexes.
+
 ## Separate responsibilities, gates and limitations
 
 - **TIME-1A:** normalized historical CSV contracts, exact-time gap-aware selection, cache identity and model-compatible pinned inputs; no Ocean UI or time-runner results.

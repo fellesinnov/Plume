@@ -169,6 +169,14 @@ class HistoricalForcing:
     data_sha256: str
     cache_path: Path | None = field(default=None, compare=False)
     cache_hit: bool = field(default=False, compare=False)
+    # The snapshot iterator must not scan the annual timestamp tuple for every
+    # hour; the indexes are derived/rebuilt from SHA-bound serialized columns.
+    _clock_index: frozenset[str] = field(init=False, repr=False, compare=False)
+    _available_index: frozenset[str] = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "_clock_index", frozenset(self.clock_times))
+        object.__setattr__(self, "_available_index", frozenset(self.available_times))
 
     def payload(self) -> dict[str, Any]:
         return {"format_version": _SCHEMA, "request": self.request,
@@ -230,9 +238,9 @@ class HistoricalForcing:
 
     def _snapshot_unchecked(self, when: str) -> PinnedSnapshot:
         """Internal O(levels) sampler for an already-verified history frame."""
-        if when not in self.clock_times:
+        if when not in self._clock_index:
             raise ProviderDataError(f"historical timestamp {when} is outside selected clock grid")
-        if when not in self.available_times:
+        if when not in self._available_index:
             missing = self.missing_by_time.get(when, ())
             raise ProviderDataError(f"historical timestamp {when} has missing forcing: {', '.join(missing)}")
         temp_item = self.series["ambient.temperature_profile_C"]

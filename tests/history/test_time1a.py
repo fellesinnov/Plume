@@ -299,3 +299,65 @@ def test_csv_changed_during_acquisition_must_not_be_cached_under_stale_request_s
         with pytest.raises(ProviderDataError, match="changed during historical acquisition"):
             acquire_history(cfg, workspace_override=tmp_path / "workspace")
     assert not list((tmp_path / "workspace").rglob("*.json"))
+
+
+def test_project_paths_rebase_for_time_depth_csv_without_orphaning_files(tmp_path):
+    """A named project must resolve historical input files after relocating config."""
+    from plume.design.projects import ProjectStore
+    cfg = _cfg(tmp_path)
+    store = ProjectStore(tmp_path / "project-workspace")
+    project = store.create(cfg, project_id="history-a", name="History A")
+    assert project.config.project_id == "history-a"
+    for group in ("source", "ambient"):
+        for key, desc in project.config.normalized["forcing"][group].items():
+            if desc["provider"] in {"csv", "csv_time_depth_profile", "csv_time_vector_profile"}:
+                origin = cfg.normalized["forcing"][group][key]["path"]
+                assert (project.config.source_dir / desc["path"]).resolve() == (tmp_path / origin).resolve()
+    selected = acquire_history(project.config)
+    assert selected.snapshot_at(project.config, TIMES[2]).source_scalars["flow_m3h"] == 550
+
+
+def test_portable_project_export_rejects_external_historical_source_files(tmp_path):
+    """Reject a portable config that would silently lose its input CSV dependency."""
+    from plume.design.projects import DesignProject, ProjectStore, export_portable_yaml
+    from plume.errors import WorkspaceError
+    store = ProjectStore(tmp_path / "work")
+    project = store.create(_cfg(tmp_path), project_id="history-a", name="History A")
+    fake_locked = DesignProject(project.project_dir, project.config, "locked", project.config.sha256)
+    with pytest.raises(WorkspaceError, match="companion CSV files"):
+        export_portable_yaml(fake_locked)
+
+
+def test_locked_snapshot_export_must_not_flatten_vertical_current_shear(tmp_path):
+    """A one-hour YAML export cannot represent a historical depth-sheared current yet."""
+    from plume.design.projects import DesignProject, ProjectStore, export_snapshot_yaml
+    from plume.errors import WorkspaceError
+    from plume.design.snapshot import PinnedSnapshot
+    store = ProjectStore(tmp_path / "work")
+    project = store.create(_cfg(tmp_path), project_id="history-a", name="History A")
+    history = acquire_history(project.config)
+    snapshot = history.snapshot_at(project.config, TIMES[0])
+    assert snapshot.current_profile_east_north_mps is not None
+    path = project.project_dir / "revisions" / "locked" / "snapshot.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(snapshot.as_record()), encoding="utf-8")
+    fake_locked = DesignProject(project.project_dir, project.config, "locked", project.config.sha256)
+    with pytest.raises(WorkspaceError, match="cannot export depth-varying current as constant_vector"):
+        export_snapshot_yaml(fake_locked, PinnedSnapshot.from_record(snapshot.as_record()))
+
+
+
+def test_year_selection_membership_indexes_are_derived_but_not_in_serialized_record(tmp_path):
+    """Fast membership indices avoid O(year**2) scans but are not persisted."""
+    cfg = _cfg(tmp_path)
+    first = acquire_history(cfg, workspace_override=tmp_path / "cache")
+    assert isinstance(first._clock_index, frozenset)
+    assert isinstance(first._available_index, frozenset)
+    assert len(first._clock_index) == len(first.clock_times) == 3
+    assert first._available_index == frozenset(first.available_times)
+    assert "_clock_index" not in first.as_record()
+    assert "_available_index" not in first.as_record()
+    cached = acquire_history(cfg, workspace_override=tmp_path / "cache")
+    assert cached.cache_hit
+    assert cached._available_index == first._available_index
+    assert cached.snapshot_at(cfg, TIMES[2]).snapshot_sha256 == first.snapshot_at(cfg, TIMES[2]).snapshot_sha256
