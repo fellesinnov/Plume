@@ -119,6 +119,14 @@ def _numeric(name: str, value: float, *, lo: float, hi: float,
                                  key="design_control_" + name))
 
 
+def _saved_or_pinned_scalar(source: dict, snapshot, key: str, default: float) -> float:
+    """Reopen from locked design values; nonconstant providers use the pin."""
+    spec = source.get(key)
+    if spec is not None and spec["provider"] == "constant":
+        return float(spec["value"])
+    return float(snapshot.source_scalars.get(key, default))
+
+
 def _design(project, store: ProjectStore):
     snapshot = st.session_state.get("snapshot")
     if snapshot is None:
@@ -139,7 +147,7 @@ def _design(project, store: ProjectStore):
         az = _numeric("Azimuth [° true N]", geom["azimuth_deg"],
                       lo=0.0, hi=359.9, step=5.0, fmt="%.1f")
         source = cfg["forcing"]["source"]
-        flow = _numeric("Flow [m³/h]", snapshot.source_scalars["flow_m3h"],
+        flow = _numeric("Flow [m³/h]", _saved_or_pinned_scalar(source, snapshot, "flow_m3h", 0.0),
                         lo=0.01, hi=1_000_000.0, step=50.0)
         default_kind = "Process ΔT" if "delta_T_C" in source else "Absolute outlet T"
         temp_mode = st.radio("Outlet temperature definition", ["Process ΔT", "Absolute outlet T"],
@@ -147,12 +155,12 @@ def _design(project, store: ProjectStore):
                              key="design_control_temperature_mode", horizontal=True)
         ambient_t = float(np.interp(depth, *zip(*snapshot.temperature_profile_C)))
         if temp_mode == "Process ΔT":
-            delta = _numeric("Process ΔT [°C]", snapshot.source_scalars.get("delta_T_C", 10.0),
+            delta = _numeric("Process ΔT [°C]", _saved_or_pinned_scalar(source, snapshot, "delta_T_C", 10.0),
                              lo=0.01, hi=60.0, step=0.5)
             absolute = None
         else:
             absolute = _numeric("Absolute discharge T [°C]",
-                                snapshot.source_scalars.get("discharge_temperature_C", ambient_t + 10.0),
+                                _saved_or_pinned_scalar(source, snapshot, "discharge_temperature_C", ambient_t + 10.0),
                                 lo=-2.0, hi=100.0, step=0.5)
             delta = None
         st.caption(f"Local ambient T at outlet: {ambient_t:.2f} °C")

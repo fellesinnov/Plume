@@ -66,7 +66,7 @@ Live queue. A ready item names the observation that retires it.
 **Retires when:** one pinned snapshot can compare multiple deterministic geometry variants through the same MODEL/FIELD/criteria stack with no provider refetch, save/reopen project revisions, and export/select the locked configuration for historical simulation.
 
 ## TIME-1 — Ocean browser + historical runner + Copernicus
-**Scope:** add the Design Studio Ocean view plus quasi-steady time runner: map/coordinate site selection, default previous-complete-year fetch, shared provider cache/provenance, annual T/S/current plots, date/time selection of a cached profile for Design Mode, and annual metrics table. Geometry/config changes must reuse the ocean cache.
+**Scope:** add the Design Studio Ocean view plus quasi-steady time runner: map/coordinate site selection, default previous-complete-year fetch, shared provider cache/provenance, annual T/S/current plots, date/time selection of a cached profile for Design Mode, and annual metrics table. Geometry/config changes must reuse the ocean cache. **Binding gate:** DESIGN-1 locks plant flow/discharge temperature as a constant design operating point, preserving original provider requests in pinned-snapshot provenance. TIME-1 must deliberately restore/select time-varying plant source providers for annual replay (not silently reuse constant design-case values as plant history).
 
 **Retires when:** a reproducible historical interval can be run from one config with cached provider data and one metric row per forcing timestamp.
 
