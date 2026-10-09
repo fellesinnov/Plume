@@ -8,6 +8,8 @@ from ..errors import ConfigError, UnsupportedProviderError
 from .base import Provider, ProviderContext, ProviderProvenance, ProviderResult
 from .builtin import ConstantProvider, ConstantVectorProvider, CsvProvider, InlineProfileProvider
 from .depth_csv import CsvDepthProfileProvider
+from .history_csv import CsvTimeDepthProfileProvider, CsvTimeVectorProfileProvider
+from .copernicus import CopernicusProvider
 
 _PROVIDERS: dict[str, Provider] = {
     provider.name: provider
@@ -17,6 +19,9 @@ _PROVIDERS: dict[str, Provider] = {
         InlineProfileProvider(),
         CsvProvider(),
         CsvDepthProfileProvider(),
+        CsvTimeDepthProfileProvider(),
+        CsvTimeVectorProfileProvider(),
+        CopernicusProvider(),
     )
 }
 

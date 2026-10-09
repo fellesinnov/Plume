@@ -1,5 +1,17 @@
 # Current build / evidence status
 
+## TIME-1A/B/C unified cloud source candidate — 2026-10-09
+
+**CURRENT STATE: DRAFT SOURCE CANDIDATE / MECHANICAL HOLD.** Single-writer `time-1a-historical-foundation`, PR #11, base `main` `750e94ecc1ad487e30e672cf8879a4ca868c4364`. Headless TIME-1A timestamped T/SP/ENU/plant CSV history + SHA workspace cache is joined by TIME-1B **optional Copernicus** wet-cell/units/pt0-to-TEOS-10 safeguards and Ocean map/plots, and TIME-1C **bounded locked-revision** quasi-steady MODEL/FIELD runner with per-timestamp gap rows, immutable output SHA and exploratory Results. Real plant source descriptors are recovered from the saved Design snapshot; no constant one-hour replay substitution. Synthetic generator supports a 72h/71 complete one-gap workflow without credentials.
+
+**Evidence:** prior TIME-1A focused isolated 20/20 PASS; current TIME-1B/C **36/36 isolated synthetic tests PASS**, authored source `compileall` PASS. These are **not** the full Plume checkout suite: sandbox lacks official GSW, Copernicus Marine service/client and Streamlit, and GitHub DNS is unavailable. No live Copernicus query, official-GSW numeric model run, complete Streamlit browser workflow, Windows UI evidence or permit calibration has occurred in this cloud candidate. **Next:** one bounded laptop closer with `pip install -e ".[studio,ocean]"`, complete `pytest -q -rs`, real synthetic Ocean→Design→Simulate→Results (default 3 steps), optional separate 1–3-day real Copernicus request. No Actions run or merge authorised. Original `References/` unchanged. See [unified source/closer contract](../TIME_1.md), [TIME-1B/C evidence](2026-10-09-time-1-bc-source.md) and [TIME-1A evidence](2026-10-09-time-1a.md). Physical MODEL-CLOSURE-1/FIELD-PROFILE-1 remain OPEN, MODEL-TOL-1 BLOCKED, PERMIT-1 later.
+
+
+## TIME-1A historical data foundation — 2026-10-09 (source candidate)
+
+**SCOPE:** normalized time/depth scalar and ENU-current CSV providers, whole-second UTC timestamp selection with explicit missing slots, SHA-bound reusable workspace cache, preserved time-varying plant providers and optional depth-current MODEL-1 bridge, all headless. Branch `time-1a-historical-foundation` cut from verified `main` **`750e94ecc1ad487e30e672cf8879a4ca868c4364`**. **Bounded isolated sandbox evidence:** 20/20 focused tests PASS, including subsecond sample anti-aliasing, missing-hour/no-interpolation, corrupted-cache and CSV-input-change discriminators, no-provider-reload after acquisition, original source CSV retained, legacy static snapshots, project CSV path rebasing and strict current-shear export guard, and 8,760 hourly synthetic static forcing pins; source compile PASS. These checks use local **config/provider/workspace contract stubs** because the sandbox lacks complete GitHub checkout, official GSW and Streamlit; **do not promote to full integration**. Synthetic 14-day temperature/current input heatmap created in ignored sandbox workspace (335/336 valid hourly columns, one explicit gap). **HOLD** for complete exact-head install/regression suite and optional official-GSW model seam. No Actions run, no merge, no credential use, `References/` unchanged. See [TIME-1A source evidence](2026-10-09-time-1a.md) and [API contract](../TIME_1A.md).
+
+
 ## DESIGN-1 IMPLEMENTATION INTEGRATED — 2026-10-09
 
 **Human-authorised squash merge:** [PR #10](https://github.com/fellesinnov/Plume/pull/10) from `design-1-live-studio`, exact final source head `d1bbd4cb3d1b9c1a9fa8646807be01d6e28baf70`, base `main` `a95806fd0738d990a56ddd37571cfab38d9f7f5f`, confirmed merge SHA **`184156f00350803621a171107e6271f7c8b9dbcc`**. The user-observed Windows full suite finished **87/87 passed, 0 failed, 1 expected warning, 7.42 s** (six CRLF-expanded local text worktree files; the originally pinned Git SHA/size are proved by read-only in-memory reconstruction; do NOT claim local raw-byte fidelity). Actual Streamlit/GSW Project/Ocean(local)/Design, model-derived section/plan, fast preview cyan ΔT level, comparison/save/export were human-observed in the prior laptop smokes. **Local `git rev-parse HEAD` was not pasted:** user-run source-version evidence is not independently exact-head certified; accepted by explicit maintainer integration decision. No Actions run. All 52 immutable `References/` Git blobs and manual-only workflow blob were verified unchanged across integration. **Physical `MODEL-CLOSURE-1` and `FIELD-PROFILE-1` OPEN, `MODEL-TOL-1` BLOCKED**; no permitting proof or model physical validation. **Next seam: `TIME-1`**. [Exact close record](2026-10-09-design-1-integrated.md).
@@ -110,7 +122,7 @@ Integrated evidence:
 - deterministic local provider contracts/implementations;
 - config-relative paths and corrected demo workspace root;
 - headless `plume prepare` producing normalized config + provenance manifest;
-- sandbox **13/13 focused tests PASS**;
+- sandbox **20/20 focused tests PASS**;
 - `compileall` PASS;
 - editable package + CLI prepare smoke PASS without build isolation;
 - no GitHub Actions run;

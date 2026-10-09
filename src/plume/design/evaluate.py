@@ -155,18 +155,30 @@ def evaluate_design(candidate: Mapping[str, Any], snapshot: PinnedSnapshot, *,
     site = normalized["site"]
     latitude, longitude = site["latitude_deg"], site["longitude_deg"]
     depth = normalized["outfall"]["discharge_depth_below_surface_m"]
+    current_profile = snapshot.current_profile_east_north_mps
     depth_levels = sorted({d for d, _ in snapshot.temperature_profile_C} |
-                          {d for d, _ in snapshot.salinity_profile_psu})
+                          {d for d, _ in snapshot.salinity_profile_psu} |
+                          ({d for d, _, _ in current_profile} if current_profile else set()))
     td, tv = zip(*snapshot.temperature_profile_C)
     sd, sv = zip(*snapshot.salinity_profile_psu)
-    east, north = snapshot.current_east_north_mps
+    if current_profile:
+        current_depths = [row[0] for row in current_profile]
+        east_levels = [row[1] for row in current_profile]
+        north_levels = [row[2] for row in current_profile]
+    else:
+        east, north = snapshot.current_east_north_mps
     levels = []
     for d in depth_levels:
         state = thermo.from_practical_salinity_in_situ(
             practical_salinity=float(np.interp(d, sd, sv)),
             in_situ_temperature_C=float(np.interp(d, td, tv)),
             depth_m=d, latitude_deg=latitude, longitude_deg=longitude)
-        levels.append(AmbientLevel(d, state, east, north))
+        if current_profile:
+            current_east = float(np.interp(d, current_depths, east_levels))
+            current_north = float(np.interp(d, current_depths, north_levels))
+        else:
+            current_east, current_north = east, north
+        levels.append(AmbientLevel(d, state, current_east, current_north))
     ambient = AmbientColumn.from_levels(levels)
     outlet_temp = float(np.interp(depth, td, tv))
     discharge = (_candidate_scalar("discharge_temperature_C", normalized, snapshot)

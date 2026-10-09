@@ -238,6 +238,22 @@ The selected candidate can then be copied/exported as the locked project config 
 
 Design Mode should not fork the physics implementation. It calls the same outlet adapter, solver, field reconstruction and criteria engine used by historical/live runs.
 
+### TIME-1A historical CSV providers and replay-input snapshots
+
+`csv_time_depth_profile` maps the named `temperature_profile_C` (in-situ ITS-90 °C) or `salinity_profile_psu` (Practical Salinity) to an explicitly UTC-timestamped `time, depth_m, value` table. `csv_time_vector_profile` maps `current_profile` to `time, depth_m, u_east_mps, v_north_mps` (ENU, m/s). Whole-second timestamps must be timezone-aware; within one timestamp, all depth levels increase strictly and the selected grid covers 0 m and `site.water_depth_m`. No silent time/depth extrapolation or gap interpolation. File SHA is included in the request/cache identity.
+
+The reusable `plume.history.acquire_history` API returns an indexed history, request/data SHA and provenance, explicit `clock_times`, `available_times` and `missing_by_time`, and can materialize a true `PinnedSnapshot` using `snapshot_at(config,timestamp)` without provider I/O. The current profile can be depth-varying; optional new snapshot field is omitted for legacy static-current pins so existing one-hour identities remain unchanged. Cache JSON and demo CSV/plots belong only in the configured ignored workspace. The normal forcing clock is **start inclusive/end exclusive**, positive whole-second sampling. Schema-v1 `forcing.clock` rejects fractional start/end rather than silently truncating; scalar plant CSV samples preserve microseconds so off-grid readings never masquerade as whole-hour data. File edits invalidate cache by byte SHA, geometry changes do not.
+
+The history source descriptors must be the **original normalized time-varying flow and temperature providers**, not DESIGN-1's locked one-hour constant design controls. TIME-1B will handle Copernicus native potential temperature/native Practical Salinity and convert deliberately at the model boundary, preserving actual requested/used ocean cell. See [TIME_1A.md](TIME_1A.md).
+
+### TIME-1B/C optional Copernicus + historical runner source contracts
+
+`provider: copernicus` must explicitly name `role: temperature|salinity|current`, `dataset_id`, and native `temperature_kind: potential_pt0|in_situ_ITS90` / `salinity_kind: practical` when appropriate. Dataset-native `standard_name` and `units` must match declared quantities: silent potential↔in-situ relabeling, absolute-SP substitution, Kelvin/cm/s ambiguity or role-mismatched options are rejected. The provider selects a nearest viable *wet* rectilinear cell within an explicit bounded radius and reports requested versus actual WGS84 coordinates, native depths, dataset/variables and masks; it permits **only bracketed vertical interpolation** to seabed and a disclosed bounded shallow top-cell hold to 0 m. Downloaded deeper levels masked below the **requested** seabed are irrelevant to wet-cell screening, but never support bottom extrapolation.
+
+Where thetao and so come from separate Copernicus products, the history keeps `thetao` labelled `time_depth_potential` until selecting an exact UTC hour; the pinned snapshot pairs same-hour SP and converts with official GSW before model input, with provenance. Provider cache is keyed independently of geometry; remote content freshness requires explicit refresh/retention policy. The remote adapter is optional (`pip install -e '.[ocean]'`), credentials from environment only.
+
+`plume.runner` consumes a saved locked Design revision and the **original** source-provider descriptors retained in its pinned snapshot. A three-step default/bounded quasi-steady runner invokes the headless MODEL-1/FIELD-1 per complete UTC instant, records `MISSING` rows for unavailable forcing and digest-verified workspace results. It never manufactures PERMIT-1 legal pass/fail. See [TIME_1.md](TIME_1.md).
+
 ## 7. Copernicus provider
 
 Reuse the proven HeatHandler ideas without coupling the repositories:

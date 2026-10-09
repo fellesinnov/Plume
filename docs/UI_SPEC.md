@@ -112,6 +112,12 @@ The UI then shows the full vertical profiles for that instant.
 
 A later feature may rank candidate "adverse" timestamps using permit-relevant severity. Do not define "worst day" as simply the highest surface temperature; stratification, current, depth profile and operating state can matter.
 
+### TIME-1 source candidate status (not yet integrated)
+
+TIME-1B extends the real Streamlit Ocean view with an explicit **Load history** action, a map for proposed WGS84 coordinates during **new project creation**, UTC timestamp picker, and gap-preserving temperature/salinity/ENU-current depth-versus-time panels. The selected hour is a normalized pinned snapshot, not a separate UI physics calculation. When a Copernicus `thetao` product is still potential temperature, label the raw Ocean panel **pt0**, not in-situ; conversion happens in the headless pairing boundary before Design evaluation. Exact site and period remain config-controlled. An editable **previous complete calendar year** picker is still future UI polish, not silently implemented.
+
+TIME-1C adds explicit *bounded* Simulate/Results views over a **locked** design revision. Results are exploratory sampled near-field metrics with `UNVALIDATED` /`NOT_ASSESSED`, not configured permit pass/fail or qualified annual plume animation. No background/implicit run or artificial regulatory statistics.
+
 ## 4. Design view — live calculation
 
 Design Mode evaluates one pinned environmental snapshot repeatedly using the **same model stack** as historical simulation.

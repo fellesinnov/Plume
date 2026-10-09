@@ -52,7 +52,8 @@ def _rebase_paths(normalized: Mapping[str, Any], source_dir: Path, dest_dir: Pat
     updated["workspace"]["root"] = Path(os.path.relpath(workspace_root, dest_dir)).as_posix()
     for group in ("source", "ambient"):
         for spec in updated["forcing"][group].values():
-            if spec["provider"] in {"csv", "csv_depth_profile"}:
+            if spec["provider"] in {"csv", "csv_depth_profile",
+                                     "csv_time_depth_profile", "csv_time_vector_profile"}:
                 input_path = Path(spec["path"])
                 full = (input_path if input_path.is_absolute() else source_dir / input_path).resolve()
                 spec["path"] = Path(os.path.relpath(full, dest_dir)).as_posix()
@@ -217,10 +218,11 @@ def export_portable_yaml(project: DesignProject) -> str:
     if not project.is_locked:
         raise WorkspaceError("save a locked revision before exporting")
     data = copy.deepcopy(project.config.normalized)
-    if any(spec["provider"] in {"csv", "csv_depth_profile"}
+    if any(spec["provider"] in {"csv", "csv_depth_profile",
+                                "csv_time_depth_profile", "csv_time_vector_profile"}
            for group in ("source", "ambient")
            for spec in data["forcing"][group].values()):
-        raise WorkspaceError("file-backed provider config requires companion CSV files; export the pinned snapshot instead")
+        raise WorkspaceError("file-backed provider config requires companion CSV files; the one-hour snapshot export supports only representable current profiles")
     data["workspace"]["root"] = "./workspace"
     return yaml.safe_dump(data, sort_keys=False, allow_unicode=True)
 
@@ -243,6 +245,11 @@ def export_snapshot_yaml(project: DesignProject, snapshot: PinnedSnapshot) -> st
         project.config.normalized["forcing"]["ambient"]
     ) != snapshot.ambient_spec_sha256:
         raise WorkspaceError("saved config and pinned snapshot do not agree")
+    # A one-hour portable config currently has only constant_vector for
+    # current. Do NOT erase vertical current shear by exporting its surface
+    # vector as if it described the whole column.
+    if snapshot.current_profile_east_north_mps is not None:
+        raise WorkspaceError("cannot export depth-varying current as constant_vector; use locked snapshot JSON until static vector-profile provider is implemented")
     data = copy.deepcopy(project.config.normalized)
     t = datetime.fromisoformat(snapshot.at_utc.replace("Z", "+00:00"))
     data["forcing"]["clock"] = {
