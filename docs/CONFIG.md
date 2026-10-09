@@ -238,6 +238,14 @@ The selected candidate can then be copied/exported as the locked project config 
 
 Design Mode should not fork the physics implementation. It calls the same outlet adapter, solver, field reconstruction and criteria engine used by historical/live runs.
 
+### TIME-1A historical CSV providers and replay-input snapshots
+
+`csv_time_depth_profile` maps the named `temperature_profile_C` (in-situ ITS-90 °C) or `salinity_profile_psu` (Practical Salinity) to an explicitly UTC-timestamped `time, depth_m, value` table. `csv_time_vector_profile` maps `current_profile` to `time, depth_m, u_east_mps, v_north_mps` (ENU, m/s). Whole-second timestamps must be timezone-aware; within one timestamp, all depth levels increase strictly and the selected grid covers 0 m and `site.water_depth_m`. No silent time/depth extrapolation or gap interpolation. File SHA is included in the request/cache identity.
+
+The reusable `plume.history.acquire_history` API returns an indexed history, request/data SHA and provenance, explicit `clock_times`, `available_times` and `missing_by_time`, and can materialize a true `PinnedSnapshot` using `snapshot_at(config,timestamp)` without provider I/O. The current profile can be depth-varying; optional new snapshot field is omitted for legacy static-current pins so existing one-hour identities remain unchanged. Cache JSON and demo CSV/plots belong only in the configured ignored workspace. The normal forcing clock is **start inclusive/end exclusive**, positive whole-second sampling. File edits invalidate cache by byte SHA, geometry changes do not.
+
+The history source descriptors must be the **original normalized time-varying flow and temperature providers**, not DESIGN-1's locked one-hour constant design controls. TIME-1B will handle Copernicus native potential temperature/native Practical Salinity and convert deliberately at the model boundary, preserving actual requested/used ocean cell. See [TIME_1A.md](TIME_1A.md).
+
 ## 7. Copernicus provider
 
 Reuse the proven HeatHandler ideas without coupling the repositories:

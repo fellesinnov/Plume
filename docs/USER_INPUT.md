@@ -50,3 +50,7 @@ This file records accepted project direction that should survive chat/session bo
 - User demonstrated a real Windows Streamlit session: Project creation, local Ocean pin, live computed section/plan rerenders, variant comparison, saving and exporting. The plot's cyan +2 °C excess-temperature isotherm was positively received.
 - Requested an adjustable line/tolerance, initially defaulting to +2 °C. Implement first as an explicitly labelled **visualisation-only preview**: changing the level set must reuse the same solved field and keep the saved config's criteria intact. A future criterion-editing workflow needs an explicit design/permit decision, not an implicit on-screen display change.
 - Reported Windows `pytest` 77 passed / 1 failed due to immutable reference worktree byte-size mismatch; protect checked-in reference bytes using Git checkout attributes, not by modifying any `References/` content or relaxing the exact manifest locks.
+
+## 2026-10-09 TIME-1A authorisation
+
+- User explicitly authorised `GO TIME-1A!` for a cloud-only first historical ocean foundation while traveling. Prior accepted scope: timestamped temperature/salinity/current contracts, reusable normalized provider cache, deterministic selection/replay inputs, no refetch on outlet geometry edits, and illustrative strictly synthetic diagnostic plot. No approval for Actions or `main` merge; Copernicus service integration and Ocean UI belong to later TIME-1B.

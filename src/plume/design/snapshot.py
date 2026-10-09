@@ -75,9 +75,11 @@ class PinnedSnapshot:
     source_scalars: dict[str, float]
     providers: dict[str, dict[str, Any]]
     snapshot_sha256: str
+    # Optional TIME-1A depth-varying ENU current. None preserves legacy snapshot SHA.
+    current_profile_east_north_mps: tuple[tuple[float, float, float], ...] | None = None
 
     def payload(self) -> dict[str, Any]:
-        return {
+        payload = {
             "at_utc": self.at_utc,
             "site": self.site,
             "ambient_spec_sha256": self.ambient_spec_sha256,
@@ -88,6 +90,11 @@ class PinnedSnapshot:
             "source_scalars": self.source_scalars,
             "providers": self.providers,
         }
+        if self.current_profile_east_north_mps is not None:
+            payload["current_profile_east_north_mps"] = [
+                list(row) for row in self.current_profile_east_north_mps
+            ]
+        return payload
 
     def verify_identity(self) -> None:
         """Detect in-place mutation of nested data despite the frozen outer dataclass."""
@@ -104,9 +111,26 @@ class PinnedSnapshot:
                 "salinity_profile_psu", "current_east_north_mps", "source_scalars", "providers")
         try:
             data = {key: raw[key] for key in keys}
+            if "current_profile_east_north_mps" in raw:
+                data["current_profile_east_north_mps"] = raw["current_profile_east_north_mps"]
             claimed = str(raw["snapshot_sha256"])
             if _digest(data) != claimed:
                 raise ProviderDataError("saved snapshot identity does not match its content")
+            profile = None
+            if "current_profile_east_north_mps" in data:
+                profile = tuple(tuple(float(v) for v in row)
+                                for row in data["current_profile_east_north_mps"])
+                if (len(profile) < 2 or any(len(row) != 3 or not all(math.isfinite(v) for v in row)
+                                               for row in profile)):
+                    raise ProviderDataError("saved depth-current profile must contain finite depth/u/v triples")
+                depths = [row[0] for row in profile]
+                water_depth = float(data["site"]["water_depth_m"])
+                if (abs(depths[0]) > 1e-8 or abs(depths[-1] - water_depth) > 1e-8
+                        or any(b <= a for a, b in zip(depths, depths[1:]))):
+                    raise ProviderDataError("saved depth-current profile must cover the full water column")
+                surface = tuple(float(v) for v in data["current_east_north_mps"])
+                if surface != profile[0][1:]:
+                    raise ProviderDataError("saved current surface summary differs from depth-current profile")
             return cls(
                 at_utc=_timestamp(data["at_utc"]), site=dict(data["site"]),
                 ambient_spec_sha256=str(data["ambient_spec_sha256"]),
@@ -116,6 +140,7 @@ class PinnedSnapshot:
                 current_east_north_mps=tuple(float(v) for v in data["current_east_north_mps"]),
                 source_scalars={k: float(v) for k, v in data["source_scalars"].items()},
                 providers=dict(data["providers"]), snapshot_sha256=claimed,
+                current_profile_east_north_mps=profile,
             )
         except (KeyError, TypeError, ValueError) as exc:
             raise ProviderDataError("invalid saved design snapshot") from exc
